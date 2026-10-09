@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#090d16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Europa 2026">
+  <meta name="description" content="Dossiê de Viagem & Itinerário Seguro Europa 2026 - Diego, Tatiana e Fabiana">
+  <title>Europa 2026 • Dossiê de Viagem</title>
+  
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+
+  <!-- Header Fixo Superior -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">🧭</div>
+        <div>
+          <h1 class="brand-title">Europa 2026</h1>
+          <div class="brand-subtitle">Diego, Tatiana & Fabiana</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span id="offline-status-pill" class="offline-pill">● Online</span>
+        <button id="header-vault-status" class="status-pill status-locked" title="Clique para destravar os códigos protegidos">
+          <span>🔒</span> <span>Destravar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-content">
+    
+    <!-- Hero Card: Agora / Próxima Etapa -->
+    <section id="current-step-card" class="current-step-card">
+      <!-- Injetado dinamicamente via time.js e app.js -->
+    </section>
+
+    <!-- Simulador de Viagem (Time Machine) -->
+    <div class="simulator-box">
+      <div class="simulator-title">
+        <span>⏱️</span> <span>Simular Dia da Viagem:</span>
+      </div>
+      <div id="simulator-pills" class="day-pills">
+        <!-- Pílulas de datas geradas dinamicamente -->
+      </div>
+    </div>
+
+    <!-- Container das Abas de Conteúdo -->
+    <section id="tab-content-container">
+      <!-- Timeline ou visualização tática renderizada via app.js -->
+    </section>
+
+  </main>
+
+  <!-- Barra Inferior Tática Fixa (Bottom Nav) -->
+  <nav class="bottom-nav">
+    <div class="nav-container">
+      <button class="nav-tab active" data-tab="timeline">
+        <span class="nav-tab-icon">📅</span>
+        <span>Timeline</span>
+      </button>
+      <button class="nav-tab" data-tab="flights">
+        <span class="nav-tab-icon">✈️</span>
+        <span>Voos</span>
+      </button>
+      <button class="nav-tab" data-tab="stays">
+        <span class="nav-tab-icon">🏨</span>
+        <span>Hotéis</span>
+      </button>
+      <button class="nav-tab" data-tab="car">
+        <span class="nav-tab-icon">🚗</span>
+        <span>Carro</span>
+      </button>
+      <button class="nav-tab" data-tab="congress">
+        <span class="nav-tab-icon">🎓</span>
+        <span>Congresso</span>
+      </button>
+      <button class="nav-tab" data-tab="emergency">
+        <span class="nav-tab-icon">🆘</span>
+        <span>SOS</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Modal de Destravamento com Senha -->
+  <div id="modal-unlock" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🔓 Destravar Cofre de Viagem</h3>
+        <button class="btn btn-secondary btn-sm" data-close-modal>✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+          Digite sua senha mestre para derivar a chave de sessão em memória via <strong>PBKDF2 (600.000 iterações)</strong>. Seus localizadores, PINs e PDFs serão decifrados sob demanda.
+        </p>
+        <div class="input-group">
+          <label class="input-label" for="unlock-password">Senha Mestre do Cofre:</label>
+          <input type="password" id="unlock-password" class="input-text" placeholder="Digite sua senha mestre..." autocomplete="current-password">
+          <div id="unlock-error" style="color: var(--accent-rose); font-size: 0.8rem; margin-top: 6px;"></div>
+        </div>
+        <div style="background: var(--bg-main); padding: 10px; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--text-dim);">
+          🛡️ <strong>Segurança em Repositório Público:</strong> A chave nunca é salva em disco ou no navegador. Ao fechar a aba ou após 15 minutos, o cofre é trancado automaticamente.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-modal>Cancelar</button>
+        <button id="btn-do-unlock" class="btn btn-primary">Destravar Cofre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Visualização Segura de PDF -->
+  <div id="modal-pdf" class="modal-backdrop">
+    <div class="modal-card modal-card-lg">
+      <div class="modal-header">
+        <h3 id="pdf-modal-title" class="modal-title">Visualizar Comprovante</h3>
+        <button class="btn btn-secondary btn-sm" data-close-modal>✕</button>
+      </div>
+      <div class="modal-body" style="padding: 0; height: 100%;">
+        <iframe id="pdf-viewer-frame" class="pdf-frame" src="about:blank" title="Comprovante de Viagem"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-pdf-download" class="btn btn-secondary btn-sm">⬇️ Baixar Cópia Decifrada</button>
+        <button class="btn btn-primary btn-sm" data-close-modal>Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast de Notificação -->
+  <div id="toast-notification" class="toast">Notificação</div>
+
+  <!-- Script Principal Modular -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

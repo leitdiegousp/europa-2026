@@ -1,0 +1,30 @@
+# Europa 2026 - Git Ignore
+# Bloqueio absoluto contra vazamento de documentos em texto claro
+
+# PDFs e documentos brutos
+*.pdf
+*.PDF
+*.zip
+*.ZIP
+*.png
+*.jpg
+*.jpeg
+
+# Arquivos e credenciais locais
+.env
+*.key
+*.pem
+*.secret
+private-*.json
+raw-*
+tools/
+scripts/
+
+# Arquivos de sistema e IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*~
+*.swp
+*.bak

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "doc-tap-diego",
+    "size": 260590,
+    "sha256": "29a05c48d5f3467fef7545b896078e9f66c4a9ad314c29ab1a82b333b381dc17",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-tap-tatiana",
+    "size": 260585,
+    "sha256": "1927f3f38ee6aaacbca7474c8099629b01e5f2d4525799b5a745e0ea134101ae",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-aireuropa-diego",
+    "size": 222649,
+    "sha256": "22bd1fe1ead785eca93b44a661abeff6cee65a51af1dbb61426f1b8da271a6ad",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-aireuropa-tatiana",
+    "size": 222642,
+    "sha256": "aa0f77d86145c3f48b90bf6349ea3bd984fb7f79d1f34470e9d5af3ee3f9c9c9",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-aireuropa-fabiana",
+    "size": 222652,
+    "sha256": "dfa8140de9e7ab46e39c00497aa02dc55f5188fac8a37650edc7605975d14490",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-hotel-madrid-1",
+    "size": 94242,
+    "sha256": "58c28c40d75826b1590c795e6f02816f93ba042362bd402eb7a86b56188ab7d6",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-airbnb-saillon-res",
+    "size": 77812,
+    "sha256": "a50ccefdf12be348eb5c9ab7c5fdc7c1a362974feae0426778b90e8190f19fe8",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-airbnb-saillon-anuncio",
+    "size": 691416,
+    "sha256": "7f2748b7f4f0e5834e34b00f40d7e53777f58a9c3bc75099524234ef967d8430",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-hotel-madrid-2",
+    "size": 209333,
+    "sha256": "93ef921a80973d70c4dd561123c2196b1247a25f9af36ac9597ccd0e3f4e883c",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-hotel-toledo",
+    "size": 306869,
+    "sha256": "63abf7e14cdcf7f9bccb3e6c70c95e1f508a8d864fbc77b33673ab03216681bb",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-hotel-madrid-3",
+    "size": 223666,
+    "sha256": "70bce781eb9711a79f6528a0eaaa13db62f62e75812c601ebe5cacf8d869151f",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-hotel-lisboa",
+    "size": 188268,
+    "sha256": "a532876fd78c2f74c564d80039eb597fc53d8d6d22cdd23ee07916b89c4661f9",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-seguro-diego-bilhete",
+    "size": 1060258,
+    "sha256": "ee3b3a218cbb0237d413fb1d07be1b39c7b1121d3e779933d350c198281d7a76",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-seguro-diego-cert",
+    "size": 219761,
+    "sha256": "a3b7bde197012e48e22f0b2c7b3fb07eeb979e4862ffc2b7369529a4d59c4926",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-seguro-tatiana-bilhete",
+    "size": 1060291,
+    "sha256": "3d89cb19663c030aaf9cdc025f6a6250bf1e568727ee792066636c49f1acdf55",
+    "type": "pdf"
+  },
+  {
+    "id": "doc-seguro-tatiana-cert",
+    "size": 219813,
+    "sha256": "234976e55e0a2dd0db9d765ce4d364b256b0d6064fe816df505674e1df14da60",
+    "type": "pdf"
+  }
+]

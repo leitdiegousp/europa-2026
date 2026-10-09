@@ -1,0 +1,265 @@
+{
+  "title": "Europa 2026 • Diego, Tatiana & Fabiana",
+  "dates": "17 a 30 de Outubro de 2026",
+  "route": "Florianópolis ➔ Lisboa ➔ Madrid ➔ Saillon (Suíça) ➔ Madrid ➔ Toledo ➔ Madrid ➔ Lisboa ➔ Florianópolis",
+  "days": [
+    {
+      "date": "2026-10-17",
+      "city": "Florianópolis ➔ Lisboa ➔ Madrid",
+      "events": [
+        {
+          "time": "00:25",
+          "title": "Voo TAP TP110 (FLN ➔ LIS)",
+          "category": "flight",
+          "protectedId": "flight-tap-ida-1"
+        },
+        {
+          "time": "16:50",
+          "title": "Voo TAP TP1018 (LIS ➔ MAD)",
+          "category": "flight",
+          "protectedId": "flight-tap-ida-2"
+        },
+        {
+          "time": "20:00",
+          "title": "Check-in Hostel Las Rosas (Madrid)",
+          "category": "stay",
+          "protectedId": "stay-madrid-1"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-18",
+      "city": "Madrid ➔ Genebra ➔ Saillon (Suíça)",
+      "events": [
+        {
+          "time": "08:00",
+          "title": "Voo Air Europa UX1663 (MAD ➔ GVA)",
+          "category": "flight",
+          "protectedId": "flight-aireuropa-ida"
+        },
+        {
+          "time": "11:00",
+          "title": "Retirada do Carro (Aeroporto Genebra - Setor Suíço)",
+          "category": "car",
+          "protectedId": "car-rental-genebra"
+        },
+        {
+          "time": "15:00",
+          "title": "Check-in Airbnb Saillon (Valais)",
+          "category": "stay",
+          "protectedId": "stay-saillon-suica"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-19",
+      "city": "Saillon & Alpes Suíços (Valais)",
+      "events": [
+        {
+          "time": "Dia todo",
+          "title": "Passeio nos Alpes & Termas de Saillon",
+          "category": "activity",
+          "protectedId": "stay-saillon-suica"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "city": "Saillon ➔ Genebra ➔ Madrid",
+      "events": [
+        {
+          "time": "11:00",
+          "title": "Checkout Airbnb Saillon",
+          "category": "stay",
+          "protectedId": "stay-saillon-suica"
+        },
+        {
+          "time": "16:30",
+          "title": "Devolução do Carro no Aeroporto de Genebra",
+          "category": "car",
+          "protectedId": "car-rental-genebra"
+        },
+        {
+          "time": "18:55",
+          "title": "Voo Air Europa UX1666 (GVA ➔ MAD)",
+          "category": "flight",
+          "protectedId": "flight-aireuropa-volta"
+        },
+        {
+          "time": "22:00",
+          "title": "Check-in Centro Madrid Rio (Madrid)",
+          "category": "stay",
+          "protectedId": "stay-madrid-2"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-21",
+      "city": "Madrid",
+      "events": [
+        {
+          "time": "Dia todo",
+          "title": "Exploração cultural em Madrid",
+          "category": "activity",
+          "protectedId": "stay-madrid-2"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "city": "Madrid ➔ Toledo",
+      "events": [
+        {
+          "time": "11:00",
+          "title": "Checkout Centro Madrid Rio",
+          "category": "stay",
+          "protectedId": "stay-madrid-2"
+        },
+        {
+          "time": "14:00",
+          "title": "Deslocamento Madrid ➔ Toledo",
+          "category": "transport",
+          "protectedId": "stay-toledo-congresso"
+        },
+        {
+          "time": "16:00",
+          "title": "Check-in El Mirador del Valle (Toledo)",
+          "category": "stay",
+          "protectedId": "stay-toledo-congresso"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "city": "Toledo",
+      "events": [
+        {
+          "time": "09:00",
+          "title": "Congresso Acadêmico / Atividades Oficiais",
+          "category": "activity",
+          "protectedId": "stay-toledo-congresso"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-24",
+      "city": "Toledo",
+      "events": [
+        {
+          "time": "09:00",
+          "title": "Congresso Acadêmico & Cidade Histórica",
+          "category": "activity",
+          "protectedId": "stay-toledo-congresso"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-25",
+      "city": "Toledo",
+      "events": [
+        {
+          "time": "03:00",
+          "title": "⚠️ Fim do Horário de Verão (CEST UTC+2 ➔ CET UTC+1)",
+          "category": "alert",
+          "protectedId": "stay-toledo-congresso"
+        },
+        {
+          "time": "10:00",
+          "title": "Congresso Acadêmico em Toledo",
+          "category": "activity",
+          "protectedId": "stay-toledo-congresso"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "city": "Toledo",
+      "events": [
+        {
+          "time": "09:00",
+          "title": "Congresso Acadêmico em Toledo",
+          "category": "activity",
+          "protectedId": "stay-toledo-congresso"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "city": "Toledo",
+      "events": [
+        {
+          "time": "09:00",
+          "title": "Encerramento do Congresso em Toledo",
+          "category": "activity",
+          "protectedId": "stay-toledo-congresso"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-28",
+      "city": "Toledo ➔ Madrid",
+      "events": [
+        {
+          "time": "11:00",
+          "title": "Checkout El Mirador del Valle (Toledo)",
+          "category": "stay",
+          "protectedId": "stay-toledo-congresso"
+        },
+        {
+          "time": "15:00",
+          "title": "Check-in Villa Potasa 19 (Madrid)",
+          "category": "stay",
+          "protectedId": "stay-madrid-3"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-29",
+      "city": "Madrid ➔ Lisboa",
+      "events": [
+        {
+          "time": "10:00",
+          "title": "Checkout Villa Potasa 19 (Madrid)",
+          "category": "stay",
+          "protectedId": "stay-madrid-3"
+        },
+        {
+          "time": "12:10",
+          "title": "Voo TAP TP1013 (MAD ➔ LIS)",
+          "category": "flight",
+          "protectedId": "flight-tap-mad-lis"
+        },
+        {
+          "time": "15:00",
+          "title": "Check-in Central Lisbon Stay (Lisboa)",
+          "category": "stay",
+          "protectedId": "stay-lisboa"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-30",
+      "city": "Lisboa ➔ Florianópolis",
+      "events": [
+        {
+          "time": "08:30",
+          "title": "Checkout Central Lisbon Stay ➔ Ida Aeroporto LIS",
+          "category": "stay",
+          "protectedId": "stay-lisboa"
+        },
+        {
+          "time": "11:00",
+          "title": "Voo TAP TP109 Direto (LIS ➔ FLN)",
+          "category": "flight",
+          "protectedId": "flight-tap-volta"
+        },
+        {
+          "time": "18:35",
+          "title": "Chegada em Florianópolis (Brasil)",
+          "category": "flight",
+          "protectedId": "flight-tap-volta"
+        }
+      ]
+    }
+  ]
+}
