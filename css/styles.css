@@ -355,6 +355,7 @@ body {
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
+  scroll-behavior: smooth;
 }
 
 /* Ocultar barra de rolagem horizontal em navegadores WebKit (Chrome, Safari, Edge) */
@@ -367,7 +368,7 @@ body {
 
 .milestones-track-wrapper.is-dragging {
   cursor: grabbing !important;
-  scroll-behavior: auto;
+  scroll-behavior: auto !important;
 }
 
 .milestones-track-wrapper.is-dragging * {
@@ -381,9 +382,11 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 0;
-  min-width: 860px;
+  min-width: 960px;
   position: relative;
   padding-top: 14px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .milestones-track::before {

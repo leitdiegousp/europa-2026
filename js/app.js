@@ -158,7 +158,11 @@ class EuropaApp {
     };
 
     window.addEventListener("mouseup", stopDrag);
-    window.addEventListener("mouseleave", stopDrag);
+    document.addEventListener("mouseleave", stopDrag);
+    window.addEventListener("blur", stopDrag);
+
+    // Evita arraste fantasma nativo do navegador em nós/ícones
+    wrapper.addEventListener("dragstart", (e) => e.preventDefault());
 
     // Suporte para rolagem horizontal com a roda do mouse (wheel) no PC
     wrapper.addEventListener("wheel", (e) => {
@@ -174,6 +178,8 @@ class EuropaApp {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
+        isClickBlocked = false;
+        hasDragged = false;
       }
     }, true);
   }
@@ -328,14 +334,20 @@ class EuropaApp {
     this.simulatedDate = dateStr;
 
     // Se estiver em outra aba e clicou em um marco de data, alterna para a timeline
-    if (dateStr && this.currentTab !== "timeline") {
+    const needTabSwitch = Boolean(dateStr && this.currentTab !== "timeline");
+    if (needTabSwitch) {
       this.currentTab = "timeline";
       document.querySelectorAll(".nav-tab").forEach(t => {
         t.classList.toggle("active", t.dataset.tab === "timeline");
       });
+      this.render();
+    } else {
+      this._renderCurrentStep();
+      this._renderMilestonesTrack();
+      if (!this.elMainContainer.querySelector(".timeline-day")) {
+        this._renderTabContent();
+      }
     }
-
-    this.render();
 
     if (dateStr) {
       this._centerMilestone(dateStr);
@@ -363,13 +375,15 @@ class EuropaApp {
       const activeNode = wrapper.querySelector(`.milestone-node[data-date="${dateStr}"]`);
       if (!activeNode) return;
 
-      const nodeLeft = activeNode.offsetLeft;
-      const nodeWidth = activeNode.offsetWidth;
-      const wrapperWidth = wrapper.clientWidth;
-      const targetScrollLeft = nodeLeft - (wrapperWidth / 2) + (nodeWidth / 2);
+      const nodeRect = activeNode.getBoundingClientRect();
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const targetScrollLeft = wrapper.scrollLeft + (nodeRect.left - wrapperRect.left) - (wrapper.clientWidth / 2) + (nodeRect.width / 2);
+
+      const maxScroll = Math.max(0, wrapper.scrollWidth - wrapper.clientWidth);
+      const clampScroll = Math.max(0, Math.min(targetScrollLeft, maxScroll));
 
       wrapper.scrollTo({
-        left: Math.max(0, targetScrollLeft),
+        left: clampScroll,
         behavior: "smooth"
       });
     });
@@ -384,7 +398,8 @@ class EuropaApp {
       const header = document.querySelector(".app-header");
       const headerHeight = header ? header.offsetHeight : 70;
       const elementRect = dayEl.getBoundingClientRect();
-      const absoluteTop = window.pageYOffset + elementRect.top - headerHeight - 16;
+      const currentScrollY = window.scrollY || window.pageYOffset || 0;
+      const absoluteTop = currentScrollY + elementRect.top - headerHeight - 16;
 
       window.scrollTo({
         top: Math.max(0, absoluteTop),
@@ -589,6 +604,17 @@ class EuropaApp {
     const isLive = !this.simulatedDate;
     if (this.elBtnLiveTime) {
       this.elBtnLiveTime.classList.toggle("active", isLive);
+    }
+
+    // Se os nós dos marcos já existem no DOM, apenas atualiza estados active e aria-current
+    const existingButtons = this.elMilestonesTrack.querySelectorAll(".milestone-node");
+    if (existingButtons.length === milestones.length) {
+      existingButtons.forEach(btn => {
+        const isActive = this.simulatedDate === btn.dataset.date;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-current", isActive ? "step" : "false");
+      });
+      return;
     }
 
     this.elMilestonesTrack.innerHTML = milestones.map(m => {
