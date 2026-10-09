@@ -62,7 +62,7 @@
           <div class="milestones-icon-badge">🗺️</div>
           <div>
             <h3 class="milestones-heading">Cronograma de Marcos da Viagem</h3>
-            <span class="milestones-subheading">Toque em qualquer marco histórico para simular a visão daquele dia</span>
+            <span class="milestones-subheading">Arraste para o lado ou toque em um marco para ver os eventos do dia</span>
           </div>
         </div>
         <button id="btn-live-time" class="milestones-live-btn active" onclick="app.setSimulatedDate('')">
@@ -70,7 +70,7 @@
         </button>
       </div>
 
-      <div class="milestones-track-wrapper">
+      <div class="milestones-track-wrapper" role="region" aria-label="Linha histórica de marcos da viagem" tabindex="0">
         <div id="milestones-track" class="milestones-track">
           <!-- Nós dos marcos injetados dinamicamente via app.js -->
         </div>

@@ -30,6 +30,7 @@ class EuropaApp {
     this.elHeaderStatus = document.getElementById("header-vault-status");
     this.elOfflinePill = document.getElementById("offline-status-pill");
     this.elCurrentStepCard = document.getElementById("current-step-card");
+    this.elMilestonesTrackWrapper = document.querySelector(".milestones-track-wrapper");
     this.elMilestonesTrack = document.getElementById("milestones-track");
     this.elBtnLiveTime = document.getElementById("btn-live-time");
     this.elMainContainer = document.getElementById("tab-content-container");
@@ -90,10 +91,91 @@ class EuropaApp {
       });
     });
 
+    // Arraste com o mouse / rolagem horizontal na trilha histórica (PC & Mobile)
+    this._initMilestonesDrag();
+
+    // Re-centralizar marco ativo caso o viewport seja redimensionado
+    window.addEventListener("resize", () => {
+      if (this.simulatedDate) {
+        this._centerMilestone(this.simulatedDate);
+      }
+    });
+
     // Status de conexão
     window.addEventListener("online", () => this._updateOnlineStatus());
     window.addEventListener("offline", () => this._updateOnlineStatus());
     this._updateOnlineStatus();
+  }
+
+  _initMilestonesDrag() {
+    const wrapper = this.elMilestonesTrackWrapper;
+    if (!wrapper) return;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollStart = 0;
+    let hasDragged = false;
+    let isClickBlocked = false;
+    const dragThreshold = 5; // px para distinguir clique acidental de arraste
+
+    wrapper.addEventListener("mousedown", (e) => {
+      // Ignorar cliques secundários (botão direito / roda central)
+      if (e.button !== 0) return;
+      isDown = true;
+      hasDragged = false;
+      isClickBlocked = false;
+      startX = e.pageX;
+      scrollStart = wrapper.scrollLeft;
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      const dx = e.pageX - startX;
+
+      if (!hasDragged && Math.abs(dx) > dragThreshold) {
+        hasDragged = true;
+        isClickBlocked = true;
+        wrapper.classList.add("is-dragging");
+      }
+
+      if (hasDragged) {
+        e.preventDefault();
+        wrapper.scrollLeft = scrollStart - dx;
+      }
+    });
+
+    const stopDrag = () => {
+      if (!isDown) return;
+      isDown = false;
+      wrapper.classList.remove("is-dragging");
+      if (isClickBlocked) {
+        // Bloqueia clique fantasma gerado pelo navegador logo após mouseup
+        setTimeout(() => {
+          isClickBlocked = false;
+          hasDragged = false;
+        }, 60);
+      }
+    };
+
+    window.addEventListener("mouseup", stopDrag);
+    window.addEventListener("mouseleave", stopDrag);
+
+    // Suporte para rolagem horizontal com a roda do mouse (wheel) no PC
+    wrapper.addEventListener("wheel", (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && !e.ctrlKey) {
+        e.preventDefault();
+        wrapper.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    // Intercepta e cancela cliques na fase de captura caso tenha havido arraste
+    wrapper.addEventListener("click", (e) => {
+      if (isClickBlocked || hasDragged) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+      }
+    }, true);
   }
 
   async _loadPublicData() {
@@ -242,18 +324,81 @@ class EuropaApp {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  setSimulatedDate(dateStr) {
+  setSimulatedDate(dateStr, options = {}) {
     this.simulatedDate = dateStr;
-    this._renderMilestonesTrack();
 
-    if (dateStr) {
-      const activeNode = document.querySelector(`.milestone-node[data-date="${dateStr}"]`);
-      if (activeNode) {
-        activeNode.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-      }
+    // Se estiver em outra aba e clicou em um marco de data, alterna para a timeline
+    if (dateStr && this.currentTab !== "timeline") {
+      this.currentTab = "timeline";
+      document.querySelectorAll(".nav-tab").forEach(t => {
+        t.classList.toggle("active", t.dataset.tab === "timeline");
+      });
     }
 
     this.render();
+
+    if (dateStr) {
+      this._centerMilestone(dateStr);
+      if (options.scrollToDay !== false) {
+        this._scrollToDay(dateStr);
+      }
+    } else {
+      // Tempo Real (Hoje): rebobina trilha para o início
+      const wrapper = this.elMilestonesTrackWrapper || document.querySelector(".milestones-track-wrapper");
+      if (wrapper) {
+        wrapper.scrollTo({ left: 0, behavior: "smooth" });
+      }
+      if (options.scrollToTop !== false) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  }
+
+  _centerMilestone(dateStr) {
+    if (!dateStr) return;
+    const wrapper = this.elMilestonesTrackWrapper || document.querySelector(".milestones-track-wrapper");
+    if (!wrapper) return;
+
+    requestAnimationFrame(() => {
+      const activeNode = wrapper.querySelector(`.milestone-node[data-date="${dateStr}"]`);
+      if (!activeNode) return;
+
+      const nodeLeft = activeNode.offsetLeft;
+      const nodeWidth = activeNode.offsetWidth;
+      const wrapperWidth = wrapper.clientWidth;
+      const targetScrollLeft = nodeLeft - (wrapperWidth / 2) + (nodeWidth / 2);
+
+      wrapper.scrollTo({
+        left: Math.max(0, targetScrollLeft),
+        behavior: "smooth"
+      });
+    });
+  }
+
+  _scrollToDay(dateStr) {
+    if (!dateStr) return;
+    requestAnimationFrame(() => {
+      const dayEl = document.getElementById(`day-${dateStr}`);
+      if (!dayEl) return;
+
+      const header = document.querySelector(".app-header");
+      const headerHeight = header ? header.offsetHeight : 70;
+      const elementRect = dayEl.getBoundingClientRect();
+      const absoluteTop = window.pageYOffset + elementRect.top - headerHeight - 16;
+
+      window.scrollTo({
+        top: Math.max(0, absoluteTop),
+        behavior: "smooth"
+      });
+
+      // Efeito visual de destaque suave (âmbar)
+      dayEl.classList.remove("timeline-day-highlight");
+      void dayEl.offsetWidth; // Força reflow para reiniciar animação CSS
+      dayEl.classList.add("timeline-day-highlight");
+      setTimeout(() => {
+        dayEl.classList.remove("timeline-day-highlight");
+      }, 2200);
+    });
   }
 
   render() {
@@ -452,7 +597,8 @@ class EuropaApp {
         <button class="milestone-node ${isActive ? 'active' : ''}" 
                 data-date="${m.date}" 
                 onclick="app.setSimulatedDate('${m.date}')"
-                title="${m.title} (${m.city})">
+                title="${m.title} (${m.city})"
+                aria-current="${isActive ? 'step' : 'false'}">
           <div class="milestone-marker">
             <span>${m.icon}</span>
           </div>
@@ -498,7 +644,7 @@ class EuropaApp {
 
     this.publicTimeline.days.forEach(day => {
       html += `
-        <div class="timeline-day">
+        <div class="timeline-day" id="day-${day.date}" data-date="${day.date}">
           <div class="day-header">
             <span class="day-title">${formatDateInZone(day.date + "T12:00:00", "Europe/Madrid")}</span>
             <span class="day-city">${day.city}</span>

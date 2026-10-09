@@ -347,18 +347,33 @@ body {
 .milestones-track-wrapper {
   position: relative;
   overflow-x: auto;
-  padding: 10px 4px 6px;
+  overflow-y: hidden;
+  padding: 10px 4px 10px;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-focus) transparent;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE e Edge legado */
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.milestones-track-wrapper::-webkit-scrollbar {
-  height: 5px;
+/* Ocultar barra de rolagem horizontal em navegadores WebKit (Chrome, Safari, Edge) */
+.milestones-track-wrapper::-webkit-scrollbar,
+.milestones-track::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
-.milestones-track-wrapper::-webkit-scrollbar-thumb {
-  background: var(--border-focus);
-  border-radius: 4px;
+
+.milestones-track-wrapper.is-dragging {
+  cursor: grabbing !important;
+  scroll-behavior: auto;
+}
+
+.milestones-track-wrapper.is-dragging * {
+  cursor: grabbing !important;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Linha contínua do infográfico */
@@ -544,6 +559,28 @@ body {
 
 .timeline-day {
   margin-bottom: 24px;
+  scroll-margin-top: 80px;
+  border-radius: var(--radius-md);
+  transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.timeline-day.timeline-day-highlight {
+  animation: dayHighlightPulse 2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dayHighlightPulse {
+  0% {
+    background-color: var(--accent-amber-subtle);
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.4), var(--shadow-card);
+  }
+  60% {
+    background-color: rgba(245, 158, 11, 0.08);
+    box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
 }
 
 .day-header {
