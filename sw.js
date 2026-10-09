@@ -5,7 +5,7 @@
  * blobs criptografados no modo avião / sem sinal.
  */
 
-const CACHE_NAME = "europa-vault-v5";
+const CACHE_NAME = "europa-vault-v6";
 
 const STATIC_ASSETS = [
   "./",
@@ -16,6 +16,9 @@ const STATIC_ASSETS = [
   "js/vault-client.js",
   "js/time.js",
   "manifest.webmanifest",
+  "assets/icons/og-preview.png",
+  "assets/icons/icon-512.png",
+  "assets/icons/icon-192.png",
   "data/public-timeline.json",
   "vault/key-envelope.json",
   "vault/asset-manifest.json",

@@ -9,6 +9,8 @@
 *.png
 *.jpg
 *.jpeg
+!assets/icons/*.png
+!assets/icons/*.jpg
 
 # Arquivos e credenciais locais
 .env
