@@ -5,7 +5,7 @@
  * blobs criptografados no modo avião / sem sinal.
  */
 
-const CACHE_NAME = "europa-vault-v10";
+const CACHE_NAME = "europa-vault-v11";
 
 const STATIC_ASSETS = [
   "./",
@@ -22,7 +22,11 @@ const STATIC_ASSETS = [
   "data/public-timeline.json",
   "vault/key-envelope.json",
   "vault/asset-manifest.json",
-  "vault/index.enc"
+  "vault/index.enc",
+  "vault/assets/doc-seguro-diego-bilhete.enc",
+  "vault/assets/doc-seguro-diego-cert.enc",
+  "vault/assets/doc-seguro-tatiana-bilhete.enc",
+  "vault/assets/doc-seguro-tatiana-cert.enc"
 ];
 
 // Instalação do Service Worker e pré-cache

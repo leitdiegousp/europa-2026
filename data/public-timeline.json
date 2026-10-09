@@ -14,6 +14,13 @@
           "protectedId": "flight-tap-ida-1"
         },
         {
+          "time": "15:45",
+          "title": "Chegada em Lisboa (LIS) • Controle de Passaporte & Imigração Schengen",
+          "category": "activity",
+          "isImmigration": true,
+          "protectedId": "immigration-lisboa"
+        },
+        {
           "time": "16:50",
           "title": "Voo TAP TP1018 (LIS ➔ MAD)",
           "category": "flight",
