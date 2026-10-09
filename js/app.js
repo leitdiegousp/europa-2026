@@ -330,6 +330,7 @@ class EuropaApp {
       this.activePdfRevoke();
       this.activePdfRevoke = null;
     }
+    this.pendingPdfRequest = null;
   }
 
   switchTab(tabKey) {
@@ -1075,7 +1076,7 @@ class EuropaApp {
                   </button>
                 `).join("")}
               </div>
-              ${f.route && f.route.includes("LIS") ? `
+              ${((f.route && f.route.startsWith("FLN") && f.route.includes("LIS")) || (f.title && f.title.includes("TP110"))) ? `
                 <div style="margin-top: 12px; padding: 12px; background: rgba(9, 13, 22, 0.7); border: 1px solid rgba(245, 158, 11, 0.35); border-left: 3px solid var(--accent-amber); border-radius: var(--radius-sm);">
                   <div style="font-weight: 700; color: var(--accent-amber); font-size: 0.85rem; margin-bottom: 4px;">
                     🇵🇹 Desembarque em Lisboa (LIS) • Documentos de Imigração & Seguro Schengen
@@ -1097,7 +1098,7 @@ class EuropaApp {
             <div class="locked-indicator">
               <span>🔒 Localizador, links de check-in e cartões de embarque protegidos no cofre.</span>
             </div>
-            ${f.route && f.route.includes("LIS") ? `
+            ${((f.route && f.route.startsWith("FLN") && f.route.includes("LIS")) || (f.title && f.title.includes("TP110"))) ? `
               <div style="margin-top: 10px; padding: 10px; background: rgba(9, 13, 22, 0.7); border: 1px solid rgba(245, 158, 11, 0.35); border-left: 3px solid var(--accent-amber); border-radius: var(--radius-sm);">
                 <div style="font-weight: 700; color: var(--accent-amber); font-size: 0.85rem; margin-bottom: 4px;">
                   🇵🇹 Desembarque em Lisboa (LIS) • Documentos de Imigração & Seguro Schengen
@@ -1346,26 +1347,25 @@ class EuropaApp {
               </div>
             ` : ""}
           </div>
-          ${isUnlocked ? `
-            <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn btn-secondary btn-sm" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
-                📄 Bilhete Seguro Diego
-              </button>
-              <button class="btn btn-secondary btn-sm" onclick="app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
-                📄 Certificado Schengen Diego
-              </button>
-              <button class="btn btn-secondary btn-sm" onclick="app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
-                📄 Bilhete Seguro Tatiana
-              </button>
-              <button class="btn btn-secondary btn-sm" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
-                📄 Certificado Schengen Tatiana
-              </button>
-            </div>
-          ` : `
+          <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
+              📄 Bilhete Seguro Diego
+            </button>
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
+              📄 Certificado Schengen Diego
+            </button>
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
+              📄 Bilhete Seguro Tatiana
+            </button>
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
+              📄 Certificado Schengen Tatiana
+            </button>
+          </div>
+          ${!isUnlocked ? `
             <div class="locked-indicator" style="margin-top: 8px;">
-              <span>🔒 Apólices e certificados Schengen protegidos. Destrave o cofre para visualizar.</span>
+              <span>🔒 Apólices protegidas com criptografia AES-256-GCM. Toque em qualquer documento acima para destravar e visualizar.</span>
             </div>
-          `}
+          ` : ""}
         </div>
       </div>
 
@@ -1423,4 +1423,5 @@ class EuropaApp {
 }
 
 // Inicializar aplicativo no escopo global
+window.vault = vault;
 window.app = new EuropaApp();

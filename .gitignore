@@ -19,7 +19,8 @@
 *.secret
 private-*.json
 raw-*
-tools/
+tools/*
+!tools/test_e2e.mjs
 scripts/
 
 # Arquivos de sistema e IDE

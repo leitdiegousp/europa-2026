@@ -5,7 +5,7 @@
  * blobs criptografados no modo avião / sem sinal.
  */
 
-const CACHE_NAME = "europa-vault-v11";
+const CACHE_NAME = "europa-vault-v12";
 
 const STATIC_ASSETS = [
   "./",
