@@ -243,6 +243,8 @@ async function main() {
       const wrapper = card.querySelector(".immigration-card-body-wrapper");
       const body = card.querySelector(".immigration-card-body");
       const toggleText = card.querySelector(".immigration-toggle-text");
+      const chevron = card.querySelector(".toggle-chevron");
+      const badge = card.querySelector(".immigration-status-badge");
       const text = card.innerText;
       return {
         hasCard: true,
@@ -250,6 +252,9 @@ async function main() {
         isWrapperCollapsed: wrapper && wrapper.classList.contains("collapsed"),
         isBodyAriaHidden: body && body.getAttribute("aria-hidden") === "true",
         toggleText: toggleText ? toggleText.innerText.trim() : "",
+        chevronOpen: chevron ? chevron.classList.contains("open") : null,
+        chevronChar: chevron ? chevron.textContent.trim() : "",
+        isBadgeHidden: badge ? window.getComputedStyle(badge).display === "none" : false,
         hasTitle: text.includes("Documentos de Imigração & Seguro Schengen"),
         hasTag: text.toLowerCase().includes("controle de fronteira"),
         hasDiegoPolicy: text.includes("16023-0003-69-260122474")
@@ -267,11 +272,17 @@ async function main() {
   if (collapsedCheck.hasDiegoPolicy) {
     throw new Error("Collapsed card should not display policy details in collapsed state!");
   }
-  console.log(`  ✓ Card is collapsed by default: button="${collapsedCheck.toggleText}", title & tag visible, body collapsed.`);
+  if (collapsedCheck.chevronOpen !== false) {
+    throw new Error("Collapsed chevron should not have .open class");
+  }
+  if (!collapsedCheck.isBadgeHidden) {
+    throw new Error("Status badge should be hidden in collapsed state to preserve vertical space!");
+  }
+  console.log(`  ✓ Card is collapsed by default: button="${collapsedCheck.toggleText}", chevron="${collapsedCheck.chevronChar}" (pointing down), badge hidden, body collapsed.`);
 
-  // Step D3: Test Toggle to Expand Card
-  console.log("\n[TEST D3] Testing Toggle to Expand Card & Credentials Visibility...");
-  await cdp.evaluate(`app.toggleImmigrationDocs()`);
+  // Step D3: Test Real DOM Clicks to Expand and Collapse Card
+  console.log("\n[TEST D3] Testing DOM click on .immigration-toggle-btn to Expand Card...");
+  await cdp.evaluate(`document.getElementById("immigration-toggle-btn").click()`);
   await new Promise(r => setTimeout(r, 200));
 
   const expandedCheck = await cdp.evaluate(`
@@ -281,12 +292,17 @@ async function main() {
       const wrapper = card.querySelector(".immigration-card-body-wrapper");
       const body = card.querySelector(".immigration-card-body");
       const toggleText = card.querySelector(".immigration-toggle-text");
+      const chevron = card.querySelector(".toggle-chevron");
+      const badge = card.querySelector(".immigration-status-badge");
       const text = card.innerText;
       return {
         isExpandedClass: card.classList.contains("is-expanded"),
         isWrapperExpanded: wrapper && wrapper.classList.contains("expanded"),
         isBodyAriaVisible: body && body.getAttribute("aria-hidden") === "false",
         toggleText: toggleText ? toggleText.innerText.trim() : "",
+        chevronOpen: chevron ? chevron.classList.contains("open") : null,
+        chevronChar: chevron ? chevron.textContent.trim() : "",
+        isBadgeVisible: badge ? window.getComputedStyle(badge).display !== "none" : false,
         hasDiegoPolicy: text.includes("16023-0003-69-260122474"),
         hasDiegoCert: text.includes("32572804832"),
         hasTatianaPolicy: text.includes("16023-0003-69-260122473"),
@@ -301,7 +317,22 @@ async function main() {
   }
   if (!expandedCheck.hasDiegoPolicy || !expandedCheck.hasDiegoCert) throw new Error("Missing Diego credentials in expanded card");
   if (!expandedCheck.hasTatianaPolicy || !expandedCheck.hasTatianaCert) throw new Error("Missing Tatiana credentials in expanded card");
-  console.log("  ✓ Card expanded successfully! Toggle text:", expandedCheck.toggleText, "Buttons:", expandedCheck.buttons);
+  if (!expandedCheck.isBadgeVisible) throw new Error("Status badge / Destravar button should be visible in expanded state!");
+  if (expandedCheck.chevronOpen !== true) throw new Error("Expanded chevron should have .open class (rotated 180deg to point up)");
+  console.log("  ✓ Card expanded successfully via toggle click! Toggle text:", expandedCheck.toggleText, "Chevron open:", expandedCheck.chevronOpen, "Badge visible:", expandedCheck.isBadgeVisible);
+
+  // Test collapsing via header click delegation
+  console.log("  Testing header click delegation to collapse card...");
+  await cdp.evaluate(`document.getElementById("immigration-card-header").click()`);
+  await new Promise(r => setTimeout(r, 200));
+  const isHeaderReCollapsed = await cdp.evaluate(`document.getElementById("immigration-docs-card").classList.contains("is-collapsed")`);
+  if (!isHeaderReCollapsed) throw new Error("Card failed to re-collapse via header click");
+  console.log("  ✓ Re-collapsed successfully via header click delegation");
+
+  // Re-expand for subsequent tests
+  console.log("  Re-expanding card via toggle button click...");
+  await cdp.evaluate(`document.getElementById("immigration-toggle-btn").click()`);
+  await new Promise(r => setTimeout(r, 200));
 
   // Step F: Test Locked Button Click -> Unlock Modal Prompt -> Vault Unlock -> PDF Open
   console.log("\n[TEST E] Testing locked button click and pending PDF auto-open on unlock...");

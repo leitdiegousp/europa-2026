@@ -329,6 +329,10 @@ img, svg, video, iframe {
   box-shadow: var(--shadow-card), 0 0 26px -4px rgba(245, 158, 11, 0.18);
 }
 
+.immigration-docs-card.is-collapsed .immigration-status-badge {
+  display: none;
+}
+
 .immigration-card-inner {
   width: 100%;
   max-width: 100%;
@@ -350,11 +354,6 @@ img, svg, video, iframe {
 
 .immigration-card-header:hover .immigration-heading {
   color: #fff;
-}
-
-.immigration-card-header:focus-visible {
-  outline: 2px solid var(--accent-amber);
-  outline-offset: 4px;
 }
 
 .immigration-title-group {
@@ -437,6 +436,11 @@ img, svg, video, iframe {
   background: rgba(245, 158, 11, 0.22);
   border-color: var(--accent-amber);
   color: #fff;
+}
+
+.immigration-toggle-btn:focus-visible {
+  outline: 2px solid var(--accent-amber);
+  outline-offset: 2px;
 }
 
 .immigration-toggle-btn .toggle-chevron {
@@ -1409,6 +1413,21 @@ img, svg, video, iframe {
     padding: 10px 12px;
   }
 
+  .immigration-docs-card.is-collapsed .immigration-card-header {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .immigration-docs-card.is-collapsed .immigration-title-group {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .immigration-docs-card.is-collapsed .immigration-header-controls {
+    flex-shrink: 0;
+  }
+
   .immigration-heading {
     font-size: 1.02rem;
   }
@@ -1592,6 +1611,25 @@ img, svg, video, iframe {
     margin-top: 6px;
     padding-top: 6px;
     border-top: 1px solid rgba(245, 158, 11, 0.12);
+  }
+
+  .immigration-docs-card.is-collapsed .immigration-card-header {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .immigration-docs-card.is-collapsed .immigration-title-group {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .immigration-docs-card.is-collapsed .immigration-header-controls {
+    width: auto;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+    flex-shrink: 0;
   }
 
   .immigration-toggle-btn {

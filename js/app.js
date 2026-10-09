@@ -443,7 +443,7 @@ class EuropaApp {
 
     this.elImmigrationDocsCard.innerHTML = `
       <div class="immigration-card-inner">
-        <div class="immigration-card-header" id="immigration-card-header" role="button" tabindex="0" aria-expanded="${this.isImmigrationExpanded ? 'true' : 'false'}" aria-controls="immigration-card-body" onclick="app.toggleImmigrationDocs(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();app.toggleImmigrationDocs(event);}">
+        <div class="immigration-card-header" id="immigration-card-header" onclick="app.toggleImmigrationDocs(event)">
           <div class="immigration-title-group">
             <div class="immigration-flag-badge" aria-hidden="true">🇵🇹</div>
             <div class="immigration-title-texts">
@@ -461,9 +461,9 @@ class EuropaApp {
                 </button>
               `}
             </div>
-            <button type="button" class="immigration-toggle-btn" aria-label="${this.isImmigrationExpanded ? 'Recolher detalhes de imigração' : 'Expandir detalhes de imigração'}">
+            <button type="button" class="immigration-toggle-btn" id="immigration-toggle-btn" aria-expanded="${this.isImmigrationExpanded ? 'true' : 'false'}" aria-controls="immigration-card-body" aria-label="${this.isImmigrationExpanded ? 'Recolher detalhes de imigração' : 'Expandir detalhes de imigração'}">
               <span class="immigration-toggle-text">${this.isImmigrationExpanded ? 'Recolher' : 'Expandir'}</span>
-              <span class="toggle-chevron ${this.isImmigrationExpanded ? 'open' : ''}">${this.isImmigrationExpanded ? '▲' : '▼'}</span>
+              <span class="toggle-chevron ${this.isImmigrationExpanded ? 'open' : ''}">▼</span>
             </button>
           </div>
         </div>
@@ -555,6 +555,7 @@ class EuropaApp {
     if (e && e.target) {
       if (
         e.target.closest('.btn-unlock-fast') ||
+        e.target.closest('.immigration-status-badge') ||
         e.target.closest('.copy-icon-btn') ||
         e.target.closest('.doc-action-btn') ||
         e.target.closest('.immigration-lock-hint')
@@ -584,7 +585,6 @@ class EuropaApp {
     const card = this.elImmigrationDocsCard;
     if (!card) return;
 
-    const header = card.querySelector(".immigration-card-header");
     const wrapper = card.querySelector(".immigration-card-body-wrapper");
     const body = card.querySelector(".immigration-card-body");
     const toggleBtn = card.querySelector(".immigration-toggle-btn");
@@ -594,9 +594,6 @@ class EuropaApp {
     if (this.isImmigrationExpanded) {
       card.classList.remove("is-collapsed");
       card.classList.add("is-expanded");
-      if (header) {
-        header.setAttribute("aria-expanded", "true");
-      }
       if (wrapper) {
         wrapper.classList.remove("collapsed");
         wrapper.classList.add("expanded");
@@ -613,14 +610,11 @@ class EuropaApp {
       }
       if (chevron) {
         chevron.classList.add("open");
-        chevron.textContent = "▲";
+        chevron.textContent = "▼";
       }
     } else {
       card.classList.remove("is-expanded");
       card.classList.add("is-collapsed");
-      if (header) {
-        header.setAttribute("aria-expanded", "false");
-      }
       if (wrapper) {
         wrapper.classList.remove("expanded");
         wrapper.classList.add("collapsed");
