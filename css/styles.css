@@ -47,7 +47,7 @@
 html {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -60,7 +60,7 @@ body {
   padding-bottom: calc(75px + var(--safe-bottom));
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   position: relative;
   overflow-wrap: break-word;
   word-break: break-word;
@@ -1001,18 +1001,48 @@ img, svg, video, iframe {
     padding: 10px 12px;
   }
 
+  .header-container {
+    gap: 8px;
+  }
+
+  .brand {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 8px;
+  }
+
   .brand-title {
     font-size: 0.98rem;
+    white-space: nowrap;
   }
 
   .brand-subtitle {
     font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
   }
 
   .brand-icon {
     width: 36px;
     height: 36px;
     font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+
+  .status-pill {
+    padding: 4px 8px;
+    font-size: 0.72rem;
+  }
+
+  .offline-pill {
+    padding: 3px 6px;
+    font-size: 0.68rem;
   }
 
   .current-step-card {
@@ -1108,8 +1138,65 @@ img, svg, video, iframe {
     max-height: 94vh;
   }
 
+  .modal-title {
+    font-size: 1rem;
+  }
+
   .modal-header, .modal-body, .modal-footer {
     padding: 14px;
   }
 }
+
+@media (max-width: 360px) {
+  .app-header {
+    padding: 8px 10px;
+  }
+
+  .header-container {
+    gap: 6px;
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brand-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1.15rem;
+  }
+
+  .brand-title {
+    font-size: 0.92rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.65rem;
+    max-width: 110px;
+  }
+
+  .header-actions {
+    gap: 4px;
+  }
+
+  .status-pill {
+    padding: 3px 6px;
+    font-size: 0.68rem;
+  }
+
+  .offline-pill {
+    padding: 2px 5px;
+    font-size: 0.64rem;
+  }
+
+  .nav-tab {
+    font-size: 0.62rem;
+    padding: 2px 2px;
+  }
+
+  .nav-tab-icon {
+    font-size: 1.05rem;
+  }
+}
+
 

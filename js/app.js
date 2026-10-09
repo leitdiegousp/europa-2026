@@ -200,6 +200,8 @@ class EuropaApp {
       try {
         const reg = await navigator.serviceWorker.register("sw.js");
         console.log("✓ Service Worker registrado:", reg.scope);
+        // Força verificação imediata de atualizações no Service Worker
+        reg.update().catch(() => {});
 
         if (navigator.storage && navigator.storage.persist) {
           const isPersisted = await navigator.storage.persist();
