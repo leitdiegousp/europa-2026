@@ -207,30 +207,101 @@ async function main() {
     mobile: true
   });
 
-  // Step E: Verify Top Immigration Hero Card in DOM
-  console.log("\n[TEST D] Checking Top Immigration Card & Credentials...");
-  const cardData = await cdp.evaluate(`
+  // Step D1: Verify Main Content DOM Order (Hero -> Milestones -> Immigration Docs -> Tab Content)
+  console.log("\n[TEST D1] Verifying DOM Order of Main Sections...");
+  const domOrder = await cdp.evaluate(`
+    (() => {
+      const main = document.querySelector(".main-content");
+      if (!main) return null;
+      return Array.from(main.children).map(c => {
+        if (c.id) return '#' + c.id;
+        if (c.className) return '.' + c.className.split(' ')[0];
+        return c.tagName.toLowerCase();
+      });
+    })()
+  `);
+  console.log("  Main content children order:", domOrder);
+  const stepIdx = domOrder.indexOf("#current-step-card");
+  const milestonesIdx = domOrder.indexOf(".milestones-infographic");
+  const immigrationIdx = domOrder.indexOf("#immigration-docs-card");
+  const tabIdx = domOrder.indexOf("#tab-content-container");
+
+  if (stepIdx === -1 || milestonesIdx === -1 || immigrationIdx === -1 || tabIdx === -1) {
+    throw new Error("Missing required sections in DOM: " + JSON.stringify(domOrder));
+  }
+  if (!(stepIdx < milestonesIdx && milestonesIdx < immigrationIdx && immigrationIdx < tabIdx)) {
+    throw new Error(`Incorrect DOM order: expected #current-step-card -> .milestones-infographic -> #immigration-docs-card -> #tab-content-container, but got indices: step=${stepIdx}, milestones=${milestonesIdx}, immigration=${immigrationIdx}, tab=${tabIdx}`);
+  }
+  console.log("  ✓ Section order verified: Hero (1st) -> Milestones Infographic (2nd) -> Immigration Docs (3rd) -> Tab Content (4th)");
+
+  // Step D2: Verify Initial Collapsed State of Immigration Card
+  console.log("\n[TEST D2] Checking Collapsed State of Immigration Card by Default...");
+  const collapsedCheck = await cdp.evaluate(`
     (() => {
       const card = document.getElementById("immigration-docs-card");
       if (!card) return null;
+      const wrapper = card.querySelector(".immigration-card-body-wrapper");
+      const body = card.querySelector(".immigration-card-body");
+      const toggleText = card.querySelector(".immigration-toggle-text");
       const text = card.innerText;
       return {
         hasCard: true,
+        isCollapsedClass: card.classList.contains("is-collapsed"),
+        isWrapperCollapsed: wrapper && wrapper.classList.contains("collapsed"),
+        isBodyAriaHidden: body && body.getAttribute("aria-hidden") === "true",
+        toggleText: toggleText ? toggleText.innerText.trim() : "",
         hasTitle: text.includes("Documentos de Imigração & Seguro Schengen"),
-        hasDiegoPolicy: text.includes("16023-0003-69-260122474"),
-        hasDiegoCert: text.includes("32572804832"),
-        hasTatianaPolicy: text.includes("16023-0003-69-260122473"),
-        hasTatianaCert: text.includes("29340388828"),
-        buttons: Array.from(card.querySelectorAll("button")).map(b => b.innerText.trim())
+        hasTag: text.toLowerCase().includes("controle de fronteira"),
+        hasDiegoPolicy: text.includes("16023-0003-69-260122474")
       };
     })()
   `);
 
-  if (!cardData || !cardData.hasCard) throw new Error("immigration-docs-card not found in DOM");
-  if (!cardData.hasTitle) throw new Error("Card missing Schengen immigration title");
-  if (!cardData.hasDiegoPolicy || !cardData.hasDiegoCert) throw new Error("Missing Diego credentials in card");
-  if (!cardData.hasTatianaPolicy || !cardData.hasTatianaCert) throw new Error("Missing Tatiana credentials in card");
-  console.log("  ✓ Card rendered correctly with credentials:", cardData.buttons.filter(b => b.startsWith("📄")));
+  if (!collapsedCheck || !collapsedCheck.hasCard) throw new Error("immigration-docs-card not found in DOM");
+  if (!collapsedCheck.isCollapsedClass || !collapsedCheck.isWrapperCollapsed || !collapsedCheck.isBodyAriaHidden) {
+    throw new Error("Card is not properly in collapsed state: " + JSON.stringify(collapsedCheck));
+  }
+  if (!collapsedCheck.hasTitle || !collapsedCheck.hasTag) {
+    throw new Error("Card header missing title or tag: " + JSON.stringify(collapsedCheck));
+  }
+  if (collapsedCheck.hasDiegoPolicy) {
+    throw new Error("Collapsed card should not display policy details in collapsed state!");
+  }
+  console.log(`  ✓ Card is collapsed by default: button="${collapsedCheck.toggleText}", title & tag visible, body collapsed.`);
+
+  // Step D3: Test Toggle to Expand Card
+  console.log("\n[TEST D3] Testing Toggle to Expand Card & Credentials Visibility...");
+  await cdp.evaluate(`app.toggleImmigrationDocs()`);
+  await new Promise(r => setTimeout(r, 200));
+
+  const expandedCheck = await cdp.evaluate(`
+    (() => {
+      const card = document.getElementById("immigration-docs-card");
+      if (!card) return null;
+      const wrapper = card.querySelector(".immigration-card-body-wrapper");
+      const body = card.querySelector(".immigration-card-body");
+      const toggleText = card.querySelector(".immigration-toggle-text");
+      const text = card.innerText;
+      return {
+        isExpandedClass: card.classList.contains("is-expanded"),
+        isWrapperExpanded: wrapper && wrapper.classList.contains("expanded"),
+        isBodyAriaVisible: body && body.getAttribute("aria-hidden") === "false",
+        toggleText: toggleText ? toggleText.innerText.trim() : "",
+        hasDiegoPolicy: text.includes("16023-0003-69-260122474"),
+        hasDiegoCert: text.includes("32572804832"),
+        hasTatianaPolicy: text.includes("16023-0003-69-260122473"),
+        hasTatianaCert: text.includes("29340388828"),
+        buttons: Array.from(card.querySelectorAll(".traveler-actions button")).map(b => b.innerText.trim())
+      };
+    })()
+  `);
+
+  if (!expandedCheck.isExpandedClass || !expandedCheck.isWrapperExpanded || !expandedCheck.isBodyAriaVisible) {
+    throw new Error("Card failed to expand: " + JSON.stringify(expandedCheck));
+  }
+  if (!expandedCheck.hasDiegoPolicy || !expandedCheck.hasDiegoCert) throw new Error("Missing Diego credentials in expanded card");
+  if (!expandedCheck.hasTatianaPolicy || !expandedCheck.hasTatianaCert) throw new Error("Missing Tatiana credentials in expanded card");
+  console.log("  ✓ Card expanded successfully! Toggle text:", expandedCheck.toggleText, "Buttons:", expandedCheck.buttons);
 
   // Step F: Test Locked Button Click -> Unlock Modal Prompt -> Vault Unlock -> PDF Open
   console.log("\n[TEST E] Testing locked button click and pending PDF auto-open on unlock...");
@@ -317,6 +388,31 @@ async function main() {
   }
   console.log(`  ✓ Tatiana's certificate opened: "${tatianaPdfState.title}" with valid Blob URL`);
   await cdp.evaluate(`app.closeModals()`);
+
+  // Step F2: Test Hero Quick-Action '🛂 Seguros Imigração Lisboa' Auto-Expands from Collapsed State
+  console.log("\n[TEST F2] Testing Hero Quick-Action '🛂 Seguros Imigração Lisboa' auto-expands from collapsed state...");
+  await cdp.evaluate(`app.collapseImmigrationDocs()`);
+  const isReCollapsed = await cdp.evaluate(`document.getElementById("immigration-docs-card").classList.contains("is-collapsed")`);
+  if (!isReCollapsed) throw new Error("Card failed to re-collapse");
+  console.log("  Re-collapsed card successfully. Now invoking app.scrollToImmigrationDocs()...");
+
+  await cdp.evaluate(`app.scrollToImmigrationDocs()`);
+  await new Promise(r => setTimeout(r, 200));
+
+  const autoExpanded = await cdp.evaluate(`
+    (() => {
+      const card = document.getElementById("immigration-docs-card");
+      return {
+        isExpanded: card.classList.contains("is-expanded"),
+        hasHighlight: card.classList.contains("card-highlight"),
+        toggleText: card.querySelector(".immigration-toggle-text")?.innerText.trim()
+      };
+    })()
+  `);
+
+  if (!autoExpanded.isExpanded) throw new Error("Hero quick action failed to auto-expand immigration card: " + JSON.stringify(autoExpanded));
+  if (!autoExpanded.hasHighlight) throw new Error("Hero quick action failed to trigger card-highlight animation");
+  console.log("  ✓ Hero quick action auto-expanded the card (toggle text: " + autoExpanded.toggleText + ") and triggered amber highlight!");
 
   // Step H: Check Timeline Event on Day 17
   console.log("\n[TEST G] Checking Day 17 Timeline arrival & immigration event...");

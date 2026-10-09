@@ -15,6 +15,7 @@ class EuropaApp {
     this.simulatedDate = null;
     this.activePdfRevoke = null;
     this.pendingPdfRequest = null;
+    this.isImmigrationExpanded = false;
 
     this.init();
   }
@@ -442,103 +443,207 @@ class EuropaApp {
 
     this.elImmigrationDocsCard.innerHTML = `
       <div class="immigration-card-inner">
-        <div class="immigration-card-header">
+        <div class="immigration-card-header" id="immigration-card-header" role="button" tabindex="0" aria-expanded="${this.isImmigrationExpanded ? 'true' : 'false'}" aria-controls="immigration-card-body" onclick="app.toggleImmigrationDocs(event)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();app.toggleImmigrationDocs(event);}">
           <div class="immigration-title-group">
             <div class="immigration-flag-badge" aria-hidden="true">🇵🇹</div>
-            <div>
+            <div class="immigration-title-texts">
               <div class="immigration-tag">Controle de Fronteira • Espaço Schengen • Lisboa (LIS)</div>
               <h2 class="immigration-heading">Documentos de Imigração & Seguro Schengen (Entrada em Portugal)</h2>
             </div>
           </div>
-          <div class="immigration-status-badge">
-            ${isUnlocked ? `
-              <span class="badge-unlocked">🔓 Cofre Destravado</span>
+          <div class="immigration-header-controls">
+            <div class="immigration-status-badge">
+              ${isUnlocked ? `
+                <span class="badge-unlocked">🔓 Cofre Destravado</span>
+              ` : `
+                <button type="button" class="btn btn-primary btn-sm btn-unlock-fast" onclick="event.stopPropagation(); app.openUnlockModal()">
+                  🔒 Destravar Cofre
+                </button>
+              `}
+            </div>
+            <button type="button" class="immigration-toggle-btn" aria-label="${this.isImmigrationExpanded ? 'Recolher detalhes de imigração' : 'Expandir detalhes de imigração'}">
+              <span class="immigration-toggle-text">${this.isImmigrationExpanded ? 'Recolher' : 'Expandir'}</span>
+              <span class="toggle-chevron ${this.isImmigrationExpanded ? 'open' : ''}">${this.isImmigrationExpanded ? '▲' : '▼'}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="immigration-card-body-wrapper ${this.isImmigrationExpanded ? 'expanded' : 'collapsed'}" id="immigration-card-body-wrapper">
+          <div class="immigration-card-body" id="immigration-card-body" aria-hidden="${!this.isImmigrationExpanded}">
+            <p class="immigration-notice">
+              <strong>Apresentação Obrigatória na Imigração:</strong> Para ingressar em Portugal e no Espaço Schengen, apresente os passaportes brasileiros e os certificados de seguro viagem com cobertura médica/hospitalar mínima de <strong>€ 30.000</strong> (Porto Seguro).
+            </p>
+
+            <div class="immigration-travelers-grid">
+              <!-- Diego Jacob -->
+              <div class="traveler-doc-box">
+                <div class="traveler-header">
+                  <div class="traveler-avatar">👤</div>
+                  <div>
+                    <strong class="traveler-name">Diego Jacob Fernandes Leite</strong>
+                    <span class="traveler-role">Titular • Voo TAP TP110</span>
+                  </div>
+                </div>
+                <div class="policy-details">
+                  <div class="policy-row">
+                    <span class="policy-label">Apólice Porto Seguro:</span>
+                    <span class="policy-val">16023-0003-69-260122474 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('16023-0003-69-260122474', 'Apólice Diego')">📋</button></span>
+                  </div>
+                  <div class="policy-row">
+                    <span class="policy-label">Certificado Schengen:</span>
+                    <span class="policy-val">32572804832 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('32572804832', 'Certificado Diego')">📋</button></span>
+                  </div>
+                </div>
+                <div class="traveler-actions">
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
+                    📄 Bilhete Seguro Diego
+                  </button>
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
+                    📄 Certificado Schengen Diego
+                  </button>
+                </div>
+              </div>
+
+              <!-- Tatiana Jacob -->
+              <div class="traveler-doc-box">
+                <div class="traveler-header">
+                  <div class="traveler-avatar">👤</div>
+                  <div>
+                    <strong class="traveler-name">Tatiana Araujo de Sousa Jacob</strong>
+                    <span class="traveler-role">Esposa / Segurada • Voo TAP TP110</span>
+                  </div>
+                </div>
+                <div class="policy-details">
+                  <div class="policy-row">
+                    <span class="policy-label">Apólice Porto Seguro:</span>
+                    <span class="policy-val">16023-0003-69-260122473 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('16023-0003-69-260122473', 'Apólice Tatiana')">📋</button></span>
+                  </div>
+                  <div class="policy-row">
+                    <span class="policy-label">Certificado Schengen:</span>
+                    <span class="policy-val">29340388828 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('29340388828', 'Certificado Tatiana')">📋</button></span>
+                  </div>
+                </div>
+                <div class="traveler-actions">
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
+                    📄 Bilhete Seguro Tatiana
+                  </button>
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
+                    📄 Certificado Schengen Tatiana
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            ${!isUnlocked ? `
+              <div class="immigration-lock-hint" onclick="event.stopPropagation(); app.openUnlockModal()">
+                <span>🔒 PDFs protegidos com criptografia AES-256-GCM. Toque em qualquer botão ou <strong>aqui para destravar com a senha mestre (ti8mao)</strong>.</span>
+              </div>
             ` : `
-              <button class="btn btn-primary btn-sm btn-unlock-fast" onclick="app.openUnlockModal()">
-                🔒 Destravar Cofre
-              </button>
+              <div class="immigration-unlocked-hint">
+                <span>✓ Apólices e certificados decifrados em memória (RAM) • Toque em qualquer botão para visualização imediata ou download offline.</span>
+              </div>
             `}
           </div>
         </div>
-
-        <p class="immigration-notice">
-          <strong>Apresentação Obrigatória na Imigração:</strong> Para ingressar em Portugal e no Espaço Schengen, apresente os passaportes brasileiros e os certificados de seguro viagem com cobertura médica/hospitalar mínima de <strong>€ 30.000</strong> (Porto Seguro).
-        </p>
-
-        <div class="immigration-travelers-grid">
-          <!-- Diego Jacob -->
-          <div class="traveler-doc-box">
-            <div class="traveler-header">
-              <div class="traveler-avatar">👤</div>
-              <div>
-                <strong class="traveler-name">Diego Jacob Fernandes Leite</strong>
-                <span class="traveler-role">Titular • Voo TAP TP110</span>
-              </div>
-            </div>
-            <div class="policy-details">
-              <div class="policy-row">
-                <span class="policy-label">Apólice Porto Seguro:</span>
-                <span class="policy-val">16023-0003-69-260122474 <button class="copy-icon-btn" onclick="app.copyToClipboard('16023-0003-69-260122474', 'Apólice Diego')">📋</button></span>
-              </div>
-              <div class="policy-row">
-                <span class="policy-label">Certificado Schengen:</span>
-                <span class="policy-val">32572804832 <button class="copy-icon-btn" onclick="app.copyToClipboard('32572804832', 'Certificado Diego')">📋</button></span>
-              </div>
-            </div>
-            <div class="traveler-actions">
-              <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
-                📄 Bilhete Seguro Diego
-              </button>
-              <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
-                📄 Certificado Schengen Diego
-              </button>
-            </div>
-          </div>
-
-          <!-- Tatiana Jacob -->
-          <div class="traveler-doc-box">
-            <div class="traveler-header">
-              <div class="traveler-avatar">👤</div>
-              <div>
-                <strong class="traveler-name">Tatiana Araujo de Sousa Jacob</strong>
-                <span class="traveler-role">Esposa / Segurada • Voo TAP TP110</span>
-              </div>
-            </div>
-            <div class="policy-details">
-              <div class="policy-row">
-                <span class="policy-label">Apólice Porto Seguro:</span>
-                <span class="policy-val">16023-0003-69-260122473 <button class="copy-icon-btn" onclick="app.copyToClipboard('16023-0003-69-260122473', 'Apólice Tatiana')">📋</button></span>
-              </div>
-              <div class="policy-row">
-                <span class="policy-label">Certificado Schengen:</span>
-                <span class="policy-val">29340388828 <button class="copy-icon-btn" onclick="app.copyToClipboard('29340388828', 'Certificado Tatiana')">📋</button></span>
-              </div>
-            </div>
-            <div class="traveler-actions">
-              <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
-                📄 Bilhete Seguro Tatiana
-              </button>
-              <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
-                📄 Certificado Schengen Tatiana
-              </button>
-            </div>
-          </div>
-        </div>
-
-        ${!isUnlocked ? `
-          <div class="immigration-lock-hint" onclick="app.openUnlockModal()">
-            <span>🔒 PDFs protegidos com criptografia AES-256-GCM. Toque em qualquer botão ou <strong>aqui para destravar com a senha mestre (ti8mao)</strong>.</span>
-          </div>
-        ` : `
-          <div class="immigration-unlocked-hint">
-            <span>✓ Apólices e certificados decifrados em memória (RAM) • Toque em qualquer botão para visualização imediata ou download offline.</span>
-          </div>
-        `}
       </div>
     `;
+
+    this._updateImmigrationAccordionState();
+  }
+
+  toggleImmigrationDocs(e) {
+    if (e && e.target) {
+      if (
+        e.target.closest('.btn-unlock-fast') ||
+        e.target.closest('.copy-icon-btn') ||
+        e.target.closest('.doc-action-btn') ||
+        e.target.closest('.immigration-lock-hint')
+      ) {
+        return;
+      }
+    }
+    this.isImmigrationExpanded = !this.isImmigrationExpanded;
+    this._updateImmigrationAccordionState();
+  }
+
+  expandImmigrationDocs() {
+    if (!this.isImmigrationExpanded) {
+      this.isImmigrationExpanded = true;
+      this._updateImmigrationAccordionState();
+    }
+  }
+
+  collapseImmigrationDocs() {
+    if (this.isImmigrationExpanded) {
+      this.isImmigrationExpanded = false;
+      this._updateImmigrationAccordionState();
+    }
+  }
+
+  _updateImmigrationAccordionState() {
+    const card = this.elImmigrationDocsCard;
+    if (!card) return;
+
+    const header = card.querySelector(".immigration-card-header");
+    const wrapper = card.querySelector(".immigration-card-body-wrapper");
+    const body = card.querySelector(".immigration-card-body");
+    const toggleBtn = card.querySelector(".immigration-toggle-btn");
+    const toggleText = card.querySelector(".immigration-toggle-text");
+    const chevron = card.querySelector(".toggle-chevron");
+
+    if (this.isImmigrationExpanded) {
+      card.classList.remove("is-collapsed");
+      card.classList.add("is-expanded");
+      if (header) {
+        header.setAttribute("aria-expanded", "true");
+      }
+      if (wrapper) {
+        wrapper.classList.remove("collapsed");
+        wrapper.classList.add("expanded");
+      }
+      if (body) {
+        body.setAttribute("aria-hidden", "false");
+      }
+      if (toggleBtn) {
+        toggleBtn.setAttribute("aria-expanded", "true");
+        toggleBtn.setAttribute("aria-label", "Recolher detalhes de imigração");
+      }
+      if (toggleText) {
+        toggleText.textContent = "Recolher";
+      }
+      if (chevron) {
+        chevron.classList.add("open");
+        chevron.textContent = "▲";
+      }
+    } else {
+      card.classList.remove("is-expanded");
+      card.classList.add("is-collapsed");
+      if (header) {
+        header.setAttribute("aria-expanded", "false");
+      }
+      if (wrapper) {
+        wrapper.classList.remove("expanded");
+        wrapper.classList.add("collapsed");
+      }
+      if (body) {
+        body.setAttribute("aria-hidden", "true");
+      }
+      if (toggleBtn) {
+        toggleBtn.setAttribute("aria-expanded", "false");
+        toggleBtn.setAttribute("aria-label", "Expandir detalhes de imigração");
+      }
+      if (toggleText) {
+        toggleText.textContent = "Expandir";
+      }
+      if (chevron) {
+        chevron.classList.remove("open");
+        chevron.textContent = "▼";
+      }
+    }
   }
 
   scrollToImmigrationDocs() {
+    this.expandImmigrationDocs();
     const el = document.getElementById("immigration-docs-card");
     if (!el) return;
     const header = document.querySelector(".app-header");
