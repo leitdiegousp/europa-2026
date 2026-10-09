@@ -44,13 +44,31 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-main);
   color: var(--text-main);
   line-height: 1.5;
   padding-bottom: calc(75px + var(--safe-bottom));
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
+  position: relative;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+img, svg, video, iframe {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Header Superior */
@@ -63,14 +81,19 @@ body {
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
   padding: 12px 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .header-container {
   max-width: 900px;
+  width: 100%;
+  box-sizing: border-box;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .brand {
@@ -107,6 +130,8 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Badges e Status */
@@ -118,6 +143,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
+  cursor: pointer;
 }
 
 .status-locked {
@@ -139,6 +166,7 @@ body {
   background-color: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
 /* Botões */
@@ -184,9 +212,12 @@ body {
 
 /* Container Principal */
 .main-content {
+  width: 100%;
   max-width: 900px;
   margin: 0 auto;
   padding: 16px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* Hero Card: Agora / Próxima Etapa */
@@ -199,6 +230,8 @@ body {
   box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .step-card-header {
@@ -281,6 +314,10 @@ body {
   box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  contain: paint;
 }
 
 .milestones-header {
@@ -346,6 +383,9 @@ body {
 /* Scroll Wrapper com trilha contínua */
 .milestones-track-wrapper {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 10px 4px 10px;
@@ -356,6 +396,8 @@ body {
   user-select: none;
   -webkit-user-select: none;
   scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
 }
 
 /* Ocultar barra de rolagem horizontal em navegadores WebKit (Chrome, Safari, Edge) */
@@ -382,6 +424,7 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 0;
+  width: max-content;
   min-width: 960px;
   position: relative;
   padding-top: 14px;
@@ -403,7 +446,8 @@ body {
 
 /* Nó do Marco */
 .milestone-node {
-  flex: 1;
+  flex: 0 0 120px;
+  width: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -416,6 +460,7 @@ body {
   padding: 0 4px;
   text-align: center;
   transition: transform 0.2s ease;
+  box-sizing: border-box;
 }
 
 .milestone-node:hover {
@@ -697,7 +742,7 @@ body {
 
 .secret-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 10px;
   margin-top: 8px;
 }
@@ -722,6 +767,7 @@ body {
   align-items: center;
   gap: 6px;
   user-select: all;
+  word-break: break-all;
 }
 
 .copy-icon-btn {
@@ -910,6 +956,9 @@ body {
   pointer-events: none;
   transition: all 0.25s ease;
   box-shadow: var(--shadow-float);
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .toast.show {
@@ -924,3 +973,143 @@ body {
   border: none;
   background: #2a2a2e;
 }
+
+/* =========================================================
+   RESPONSIVE DESIGN (Mobile & Tablet Hardening)
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 14px;
+  }
+
+  .current-step-card {
+    padding: 16px;
+  }
+
+  .milestones-infographic {
+    padding: 16px 14px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 12px;
+  }
+
+  .app-header {
+    padding: 10px 12px;
+  }
+
+  .brand-title {
+    font-size: 0.98rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.7rem;
+  }
+
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+
+  .current-step-card {
+    padding: 14px 12px;
+    border-radius: var(--radius-md);
+  }
+
+  .step-title {
+    font-size: 1.15rem;
+  }
+
+  .step-details {
+    font-size: 0.82rem;
+    gap: 10px;
+  }
+
+  .step-actions {
+    gap: 8px;
+  }
+
+  .step-actions .btn {
+    font-size: 0.78rem;
+    padding: 7px 12px;
+  }
+
+  .milestones-infographic {
+    padding: 14px 10px 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .milestones-heading {
+    font-size: 0.88rem;
+  }
+
+  .milestones-subheading {
+    font-size: 0.68rem;
+  }
+
+  .milestones-live-btn {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+
+  .timeline-section-title {
+    font-size: 1.05rem;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .day-header {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .event-card {
+    padding: 14px 12px;
+  }
+
+  .event-card-top {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .event-name {
+    font-size: 0.95rem;
+  }
+
+  .event-desc {
+    font-size: 0.82rem;
+  }
+
+  .secret-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-nav {
+    padding: 6px 6px calc(6px + var(--safe-bottom));
+  }
+
+  .nav-tab {
+    padding: 3px 4px;
+    font-size: 0.68rem;
+    gap: 2px;
+  }
+
+  .nav-tab-icon {
+    font-size: 1.15rem;
+  }
+
+  .modal-card {
+    border-radius: var(--radius-md);
+    margin: 8px;
+    max-height: 94vh;
+  }
+
+  .modal-header, .modal-body, .modal-footer {
+    padding: 14px;
+  }
+}
+
