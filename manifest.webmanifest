@@ -1,7 +1,7 @@
 {
-  "name": "Europa 2026 • Dossiê de Viagem",
+  "name": "Europa 2026 • Itinerário Viagem",
   "short_name": "Europa 2026",
-  "description": "Dossiê operacional e itinerário com proteção criptográfica local para Diego, Tatiana e Fabiana.",
+  "description": "Itinerário de viagem com proteção criptográfica local para Diego, Tatiana e Fabiana.",
   "start_url": "./index.html",
   "display": "standalone",
   "orientation": "portrait",

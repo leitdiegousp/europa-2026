@@ -1,4 +1,4 @@
-# 🧭 Europa 2026 • Dossiê de Viagem & PWA Offline
+# 🧭 Europa 2026 • Itinerário Viagem & PWA Offline
 
 > **Viajantes:** Diego, Tatiana e Fabiana  
 > **Período:** 17 a 30 de Outubro de 2026  
