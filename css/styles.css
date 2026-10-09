@@ -269,54 +269,232 @@ body {
   border-top: 1px solid var(--border-subtle);
 }
 
-/* Simulador de Data e Hora (Time Machine) */
-.simulator-box {
-  background-color: var(--bg-card);
+/* =========================================================
+   TRAVEL MILESTONES INFOGRAPHIC ROADMAP
+   ========================================================= */
+.milestones-infographic {
+  background: linear-gradient(180deg, #111a2a 0%, #0d1422 100%);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 12px 16px;
-  margin-bottom: 24px;
+  border-radius: var(--radius-lg);
+  padding: 18px 20px 20px;
+  margin-bottom: 26px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+
+.milestones-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 14px;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.simulator-title {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-muted);
+.milestones-title-group {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
 }
 
-.day-pills {
+.milestones-icon-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--accent-amber-subtle);
+  border: 1px solid rgba(245, 158, 11, 0.3);
   display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
 }
 
-.day-pill {
+.milestones-heading {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.milestones-subheading {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.milestones-live-btn {
   background: var(--bg-main);
   border: 1px solid var(--border-subtle);
-  color: var(--text-muted);
+  color: var(--accent-emerald);
   font-size: 0.75rem;
-  font-weight: 600;
-  padding: 4px 10px;
+  font-weight: 700;
+  padding: 5px 12px;
   border-radius: 9999px;
   cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
 }
 
-.day-pill.active {
-  background-color: var(--accent-amber);
+.milestones-live-btn:hover,
+.milestones-live-btn.active {
+  background: var(--accent-emerald-subtle);
+  border-color: var(--accent-emerald);
+}
+
+/* Scroll Wrapper com trilha contínua */
+.milestones-track-wrapper {
+  position: relative;
+  overflow-x: auto;
+  padding: 10px 4px 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-focus) transparent;
+}
+
+.milestones-track-wrapper::-webkit-scrollbar {
+  height: 5px;
+}
+.milestones-track-wrapper::-webkit-scrollbar-thumb {
+  background: var(--border-focus);
+  border-radius: 4px;
+}
+
+/* Linha contínua do infográfico */
+.milestones-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  min-width: 860px;
+  position: relative;
+  padding-top: 14px;
+}
+
+.milestones-track::before {
+  content: "";
+  position: absolute;
+  top: 33px;
+  left: 40px;
+  right: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b 0%, #10b981 30%, #0ea5e9 65%, #f59e0b 100%);
+  opacity: 0.55;
+  z-index: 1;
+}
+
+/* Nó do Marco */
+.milestone-node {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0 4px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.milestone-node:hover {
+  transform: translateY(-2px);
+}
+
+/* Marcador Circular */
+.milestone-marker {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--border-focus);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+  box-shadow: 0 0 0 4px var(--bg-main);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.milestone-node.active .milestone-marker {
+  background: #f59e0b;
+  border-color: #f8fafc;
   color: #000;
-  border-color: var(--accent-amber);
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.35), 0 4px 16px rgba(245, 158, 11, 0.55);
+  transform: scale(1.18);
+}
+
+.milestone-date {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.milestone-node.active .milestone-date {
+  color: var(--accent-amber);
+}
+
+.milestone-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  max-width: 95px;
+  line-height: 1.25;
+  white-space: normal;
+}
+
+.milestone-node.active .milestone-title {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.milestone-tag {
+  margin-top: 5px;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--bg-main);
+  color: var(--text-dim);
+  border: 1px solid var(--border-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.milestone-node.active .milestone-tag {
+  background: var(--accent-amber-subtle);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: var(--accent-amber);
+}
+
+/* Botões de Check-in das Companhias Aéreas */
+.btn-checkin {
+  background-color: #0284c7;
+  color: #ffffff !important;
+  border: 1px solid #0369a1;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.btn-checkin:hover {
+  background-color: #0369a1;
+  color: #ffffff !important;
+}
+
+.btn-checkin-tap {
+  background-color: #059669;
+  color: #ffffff !important;
+  border: 1px solid #047857;
+}
+
+.btn-checkin-tap:hover {
+  background-color: #047857;
+  color: #ffffff !important;
 }
 
 /* Timeline Contínua */

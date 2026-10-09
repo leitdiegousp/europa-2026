@@ -30,7 +30,8 @@ class EuropaApp {
     this.elHeaderStatus = document.getElementById("header-vault-status");
     this.elOfflinePill = document.getElementById("offline-status-pill");
     this.elCurrentStepCard = document.getElementById("current-step-card");
-    this.elSimulatorPills = document.getElementById("simulator-pills");
+    this.elMilestonesTrack = document.getElementById("milestones-track");
+    this.elBtnLiveTime = document.getElementById("btn-live-time");
     this.elMainContainer = document.getElementById("tab-content-container");
     this.elToast = document.getElementById("toast-notification");
 
@@ -243,15 +244,21 @@ class EuropaApp {
 
   setSimulatedDate(dateStr) {
     this.simulatedDate = dateStr;
-    document.querySelectorAll(".day-pill").forEach(p => {
-      p.classList.toggle("active", p.dataset.date === (dateStr || ""));
-    });
+    this._renderMilestonesTrack();
+
+    if (dateStr) {
+      const activeNode = document.querySelector(`.milestone-node[data-date="${dateStr}"]`);
+      if (activeNode) {
+        activeNode.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
+    }
+
     this.render();
   }
 
   render() {
     this._renderCurrentStep();
-    this._renderSimulatorPills();
+    this._renderMilestonesTrack();
     this._renderTabContent();
   }
 
@@ -278,6 +285,7 @@ class EuropaApp {
         </p>
         <div class="step-actions">
           <button class="btn btn-primary btn-sm" onclick="app.setSimulatedDate('2026-10-17')">Simular Dia da Partida (17/Out)</button>
+          <a href="https://www.flytap.com/pt-br/check-in" target="_blank" rel="noopener noreferrer" class="btn btn-checkin-tap btn-sm">🛫 Check-in TAP ↗</a>
           <button class="btn btn-secondary btn-sm" onclick="app.prepareOffline()">Preparar Modo Avião (Offline)</button>
         </div>
       `;
@@ -299,6 +307,18 @@ class EuropaApp {
         <button class="btn btn-primary btn-sm" onclick="app.copyToClipboard('${evt.bookingRef}', 'Reserva')">
           📋 Copiar Reserva (${evt.bookingRef})
         </button>
+      `;
+    }
+
+    // Botão direto de Check-in da Companhia Aérea
+    if (evt.category === "flight" || evt.checkinUrl) {
+      const isTap = (evt.airline && evt.airline.includes("TAP")) || (evt.flightNumber && evt.flightNumber.startsWith("TP"));
+      const checkinUrl = evt.checkinUrl || (isTap ? "https://www.flytap.com/pt-br/check-in" : "https://www.aireuropa.com/br/pt/aea/check-in-online.html");
+      const ciaName = isTap ? "TAP Oficial" : "Air Europa";
+      actionButtonsHtml += `
+        <a href="${checkinUrl}" target="_blank" rel="noopener noreferrer" class="btn ${isTap ? 'btn-checkin-tap' : 'btn-checkin'} btn-sm">
+          🛫 Fazer Check-in ${ciaName} ↗
+        </a>
       `;
     }
 
@@ -343,25 +363,97 @@ class EuropaApp {
     `;
   }
 
-  _renderSimulatorPills() {
-    const days = [
-      { date: "", label: "Agora (Real)" },
-      { date: "2026-10-17", label: "17/Out (Partida FLN)" },
-      { date: "2026-10-18", label: "18/Out (Genebra/Saillon)" },
-      { date: "2026-10-20", label: "20/Out (Volta Madrid)" },
-      { date: "2026-10-22", label: "22/Out (Toledo)" },
-      { date: "2026-10-25", label: "25/Out (Fim DST)" },
-      { date: "2026-10-28", label: "28/Out (Madrid)" },
-      { date: "2026-10-29", label: "29/Out (Lisboa)" },
-      { date: "2026-10-30", label: "30/Out (Retorno Brasil)" }
+  _renderMilestonesTrack() {
+    if (!this.elMilestonesTrack) return;
+
+    const milestones = [
+      {
+        date: "2026-10-17",
+        icon: "🛫",
+        dateLabel: "17/Out",
+        title: "Partida Brasil",
+        tag: "Voo TAP",
+        city: "FLN ➔ MAD"
+      },
+      {
+        date: "2026-10-18",
+        icon: "🏔️",
+        dateLabel: "18/Out",
+        title: "Alpes Suíços",
+        tag: "Suíça",
+        city: "GVA ➔ Saillon"
+      },
+      {
+        date: "2026-10-20",
+        icon: "🇪🇸",
+        dateLabel: "20/Out",
+        title: "Retorno Madrid",
+        tag: "Espanha",
+        city: "Madrid Rio"
+      },
+      {
+        date: "2026-10-22",
+        icon: "🎓",
+        dateLabel: "22/Out",
+        title: "Congresso Toledo",
+        tag: "Congresso",
+        city: "Mirador del Valle"
+      },
+      {
+        date: "2026-10-25",
+        icon: "⏰",
+        dateLabel: "25/Out",
+        title: "Virada de Fuso",
+        tag: "Fim DST",
+        city: "CEST ➔ CET"
+      },
+      {
+        date: "2026-10-28",
+        icon: "🏨",
+        dateLabel: "28/Out",
+        title: "Madrid Noite",
+        tag: "Madrid",
+        city: "Villa Potasa"
+      },
+      {
+        date: "2026-10-29",
+        icon: "🇵🇹",
+        dateLabel: "29/Out",
+        title: "Conexão Lisboa",
+        tag: "Portugal",
+        city: "Central Lisbon"
+      },
+      {
+        date: "2026-10-30",
+        icon: "🏠",
+        dateLabel: "30/Out",
+        title: "Voo Brasil",
+        tag: "Retorno",
+        city: "LIS ➔ FLN"
+      }
     ];
 
-    this.elSimulatorPills.innerHTML = days.map(d => `
-      <button class="day-pill ${(this.simulatedDate === d.date || (!this.simulatedDate && d.date === '')) ? 'active' : ''}"
-        data-date="${d.date}" onclick="app.setSimulatedDate('${d.date}')">
-        ${d.label}
-      </button>
-    `).join("");
+    const isLive = !this.simulatedDate;
+    if (this.elBtnLiveTime) {
+      this.elBtnLiveTime.classList.toggle("active", isLive);
+    }
+
+    this.elMilestonesTrack.innerHTML = milestones.map(m => {
+      const isActive = this.simulatedDate === m.date;
+      return `
+        <button class="milestone-node ${isActive ? 'active' : ''}" 
+                data-date="${m.date}" 
+                onclick="app.setSimulatedDate('${m.date}')"
+                title="${m.title} (${m.city})">
+          <div class="milestone-marker">
+            <span>${m.icon}</span>
+          </div>
+          <div class="milestone-date">${m.dateLabel}</div>
+          <div class="milestone-title">${m.title}</div>
+          <div class="milestone-tag">${m.tag}</div>
+        </button>
+      `;
+    }).join("");
   }
 
   _renderTabContent() {
@@ -468,6 +560,11 @@ class EuropaApp {
               </div>
               ${privateBooking.documents && privateBooking.documents.length > 0 ? `
                 <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                  ${privateBooking.category === 'flight' || privateBooking.checkinUrl ? `
+                    <a href="${privateBooking.checkinUrl || (privateBooking.airline && privateBooking.airline.includes('Air Europa') ? 'https://www.aireuropa.com/br/pt/aea/check-in-online.html' : 'https://www.flytap.com/pt-br/check-in')}" target="_blank" rel="noopener noreferrer" class="btn ${privateBooking.airline && privateBooking.airline.includes('Air Europa') ? 'btn-checkin' : 'btn-checkin-tap'} btn-sm">
+                      🛫 Fazer Check-in Online ↗
+                    </a>
+                  ` : ""}
                   ${privateBooking.documents.map(docId => `
                     <button class="btn btn-secondary btn-sm" onclick="app.openPdf('${docId}', '${privateBooking.title}')">
                       📄 Abrir Comprovante PDF
@@ -509,55 +606,68 @@ class EuropaApp {
     const flights = [
       {
         title: "Voo TAP TP110 • Florianópolis ➔ Lisboa",
+        airline: "TAP Air Portugal",
         date: "17 de Outubro de 2026 (00:25 ➔ 15:45)",
         route: "FLN (T1) ➔ LIS (T1)",
         pnr: "X8NDY2",
+        checkinUrl: "https://www.flytap.com/pt-br/check-in",
         passengers: "Diego Jacob e Tatiana Jacob",
         docs: ["doc-tap-diego", "doc-tap-tatiana"]
       },
       {
         title: "Voo TAP TP1018 • Lisboa ➔ Madrid",
+        airline: "TAP Air Portugal",
         date: "17 de Outubro de 2026 (16:50 ➔ 19:10)",
         route: "LIS (T1) ➔ MAD (T2)",
         pnr: "X8NDY2",
+        checkinUrl: "https://www.flytap.com/pt-br/check-in",
         passengers: "Diego Jacob e Tatiana Jacob",
         docs: ["doc-tap-diego", "doc-tap-tatiana"]
       },
       {
         title: "Voo Air Europa UX1663 • Madrid ➔ Genebra",
+        airline: "Air Europa",
         date: "18 de Outubro de 2026 (08:00 ➔ 10:00)",
         route: "MAD (T2) ➔ GVA (T1)",
         pnr: "8IAEL8",
+        checkinUrl: "https://www.aireuropa.com/br/pt/aea/check-in-online.html",
         passengers: "Diego Jacob, Tatiana Jacob e Fabiana Poli",
         docs: ["doc-aireuropa-diego", "doc-aireuropa-tatiana", "doc-aireuropa-fabiana"]
       },
       {
         title: "Voo Air Europa UX1666 • Genebra ➔ Madrid",
+        airline: "Air Europa",
         date: "20 de Outubro de 2026 (18:55 ➔ 21:05)",
         route: "GVA (T1) ➔ MAD (T2)",
         pnr: "8IAEL8",
+        checkinUrl: "https://www.aireuropa.com/br/pt/aea/check-in-online.html",
         passengers: "Diego Jacob, Tatiana Jacob e Fabiana Poli",
         docs: ["doc-aireuropa-diego", "doc-aireuropa-tatiana", "doc-aireuropa-fabiana"]
       },
       {
         title: "Voo TAP TP1013 • Madrid ➔ Lisboa",
+        airline: "TAP Air Portugal",
         date: "29 de Outubro de 2026 (12:10 ➔ 12:35)",
         route: "MAD (T2) ➔ LIS (T1)",
         pnr: "X8NDY2",
+        checkinUrl: "https://www.flytap.com/pt-br/check-in",
         passengers: "Diego Jacob e Tatiana Jacob",
         docs: ["doc-tap-diego", "doc-tap-tatiana"]
       },
       {
         title: "Voo TAP TP109 Direto • Lisboa ➔ Florianópolis",
+        airline: "TAP Air Portugal",
         date: "30 de Outubro de 2026 (11:00 ➔ 18:35)",
         route: "LIS (T1) ➔ FLN (T1)",
         pnr: "X8NDY2",
+        checkinUrl: "https://www.flytap.com/pt-br/check-in",
         passengers: "Diego Jacob e Tatiana Jacob",
         docs: ["doc-tap-diego", "doc-tap-tatiana"]
       }
     ];
 
     flights.forEach(f => {
+      const isTap = f.airline.includes("TAP");
       html += `
         <div class="event-card">
           <div class="event-card-top">
@@ -575,6 +685,9 @@ class EuropaApp {
                 </div>
               </div>
               <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="${f.checkinUrl}" target="_blank" rel="noopener noreferrer" class="btn ${isTap ? 'btn-checkin-tap' : 'btn-checkin'} btn-sm">
+                  🛫 Fazer Check-in ${f.airline} ↗
+                </a>
                 ${f.docs.map(docId => `
                   <button class="btn btn-secondary btn-sm" onclick="app.openPdf('${docId}', '${f.title}')">
                     📄 Abrir Bilhete PDF
@@ -584,7 +697,7 @@ class EuropaApp {
             </div>
           ` : `
             <div class="locked-indicator">
-              <span>🔒 Localizador e cartões de embarque protegidos no cofre.</span>
+              <span>🔒 Localizador, links de check-in e cartões de embarque protegidos no cofre.</span>
             </div>
           `}
         </div>
