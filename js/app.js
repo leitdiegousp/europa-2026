@@ -323,15 +323,23 @@ class EuropaApp {
     }
 
     if (evt.phone) {
+      const waDigits = evt.phone.replace(/\D/g, "");
       actionButtonsHtml += `
-        <a href="tel:${evt.phone}" class="btn btn-secondary btn-sm">
-          📞 Ligar (${evt.phone})
+        <a href="https://wa.me/${waDigits}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm" title="Conversar no WhatsApp">
+          💬 WhatsApp (${evt.phone}) ↗
+        </a>
+        <a href="tel:${evt.phone}" class="btn btn-secondary btn-sm" title="Fazer ligação de voz">
+          📞 Ligar
         </a>
       `;
     } else if (evt.hostPhone) {
+      const waDigits = evt.hostPhone.replace(/\D/g, "");
       actionButtonsHtml += `
-        <a href="tel:${evt.hostPhone}" class="btn btn-secondary btn-sm">
-          📞 Ligar Anfitrião (${evt.hostPhone})
+        <a href="https://wa.me/${waDigits}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm" title="Conversar no WhatsApp">
+          💬 WhatsApp ${evt.host || 'Anfitrião'} (${evt.hostPhone}) ↗
+        </a>
+        <a href="tel:${evt.hostPhone}" class="btn btn-secondary btn-sm" title="Fazer ligação de voz">
+          📞 Ligar
         </a>
       `;
     }
@@ -541,14 +549,22 @@ class EuropaApp {
                 ` : ""}
                 ${privateBooking.phone ? `
                   <div class="secret-item">
-                    <span class="secret-label">Telefone</span>
-                    <span class="secret-value"><a href="tel:${privateBooking.phone}" style="color:var(--accent-amber);">${privateBooking.phone}</a></span>
+                    <span class="secret-label">Telefone / WhatsApp</span>
+                    <span class="secret-value">
+                      <a href="https://wa.me/${privateBooking.phone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="whatsapp-badge-link" title="Abrir conversa no WhatsApp">
+                        💬 ${privateBooking.phone} ↗
+                      </a>
+                    </span>
                   </div>
                 ` : ""}
                 ${privateBooking.hostPhone ? `
                   <div class="secret-item">
-                    <span class="secret-label">Anfitrião</span>
-                    <span class="secret-value"><a href="tel:${privateBooking.hostPhone}" style="color:var(--accent-amber);">${privateBooking.host} (${privateBooking.hostPhone})</a></span>
+                    <span class="secret-label">Anfitrião / WhatsApp</span>
+                    <span class="secret-value">
+                      <a href="https://wa.me/${privateBooking.hostPhone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="whatsapp-badge-link" title="Abrir conversa no WhatsApp com anfitrião">
+                        💬 ${privateBooking.host} (${privateBooking.hostPhone}) ↗
+                      </a>
+                    </span>
                   </div>
                 ` : ""}
                 ${privateBooking.address ? `
@@ -558,18 +574,28 @@ class EuropaApp {
                   </div>
                 ` : ""}
               </div>
-              ${privateBooking.documents && privateBooking.documents.length > 0 ? `
+              ${(privateBooking.documents && privateBooking.documents.length > 0) || privateBooking.phone || privateBooking.hostPhone ? `
                 <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
                   ${privateBooking.category === 'flight' || privateBooking.checkinUrl ? `
                     <a href="${privateBooking.checkinUrl || (privateBooking.airline && privateBooking.airline.includes('Air Europa') ? 'https://www.aireuropa.com/br/pt/aea/check-in-online.html' : 'https://www.flytap.com/pt-br/check-in')}" target="_blank" rel="noopener noreferrer" class="btn ${privateBooking.airline && privateBooking.airline.includes('Air Europa') ? 'btn-checkin' : 'btn-checkin-tap'} btn-sm">
                       🛫 Fazer Check-in Online ↗
                     </a>
                   ` : ""}
-                  ${privateBooking.documents.map(docId => `
+                  ${privateBooking.phone ? `
+                    <a href="https://wa.me/${privateBooking.phone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
+                      💬 Conversar no WhatsApp ↗
+                    </a>
+                  ` : ""}
+                  ${privateBooking.hostPhone ? `
+                    <a href="https://wa.me/${privateBooking.hostPhone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
+                      💬 WhatsApp ${privateBooking.host || 'Anfitrião'} ↗
+                    </a>
+                  ` : ""}
+                  ${privateBooking.documents ? privateBooking.documents.map(docId => `
                     <button class="btn btn-secondary btn-sm" onclick="app.openPdf('${docId}', '${privateBooking.title}')">
                       📄 Abrir Comprovante PDF
                     </button>
-                  `).join("")}
+                  `).join("") : ""}
                 </div>
               ` : ""}
             </div>
@@ -805,11 +831,21 @@ class EuropaApp {
                   </div>
                 ` : ""}
                 <div class="secret-item">
-                  <span class="secret-label">Contato</span>
-                  <span class="secret-value"><a href="tel:${s.phone}" style="color:var(--accent-amber);">${s.phone}</a></span>
+                  <span class="secret-label">Telefone / WhatsApp</span>
+                  <span class="secret-value">
+                    <a href="https://wa.me/${s.phone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="whatsapp-badge-link" title="Abrir conversa no WhatsApp">
+                      💬 ${s.phone} ↗
+                    </a>
+                  </span>
                 </div>
               </div>
               <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="https://wa.me/${s.phone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-sm">
+                  💬 Conversar no WhatsApp ↗
+                </a>
+                <a href="tel:${s.phone}" class="btn btn-secondary btn-sm" title="Fazer ligação de voz">
+                  📞 Ligar
+                </a>
                 ${s.docs.map(docId => `
                   <button class="btn btn-secondary btn-sm" onclick="app.openPdf('${docId}', '${s.title}')">
                     📄 Ver Comprovante de Reserva
@@ -968,10 +1004,10 @@ class EuropaApp {
 
       <div class="event-card" style="margin-top: 16px;">
         <div class="event-name">🏛️ Plantão Consular Brasileiro</div>
-        <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-top: 8px;">
-          • <strong>Espanha (Madrid):</strong> <a href="tel:+34677544004" style="color:var(--accent-amber);">+34 677 544 004</a> (Calle de Fernando El Santo 6)<br>
-          • <strong>Portugal (Lisboa):</strong> <a href="tel:+351962520581" style="color:var(--accent-amber);">+351 962 520 581</a> (Praça Luís de Camões 22)<br>
-          • <strong>Suíça (Genebra):</strong> <a href="tel:+41793504955" style="color:var(--accent-amber);">+41 79 350 49 55</a> (Rue de Lausanne 45)
+        <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.8; margin-top: 8px;">
+          • <strong>Espanha (Madrid):</strong> <a href="https://wa.me/34677544004" target="_blank" rel="noopener noreferrer" class="whatsapp-badge-link">💬 +34 677 544 004 ↗</a> <span style="font-size:0.75rem; color:var(--text-dim);">(Calle de Fernando El Santo 6)</span><br>
+          • <strong>Portugal (Lisboa):</strong> <a href="https://wa.me/351962520581" target="_blank" rel="noopener noreferrer" class="whatsapp-badge-link">💬 +351 962 520 581 ↗</a> <span style="font-size:0.75rem; color:var(--text-dim);">(Praça Luís de Camões 22)</span><br>
+          • <strong>Suíça (Genebra):</strong> <a href="https://wa.me/41793504955" target="_blank" rel="noopener noreferrer" class="whatsapp-badge-link">💬 +41 79 350 49 55 ↗</a> <span style="font-size:0.75rem; color:var(--text-dim);">(Rue de Lausanne 45)</span>
         </div>
       </div>
     `;
