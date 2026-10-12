@@ -1074,6 +1074,21 @@ img, svg, video, iframe {
   color: var(--accent-rose);
 }
 
+.category-temple {
+  background-color: var(--accent-emerald-subtle);
+  color: var(--accent-emerald);
+}
+
+.category-activity {
+  background-color: var(--accent-sky-subtle);
+  color: var(--accent-sky);
+}
+
+.category-transport {
+  background-color: var(--accent-amber-subtle);
+  color: var(--accent-amber);
+}
+
 .event-name {
   font-size: 1.02rem;
   font-weight: 600;

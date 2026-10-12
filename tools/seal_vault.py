@@ -192,9 +192,26 @@ def main():
         "vaultVersion": VERSION,
         "generatedAt": "2026-10-12T00:00:00Z",
         "travelers": [
-            {"id": "diego", "name": "Diego Jacob Fernandes Leite", "role": "Titular • Sacerdote", "passport": "GO506551"},
-            {"id": "tatiana", "name": "Tatiana Araujo de Sousa Jacob", "role": "Esposa • Isis", "passport": "GB464034"},
-            {"id": "fabiana", "name": "Fabiana Nunes Poli", "role": "Congressista • Isis", "passport": "G0872312"}
+            {
+                "id": "diego",
+                "name": "Diego Jacob Fernandes Leite",
+                "role": "Titular • Sacerdote",
+                "passport": "GO506551",
+                "oldPassport": "FR302881",
+                "passportStatus": "NOVO: GO506551 (antigo: FR302881)"
+            },
+            {
+                "id": "tatiana",
+                "name": "Tatiana Araújo de Sousa Jacob",
+                "role": "Esposa • Isis",
+                "passport": "GB464034"
+            },
+            {
+                "id": "fabiana",
+                "name": "Fabiana Nunes Poli",
+                "role": "Congressista • Isis",
+                "passport": "G0872312"
+            }
         ],
         "emergencyContacts": {
             "portoSeguro": {
@@ -306,6 +323,21 @@ def main():
                 "paidAmount": "R$ 758,26",
                 "documents": ["doc-airbnb-saillon-res", "doc-airbnb-saillon-anuncio"],
                 "notes": "Belíssima vila medieval com águas termais (Les Bains de Saillon). Moeda local: Franco Suíço (CHF), cartões aceitos universalmente."
+            },
+            {
+                "id": "templo-divino-daimon-valais",
+                "category": "temple",
+                "title": "Visita ao Templo Divino Daimon • Riddes (Valais)",
+                "location": "Riddes, Cantão de Valais, Suíça",
+                "route": "Saillon ➔ Riddes (~4 km / 7 min via Route de Saillon / Pont de Riddes)",
+                "credentials": "Paz y Salvo Eclesiais (Mem 207/2026 e Mem 209/2026 – Lumisial Zeus Daimon)",
+                "recommendations": "Trajes litúrgicos / vestes sacerdotais e de Isis, pontualidade suíça, respeito às diretrizes do templo irmão em Valais.",
+                "documents": [
+                    "doc-pazsalvo-diego-tatiana",
+                    "doc-pazsalvo-fabiana"
+                ],
+                "mapsUrl": "https://www.google.com/maps/dir/?api=1&origin=Vers+le+Scex+3,+Saillon,+Switzerland&destination=Riddes,+Switzerland&travelmode=driving",
+                "notes": "Deslocamento rápido Saillon ➔ Riddes cruzando a ponte sobre o Rio Ródano. Apresentar os certificados de Paz y Salvo oficiais da delegação Zeus Daimon."
             },
             {
                 "id": "flight-aireuropa-volta",
@@ -498,9 +530,21 @@ def main():
             },
             {
                 "date": "2026-10-19",
-                "city": "Saillon & Alpes Suíços (Valais)",
+                "city": "Saillon & Riddes (Valais • Suíça)",
                 "events": [
-                    {"time": "Dia todo", "title": "Passeio nos Alpes & Termas de Saillon", "category": "activity", "protectedId": "stay-saillon-suica"}
+                    {
+                        "time": "10:00",
+                        "title": "Visita ao Templo Divino Daimon (Riddes, Valais)",
+                        "category": "temple",
+                        "isDaimonVisit": True,
+                        "protectedId": "templo-divino-daimon-valais"
+                    },
+                    {
+                        "time": "15:00",
+                        "title": "Passeio nos Alpes & Termas de Saillon (Les Bains de Saillon)",
+                        "category": "activity",
+                        "protectedId": "stay-saillon-suica"
+                    }
                 ]
             },
             {

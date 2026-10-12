@@ -60,11 +60,18 @@
     },
     {
       "date": "2026-10-19",
-      "city": "Saillon & Alpes Suíços (Valais)",
+      "city": "Saillon & Riddes (Valais • Suíça)",
       "events": [
         {
-          "time": "Dia todo",
-          "title": "Passeio nos Alpes & Termas de Saillon",
+          "time": "10:00",
+          "title": "Visita ao Templo Divino Daimon (Riddes, Valais)",
+          "category": "temple",
+          "isDaimonVisit": true,
+          "protectedId": "templo-divino-daimon-valais"
+        },
+        {
+          "time": "15:00",
+          "title": "Passeio nos Alpes & Termas de Saillon (Les Bains de Saillon)",
           "category": "activity",
           "protectedId": "stay-saillon-suica"
         }

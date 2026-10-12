@@ -550,6 +550,33 @@ async function main() {
   }
   console.log("  ✓ Day 17 timeline contains immigration passport control event with passports, credentials, and action buttons");
 
+  // Step G1.5: Check Timeline Event on Day 19 (Templo Divino Daimon em Riddes, Valais)
+  console.log("\n[TEST G1.5] Checking Day 19 Timeline Templo Divino Daimon visit in Riddes, Valais...");
+  const day19Event = await cdp.evaluate(`
+    (() => {
+      app.switchTab("timeline");
+      const day19 = document.getElementById("day-2026-10-19");
+      if (!day19) return { error: "Day 19 not found" };
+      const text = day19.innerText;
+      const btns = Array.from(day19.querySelectorAll("button, a")).map(b => b.innerText.trim());
+      return {
+        hasDaimonTitle: text.includes("Templo Divino Daimon"),
+        hasRiddes: text.includes("Riddes"),
+        hasDistance: text.includes("4 km"),
+        hasPazSalvoCreds: text.includes("Mem 207/2026") && text.includes("Mem 209/2026"),
+        hasLiturgicalRules: text.includes("litúrgicos") || text.includes("liturgic"),
+        hasDiegoTatianaPazSalvoBtn: btns.some(b => b.includes("Paz y Salvo Diego & Tatiana")),
+        hasFabianaPazSalvoBtn: btns.some(b => b.includes("Paz y Salvo Fabiana")),
+        hasMapsLink: btns.some(b => b.includes("Rota Saillon ➔ Riddes (Google Maps)"))
+      };
+    })()
+  `);
+
+  if (!day19Event.hasDaimonTitle || !day19Event.hasRiddes || !day19Event.hasDistance || !day19Event.hasPazSalvoCreds || !day19Event.hasDiegoTatianaPazSalvoBtn || !day19Event.hasFabianaPazSalvoBtn || !day19Event.hasMapsLink) {
+    throw new Error("Day 19 timeline event missing Templo Divino Daimon details, credentials, or buttons: " + JSON.stringify(day19Event));
+  }
+  console.log("  ✓ Day 19 timeline contains Templo Divino Daimon visit with credentials, recommendations, Paz y Salvo buttons, and Google Maps route link");
+
   // Step H2: Check Timeline Event on Day 22 (Toledo Congress Check-in & Credenciamento)
   console.log("\n[TEST G2] Checking Day 22 Timeline Congress check-in & credenciamento event...");
   const day22Event = await cdp.evaluate(`
@@ -595,6 +622,38 @@ async function main() {
     }
   }
   console.log("  ✓ Confirmed only international arrival flight TP110 displays the Schengen immigration card");
+
+  // Step I0: Check Car & Swiss Routes Tab
+  console.log("\n[TEST H2] Checking Car & Swiss Routes Tab (Valais Templo Daimon route, credentials, and Swiss driving rules)...");
+  const carCheck = await cdp.evaluate(`
+    (() => {
+      app.switchTab("car");
+      const area = document.getElementById("tab-content-container");
+      const text = area.innerText;
+      const linksAndBtns = Array.from(area.querySelectorAll("button, a")).map(b => b.innerText.trim());
+      return {
+        hasSwissSectorAlert: text.includes("ALERTA OPERACIONAL: Setor Suíço"),
+        hasMainRoute: text.includes("Rota Principal: Aeroporto de Genebra") && text.includes("Saillon"),
+        hasValaisRoteiro: text.includes("Roteiro em Valais: Saillon ➔ Riddes (Templo Divino Daimon)"),
+        hasDistance: text.includes("4 km") && text.includes("Rio Ródano"),
+        hasCredentials: text.includes("Mem 207/2026") && text.includes("Mem 209/2026"),
+        hasArredores: text.includes("Les Bains de Saillon") && text.includes("Martigny") && text.includes("Sion"),
+        hasDrivingRules: text.includes("Recomendações Práticas de Condução"),
+        hasSpeedLimits: text.includes("50 km/h") && text.includes("80 km/h") && text.includes("120 km/h"),
+        hasHeadlightsRule: text.includes("Faróis Acesos 24h por Lei") || text.includes("Tagfahrlicht"),
+        hasParkingRule: text.includes("Disco Azul") || text.includes("EasyPark") || text.includes("CHF"),
+        hasAutumnWeather: text.includes("Clima de Montanha no Outono"),
+        hasMapsRouteBtn: linksAndBtns.some(b => b.includes("Rota Saillon ➔ Riddes (Google Maps)")),
+        hasPazSalvoDiegoTatiana: linksAndBtns.some(b => b.includes("Paz y Salvo Diego & Tatiana")),
+        hasPazSalvoFabiana: linksAndBtns.some(b => b.includes("Paz y Salvo Fabiana"))
+      };
+    })()
+  `);
+
+  if (!carCheck.hasSwissSectorAlert || !carCheck.hasMainRoute || !carCheck.hasValaisRoteiro || !carCheck.hasDistance || !carCheck.hasCredentials || !carCheck.hasArredores || !carCheck.hasDrivingRules || !carCheck.hasSpeedLimits || !carCheck.hasHeadlightsRule || !carCheck.hasParkingRule || !carCheck.hasAutumnWeather || !carCheck.hasMapsRouteBtn || !carCheck.hasPazSalvoDiegoTatiana || !carCheck.hasPazSalvoFabiana) {
+    throw new Error("Car tab missing required elements, driving rules, or buttons: " + JSON.stringify(carCheck));
+  }
+  console.log("  ✓ Car & Swiss Routes tab contains Valais itinerary, Templo Daimon route, credentials, Swiss driving guidelines, and action buttons");
 
   // Step J: Check Emergency Tab (buttons actionable in both locked and unlocked state)
   console.log("\n[TEST I] Checking Emergency Tab...");

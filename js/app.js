@@ -513,7 +513,7 @@ class EuropaApp {
                 <div class="policy-details">
                   <div class="policy-row">
                     <span class="policy-label">Passaporte Brasileiro:</span>
-                    <span class="policy-val">GO506551 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button></span>
+                    <span class="policy-val">GO506551 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button><br><span style="font-size:0.75rem; color:var(--text-muted); font-family:inherit;">Passaporte Novo (Antigo: FR302881)</span></span>
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Apólice Porto Seguro:</span>
@@ -871,6 +871,14 @@ class EuropaApp {
         city: "GVA ➔ Saillon"
       },
       {
+        date: "2026-10-19",
+        icon: "🏛️",
+        dateLabel: "19/Out",
+        title: "Templo Daimon",
+        tag: "Riddes Valais",
+        city: "Saillon ➔ Riddes"
+      },
+      {
         date: "2026-10-20",
         icon: "🇪🇸",
         dateLabel: "20/Out",
@@ -1142,6 +1150,46 @@ class EuropaApp {
               </div>
             `;
           }
+        } else if (evt.isDaimonVisit || evt.protectedId === "templo-divino-daimon-valais" || (day.date === "2026-10-19" && evt.title.includes("Templo Divino Daimon"))) {
+          html += `
+            <div class="secret-badge" style="border-left: 3px solid var(--accent-emerald); margin-top: 10px;">
+              <div style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 8px;">
+                🏛️ <strong>Visita Fraternal ao Templo Divino Daimon (Riddes, Valais • Suíça)</strong><br>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                  Deslocamento rápido entre cidades vizinhas no Cantão de Valais: <strong>Saillon ➔ Riddes</strong> (~4 km / cerca de 6 a 8 minutos de carro via Route de Saillon / Pont de Riddes sobre o Rio Ródano).
+                </span>
+              </div>
+              <div class="secret-grid" style="margin-bottom: 10px;">
+                <div class="secret-item">
+                  <span class="secret-label">Confirmações & Credenciais</span>
+                  <span class="secret-value">Paz y Salvo Institucional Zeus Daimon (Mem 207/2026 Diego & Tatiana • Mem 209/2026 Fabiana)</span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Recomendações Litúrgicas</span>
+                  <span class="secret-value">Trajes litúrgicos (vestes sacerdotais e de Isis), pontualidade suíça, respeito às diretrizes do templo irmão</span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Participantes Oficiais</span>
+                  <span class="secret-value">Diego Jacob (Sacerdote) • Tatiana Araújo (Isis) • Fabiana Poli (Isis)</span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Localização & Trajeto</span>
+                  <span class="secret-value">Riddes, Cantão de Valais, Suíça • Travessia da Pont de Riddes sobre o Rio Ródano</span>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+                  📄 Paz y Salvo Diego & Tatiana
+                </button>
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+                  📄 Paz y Salvo Fabiana
+                </button>
+                <a href="https://www.google.com/maps/dir/?api=1&origin=Vers+le+Scex+3,+Saillon,+Switzerland&destination=Riddes,+Switzerland&travelmode=driving" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
+                  🗺️ Rota Saillon ➔ Riddes (Google Maps) ↗
+                </a>
+              </div>
+            </div>
+          `;
         } else if (isUnlocked && privateBooking) {
           html += `
             <div class="secret-badge">
@@ -1531,10 +1579,14 @@ class EuropaApp {
   }
 
   _renderCarView() {
+    const isUnlocked = vault.isUnlocked;
+
     this.elMainContainer.innerHTML = `
       <div class="timeline-section-title">
         <span>🚗 Aluguel de Carro & Rotas na Suíça</span>
+        ${!isUnlocked ? `<button class="btn btn-primary btn-sm" onclick="app.openUnlockModal()">Destravar Documentos</button>` : ""}
       </div>
+
       <div class="event-card" style="border-left: 4px solid var(--accent-amber);">
         <div class="event-name">⚠️ ALERTA OPERACIONAL: Setor Suíço do Aeroporto de Genebra</div>
         <p class="event-desc" style="color:var(--text-main); margin-bottom: 12px;">
@@ -1549,14 +1601,79 @@ class EuropaApp {
       </div>
 
       <div class="event-card" style="margin-top: 16px;">
-        <div class="event-name">🗺️ Rota Aeroporto de Genebra (GVA) ➔ Saillon (Valais)</div>
-        <div class="event-desc">Distância: 145 km • Tempo médio: 1h35min</div>
+        <div class="event-name">🗺️ Rota Principal: Aeroporto de Genebra (GVA) ➔ Saillon (Valais)</div>
+        <div class="event-desc">Distância: 145 km • Tempo médio: 1h35min via Autoestradas A1 & A9</div>
         <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); font-size: 0.88rem; line-height: 1.6;">
           <strong>Itinerário Recomendado:</strong><br>
           1. Saída do GVA pegando a Autoestrada <strong>A1</strong> sentido Lausanne.<br>
           2. Na bifurcação em Lausanne, seguir pela <strong>A9</strong> sentido Martigny / Sion.<br>
           3. Seguir pelo belíssimo Vale do Ródano cercado pelas montanhas até a <strong>Saída 24 (Riddes / Saillon)</strong>.<br>
           4. Atravessar a ponte sobre o rio Ródano e seguir as placas até o vilarejo de Saillon.
+        </div>
+      </div>
+
+      <!-- Roteiro em Valais: Saillon ➔ Riddes (Templo Divino Daimon) & Arredores -->
+      <div class="event-card" style="margin-top: 16px; border-left: 4px solid var(--accent-emerald);">
+        <div class="event-name">🏛️ Roteiro em Valais: Saillon ➔ Riddes (Templo Divino Daimon) & Arredores</div>
+        <div class="event-desc">Visita oficial no Dia 19/10 e passeios pelas joias alpinas do Cantão de Valais.</div>
+        
+        <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); font-size: 0.88rem; line-height: 1.6; margin-bottom: 12px;">
+          <strong>📍 Rota Saillon ➔ Riddes (Templo Divino Daimon):</strong><br>
+          • <strong>Distância & Tempo:</strong> Apenas <strong>~4 km</strong> (cerca de 6 a 8 minutos de carro).<br>
+          • <strong>Trajeto:</strong> Saillon e Riddes são cidades vizinhas no Cantão de Valais, separadas apenas pelo Rio Ródano (Rhône). Siga pela <em>Route de Saillon</em> e cruze a <em>Pont de Riddes</em> diretamente até o centro de Riddes.<br>
+          • <strong>Confirmações & Credenciais:</strong> Portar os documentos eclesiais de Paz y Salvo emitidos pelo Lumisial Zeus Daimon (Mem 207/2026 de Diego & Tatiana e Mem 209/2026 de Fabiana).<br>
+          • <strong>Recomendações Litúrgicas:</strong> Trajes litúrgicos / vestes sacerdotais e de Isis, pontualidade suíça e respeito às diretrizes do templo irmão em Valais.
+        </div>
+
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
+          <a href="https://www.google.com/maps/dir/?api=1&origin=Vers+le+Scex+3,+Saillon,+Switzerland&destination=Riddes,+Switzerland&travelmode=driving" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
+            🗺️ Rota Saillon ➔ Riddes (Google Maps) ↗
+          </a>
+          <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+            📄 Paz y Salvo Diego & Tatiana
+          </button>
+          <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+            📄 Paz y Salvo Fabiana
+          </button>
+        </div>
+
+        <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); font-size: 0.88rem; line-height: 1.6;">
+          <strong>🏔️ Arredores em Valais Recomendados:</strong><br>
+          • <strong>Les Bains de Saillon (~1 km):</strong> Famoso centro termal alpino com piscinas térmicas quentes ao ar livre (32°C a 34°C) com vista panorâmica para os vinhedos de Saillon.<br>
+          • <strong>Martigny (~15 km a oeste via A9 ou Route Cantonale):</strong> Cidade histórica romana, sede da prestigiada Fundação Pierre Gianadda e do Castelo La Bâtiaz.<br>
+          • <strong>Sion (~18 km a leste via A9):</strong> Histórica capital de Valais, coroada pelas colinas fortificadas dos castelos de Valère e Tourbillon.
+        </div>
+      </div>
+
+      <!-- Recomendações Práticas na Suíça -->
+      <div class="event-card" style="margin-top: 16px; border-left: 4px solid var(--accent-sky);">
+        <div class="event-name">🇨🇭 Recomendações Práticas de Condução & Trânsito na Suíça</div>
+        <div class="event-desc">Normas cantonais e de trânsito essenciais para dirigir com segurança e sem infrações.</div>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin-top: 10px;">
+          <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); font-size: 0.85rem; line-height: 1.5;">
+            <strong style="color:var(--accent-amber);">⚡ Limites Rigorosos de Velocidade</strong><br>
+            • <strong>50 km/h:</strong> Zonas urbanas e perímetros de vilarejos (tolerância zero, radares fixos frequentes).<br>
+            • <strong>80 km/h:</strong> Estradas cantonais e secundárias fora de localidades.<br>
+            • <strong>100 km/h:</strong> Semiautoestradas expressas.<br>
+            • <strong>120 km/h:</strong> Autoestradas federais (A1 / A9). Multas suíças são rigorosas e de alto valor.
+          </div>
+
+          <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); font-size: 0.85rem; line-height: 1.5;">
+            <strong style="color:var(--accent-sky);">💡 Faróis Acesos 24h por Lei (Tagfahrlicht)</strong><br>
+            Na Suíça, é <strong>obrigatório por lei manter os faróis baixos ou DRL acesos o tempo todo</strong>, inclusive em pleno dia com sol aberto. Conduzir com faróis apagados é passível de autuação rodoviária.
+          </div>
+
+          <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); font-size: 0.85rem; line-height: 1.5;">
+            <strong style="color:var(--accent-emerald);">🅿️ Estacionamento: Disco Azul & Parquímetros</strong><br>
+            • <strong>Zona Azul (Zone Bleue):</strong> Estacionamento gratuito por tempo limitado (1h a 1h30), exigindo o uso obrigatório do <em>disco azul de estacionamento</em> visível no para-brisa.<br>
+            • <strong>Zonas Pagas:</strong> Parquímetro em francos suíços (CHF) ou pagamento por aplicativo móvel (<em>EasyPark / Parkingpay</em>).
+          </div>
+
+          <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); font-size: 0.85rem; line-height: 1.5;">
+            <strong style="color:var(--text-main);">🍂 Clima de Montanha no Outono</strong><br>
+            Em outubro no Cantão de Valais, as temperaturas variam entre 4°C e 15°C, com possibilidade de neblina matinal no Vale do Ródano e folhas úmidas no asfalto. Recomenda-se manter casacos térmicos acessíveis no carro.
+          </div>
         </div>
       </div>
     `;
