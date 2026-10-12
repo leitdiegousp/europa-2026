@@ -623,6 +623,121 @@ img, svg, video, iframe {
   font-weight: 700;
 }
 
+/* Botões de documentos com layout de desabilitados quando o cofre está travado */
+.btn-doc-locked {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px dashed rgba(245, 158, 11, 0.35) !important;
+  color: var(--text-muted) !important;
+  opacity: 0.72;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.btn-doc-locked:hover {
+  background: rgba(245, 158, 11, 0.09) !important;
+  border-color: var(--accent-amber) !important;
+  color: var(--text-main) !important;
+  opacity: 0.95;
+}
+
+.btn-doc-locked .lock-indicator {
+  margin-left: 4px;
+  font-size: 0.72rem;
+  opacity: 0.85;
+}
+
+/* Painel informativo de destrave no topo do card de documentos */
+.unlock-info-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-left: 4px solid var(--accent-amber);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  transition: background 0.2s ease;
+}
+
+.unlock-info-banner:hover {
+  background: rgba(245, 158, 11, 0.11);
+}
+
+.unlock-info-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.unlock-info-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.unlock-info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.unlock-info-text strong {
+  font-size: 0.85rem;
+  color: var(--accent-amber);
+}
+
+.unlock-info-text span {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.btn-unlock-touch {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 0.78rem;
+  padding: 7px 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 480px) {
+  .unlock-info-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .btn-unlock-touch {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+/* Asteriscos e tags para dados confidenciais bloqueados */
+.locked-asterisks {
+  color: var(--text-dim);
+  font-family: monospace;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.locked-tag-inline {
+  font-size: 0.68rem;
+  color: var(--accent-amber);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-left: 6px;
+  letter-spacing: normal;
+  font-family: var(--font-sans);
+  font-weight: 500;
+}
+
 .immigration-lock-hint {
   background: rgba(245, 158, 11, 0.08);
   border: 1px dashed rgba(245, 158, 11, 0.35);

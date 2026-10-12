@@ -505,6 +505,21 @@ class EuropaApp {
               <strong>Apresentação Obrigatória na Imigração & Viagem:</strong> Para ingressar em Portugal e no Espaço Schengen, apresente os passaportes brasileiros e os certificados de seguro viagem com cobertura médica/hospitalar mínima de <strong>€ 30.000</strong> (Porto Seguro). Abaixo constam também as Cartas de Convite oficiais e credenciais de Paz y Salvo para o Congresso em Toledo.
             </p>
 
+            ${!isUnlocked ? `
+              <div class="unlock-info-banner" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor: pointer;" title="Toque para destravar o cofre">
+                <div class="unlock-info-content">
+                  <div class="unlock-info-icon">🔒</div>
+                  <div class="unlock-info-text">
+                    <strong>Destrave para ver informações</strong>
+                    <span>Passaportes, apólices de seguro e download de documentos estão protegidos. Toque para destravar com sua senha mestre.</span>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary btn-sm btn-unlock-touch" onclick="event.stopPropagation(); app.openUnlockModal()">
+                  🔓 Destravar Cofre
+                </button>
+              </div>
+            ` : ""}
+
             <div class="immigration-travelers-grid">
               <!-- Diego Jacob -->
               <div class="traveler-doc-box">
@@ -521,7 +536,7 @@ class EuropaApp {
                     ${isUnlocked && tDiego ? `
                       <span class="policy-val">${tDiego.passport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.passport}', 'Passaporte Diego')">📋</button><br><span style="font-size:0.75rem; color:var(--text-muted); font-family:inherit;">Passaporte Novo (Antigo: ${tDiego.oldPassport || 'FR302881'} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.oldPassport || 'FR302881'}', 'Passaporte Antigo Diego')">📋</button>)</span></span>
                     ` : `
-                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre (toque para destravar)</span>
+                      <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
@@ -529,7 +544,7 @@ class EuropaApp {
                     ${isUnlocked && tDiego ? `
                       <span class="policy-val">${tDiego.apolice || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.apolice || ''}', 'Apólice Diego')">📋</button></span>
                     ` : `
-                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                      <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">•••••••••••••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
@@ -537,22 +552,22 @@ class EuropaApp {
                     ${isUnlocked && tDiego ? `
                       <span class="policy-val">${tDiego.certSchengen || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.certSchengen || ''}', 'Certificado Diego')">📋</button></span>
                     ` : `
-                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                      <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">•••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                 </div>
                 <div class="traveler-actions">
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
-                    📄 Bilhete Seguro Diego
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
+                    📄 Bilhete Seguro Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
-                    📄 Certificado Schengen Diego
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
+                    📄 Certificado Schengen Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
-                    📄 Carta Convite Diego
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
+                    📄 Carta Convite Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
-                    📄 Paz y Salvo
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+                    📄 Paz y Salvo ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
                 </div>
               </div>
@@ -572,7 +587,7 @@ class EuropaApp {
                     ${isUnlocked && tTatiana ? `
                       <span class="policy-val">${tTatiana.passport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tTatiana.passport}', 'Passaporte Tatiana')">📋</button></span>
                     ` : `
-                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre (toque para destravar)</span>
+                      <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
@@ -580,7 +595,7 @@ class EuropaApp {
                     ${isUnlocked && tTatiana ? `
                       <span class="policy-val">${tTatiana.apolice || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tTatiana.apolice || ''}', 'Apólice Tatiana')">📋</button></span>
                     ` : `
-                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                      <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">•••••••••••••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
@@ -588,22 +603,22 @@ class EuropaApp {
                     ${isUnlocked && tTatiana ? `
                       <span class="policy-val">${tTatiana.certSchengen || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tTatiana.certSchengen || ''}', 'Certificado Tatiana')">📋</button></span>
                     ` : `
-                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                      <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">•••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                 </div>
                 <div class="traveler-actions">
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
-                    📄 Bilhete Seguro Tatiana
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
+                    📄 Bilhete Seguro Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
-                    📄 Certificado Schengen Tatiana
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
+                    📄 Certificado Schengen Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
-                    📄 Carta Convite Tatiana
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
+                    📄 Carta Convite Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
-                    📄 Paz y Salvo
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+                    📄 Paz y Salvo ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
                 </div>
               </div>
@@ -623,7 +638,7 @@ class EuropaApp {
                     ${isUnlocked && tFabiana ? `
                       <span class="policy-val">${tFabiana.passport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tFabiana.passport}', 'Passaporte Fabiana')">📋</button></span>
                     ` : `
-                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre (toque para destravar)</span>
+                      <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
@@ -631,7 +646,7 @@ class EuropaApp {
                     ${isUnlocked && tFabiana ? `
                       <span class="policy-val">${tFabiana.credencial || 'Mem 209/2026 – VIC'} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tFabiana.credencial || 'Mem 209/2026 – VIC'}', 'Credencial Fabiana')">📋</button></span>
                     ` : `
-                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                      <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
@@ -640,11 +655,11 @@ class EuropaApp {
                   </div>
                 </div>
                 <div class="traveler-actions">
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
-                    📄 Paz y Salvo Fabiana
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+                    📄 Paz y Salvo Fabiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
-                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-aireuropa-fabiana', 'Voo Air Europa - Fabiana Nunes Poli')">
-                    ✈️ Voo Air Europa Fabiana
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-aireuropa-fabiana', 'Voo Air Europa - Fabiana Nunes Poli')">
+                    ✈️ Voo Air Europa Fabiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                   </button>
                 </div>
               </div>
@@ -652,7 +667,7 @@ class EuropaApp {
 
             ${!isUnlocked ? `
               <div class="immigration-lock-hint" onclick="event.stopPropagation(); app.openUnlockModal()">
-                <span>🔒 PDFs protegidos com criptografia AES-256-GCM. Toque em qualquer botão ou <strong>aqui para destravar com a senha mestre (ti8mao)</strong>.</span>
+                <span>🔒 PDFs e dados confidenciais protegidos com criptografia AES-256-GCM. Toque em qualquer documento ou <strong>aqui para destravar com sua senha mestre</strong>.</span>
               </div>
             ` : `
               <div class="immigration-unlocked-hint">
@@ -872,17 +887,17 @@ class EuropaApp {
 
     if (evt.category === "temple" || evt.id === "templo-divino-daimon-valais") {
       actionButtonsHtml += `
-        <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
-          📄 Paz y Salvo Diego & Tatiana
+        <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+          📄 Paz y Salvo Diego & Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
         </button>
-        <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
-          📄 Paz y Salvo Fabiana
+        <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+          📄 Paz y Salvo Fabiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
         </button>
       `;
     } else if (evt.documents && evt.documents.length > 0) {
       actionButtonsHtml += `
-        <button class="btn btn-secondary btn-sm" onclick="app.openPdf('${evt.documents[0]}', '${evt.title}')">
-          📄 Ver Voucher PDF
+        <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('${evt.documents[0]}', '${evt.title}')">
+          📄 Ver Voucher PDF ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
         </button>
       `;
     }
@@ -1110,9 +1125,9 @@ class EuropaApp {
                     <span class="secret-value">Passaporte NOVO: ${tDiego.passport} (antigo: ${tDiego.oldPassport || ''}) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tDiego.passport}', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('${tDiego.oldPassport || ''}', 'Passaporte Antigo Diego')">📋 (antigo)</button><br>Apólice: ${tDiego.apolice || ''} (Cert: ${tDiego.certSchengen || ''})</span>
                   </div>
                 ` : `
-                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
                     <span class="secret-label">Diego Jacob (Titular)</span>
-                    <span class="secret-value text-muted">🔒 Passaporte e apólice protegidos no cofre (toque para destravar)</span>
+                    <span class="secret-value locked-val text-muted"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                   </div>
                 `}
                 ${isUnlocked && tTatiana ? `
@@ -1121,30 +1136,30 @@ class EuropaApp {
                     <span class="secret-value">Passaporte: ${tTatiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tTatiana.passport}', 'Passaporte Tatiana')">📋</button><br>Apólice: ${tTatiana.apolice || ''} (Cert: ${tTatiana.certSchengen || ''})</span>
                   </div>
                 ` : `
-                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
                     <span class="secret-label">Tatiana Jacob (Esposa)</span>
-                    <span class="secret-value text-muted">🔒 Passaporte e apólice protegidos no cofre (toque para destravar)</span>
+                    <span class="secret-value locked-val text-muted"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                   </div>
                 `}
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
-                  📄 Bilhete Seguro Diego
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
+                  📄 Bilhete Seguro Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
-                  📄 Certificado Schengen Diego
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
+                  📄 Certificado Schengen Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
-                  📄 Bilhete Seguro Tatiana
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
+                  📄 Bilhete Seguro Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
-                  📄 Certificado Schengen Tatiana
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
+                  📄 Certificado Schengen Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
-                  📄 Carta Convite Diego
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
+                  📄 Carta Convite Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
-                  📄 Carta Convite Tatiana
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
+                  📄 Carta Convite Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
                 <button class="btn btn-secondary btn-sm" onclick="app.scrollToImmigrationDocs()">
                   ⬆️ Ver Card de Imigração no Topo
@@ -1168,9 +1183,9 @@ class EuropaApp {
                     <span class="secret-value">Passaporte NOVO: ${tDiego.passport} (antigo: ${tDiego.oldPassport || 'FR302881'}) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tDiego.passport}', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('${tDiego.oldPassport || 'FR302881'}', 'Passaporte Antigo Diego')">📋 (antigo)</button></span>
                   </div>
                 ` : `
-                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
                     <span class="secret-label">Diego Jacob (Sacerdote)</span>
-                    <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+                    <span class="secret-value locked-val text-muted"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                   </div>
                 `}
                 ${isUnlocked && tTatiana ? `
@@ -1179,9 +1194,9 @@ class EuropaApp {
                     <span class="secret-value">Passaporte: ${tTatiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tTatiana.passport}', 'Passaporte Tatiana')">📋</button></span>
                   </div>
                 ` : `
-                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
                     <span class="secret-label">Tatiana Araújo (Isis)</span>
-                    <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+                    <span class="secret-value locked-val text-muted"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                   </div>
                 `}
                 ${isUnlocked && tFabiana ? `
@@ -1190,9 +1205,9 @@ class EuropaApp {
                     <span class="secret-value">Passaporte: ${tFabiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tFabiana.passport}', 'Passaporte Fabiana')">📋</button></span>
                   </div>
                 ` : `
-                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
                     <span class="secret-label">Fabiana Poli (Isis)</span>
-                    <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+                    <span class="secret-value locked-val text-muted"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                   </div>
                 `}
                 <div class="secret-item">
@@ -1201,20 +1216,20 @@ class EuropaApp {
                 </div>
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
-                  📄 Carta Convite Diego
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
+                  📄 Carta Convite Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
-                  📄 Carta Convite Tatiana
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
+                  📄 Carta Convite Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
-                  📄 Paz y Salvo Diego & Tatiana
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+                  📄 Paz y Salvo Diego & Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
-                  📄 Paz y Salvo Fabiana
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+                  📄 Paz y Salvo Fabiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-hotel-toledo', 'El Mirador del Valle - Reserva Hotel Toledo')">
-                  🏨 Voucher Hotel Toledo
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-hotel-toledo', 'El Mirador del Valle - Reserva Hotel Toledo')">
+                  🏨 Voucher Hotel Toledo ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
               </div>
             </div>
@@ -1283,11 +1298,11 @@ class EuropaApp {
                 </div>
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
-                  📄 Paz y Salvo Diego & Tatiana
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+                  📄 Paz y Salvo Diego & Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
-                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
-                  📄 Paz y Salvo Fabiana
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+                  📄 Paz y Salvo Fabiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
                 </button>
                 <a href="https://www.google.com/maps/dir/?api=1&origin=Vers+le+Scex+3,+Saillon,+Switzerland&destination=Riddes,+Switzerland&travelmode=driving" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
                   🗺️ Rota Saillon ➔ Riddes (Google Maps) ↗
@@ -1522,16 +1537,25 @@ class EuropaApp {
             <div class="locked-indicator">
               <span>🔒 Localizador, links de check-in e cartões de embarque protegidos no cofre.</span>
             </div>
+            ${f.docs && f.docs.length > 0 ? `
+              <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                ${f.docs.map(docId => `
+                  <button class="btn btn-doc-locked btn-sm doc-action-btn" onclick="app.openPdf('${docId}', '${f.title}')">
+                    📄 Abrir Bilhete PDF <span class="lock-indicator">🔒</span>
+                  </button>
+                `).join("")}
+              </div>
+            ` : ""}
             ${((f.route && f.route.startsWith("FLN") && f.route.includes("LIS")) || (f.title && f.title.includes("TP110"))) ? `
               <div style="margin-top: 10px; padding: 10px; background: rgba(9, 13, 22, 0.7); border: 1px solid rgba(245, 158, 11, 0.35); border-left: 3px solid var(--accent-amber); border-radius: var(--radius-sm);">
                 <div style="font-weight: 700; color: var(--accent-amber); font-size: 0.85rem; margin-bottom: 4px;">
                   🇵🇹 Desembarque em Lisboa (LIS) • Documentos de Imigração & Seguro Schengen
                 </div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
-                  <button class="btn btn-outline-amber btn-sm" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">📄 Bilhete Seguro Diego</button>
-                  <button class="btn btn-outline-amber btn-sm" onclick="app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">📄 Certificado Schengen Diego</button>
-                  <button class="btn btn-outline-amber btn-sm" onclick="app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">📄 Bilhete Seguro Tatiana</button>
-                  <button class="btn btn-outline-amber btn-sm" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">📄 Certificado Schengen Tatiana</button>
+                  <button class="btn btn-doc-locked btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">📄 Bilhete Seguro Diego <span class="lock-indicator">🔒</span></button>
+                  <button class="btn btn-doc-locked btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">📄 Certificado Schengen Diego <span class="lock-indicator">🔒</span></button>
+                  <button class="btn btn-doc-locked btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">📄 Bilhete Seguro Tatiana <span class="lock-indicator">🔒</span></button>
+                  <button class="btn btn-doc-locked btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">📄 Certificado Schengen Tatiana <span class="lock-indicator">🔒</span></button>
                 </div>
               </div>
             ` : ""}
@@ -1679,6 +1703,27 @@ class EuropaApp {
             <div class="locked-indicator">
               <span>🔒 Código de reserva, PIN de cofre e vouchers protegidos no cofre.</span>
             </div>
+            ${s.docs && s.docs.length > 0 ? `
+              <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+                ${s.docs.map(docId => {
+                  const labels = {
+                    "doc-hotel-toledo": "🏨 Voucher Hotel Toledo",
+                    "doc-convite-diego": "📄 Carta Convite Diego",
+                    "doc-convite-tatiana": "📄 Carta Convite Tatiana",
+                    "doc-pazsalvo-diego-tatiana": "📄 Paz y Salvo Diego & Tatiana",
+                    "doc-pazsalvo-fabiana": "📄 Paz y Salvo Fabiana",
+                    "doc-airbnb-saillon-res": "📄 Recibo Reserva Airbnb",
+                    "doc-airbnb-saillon-anuncio": "📄 Detalhes do Anúncio Airbnb"
+                  };
+                  const label = labels[docId] || "📄 Ver Comprovante de Reserva";
+                  return `
+                    <button class="btn btn-doc-locked btn-sm doc-action-btn" onclick="app.openPdf('${docId}', '${s.title}')">
+                      ${label} <span class="lock-indicator">🔒</span>
+                    </button>
+                  `;
+                }).join("")}
+              </div>
+            ` : ""}
           `}
         </div>
       `;
@@ -1739,11 +1784,11 @@ class EuropaApp {
           <a href="https://www.google.com/maps/dir/?api=1&origin=Vers+le+Scex+3,+Saillon,+Switzerland&destination=Riddes,+Switzerland&travelmode=driving" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
             🗺️ Rota Saillon ➔ Riddes (Google Maps) ↗
           </a>
-          <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
-            📄 Paz y Salvo Diego & Tatiana
+          <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+            📄 Paz y Salvo Diego & Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
           </button>
-          <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
-            📄 Paz y Salvo Fabiana
+          <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+            📄 Paz y Salvo Fabiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
           </button>
         </div>
 
@@ -1821,9 +1866,9 @@ class EuropaApp {
                 <span class="secret-value">Passaporte NOVO: ${tDiego.passport} (antigo: ${tDiego.oldPassport || 'FR302881'}) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tDiego.passport}', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('${tDiego.oldPassport || 'FR302881'}', 'Passaporte Antigo Diego')">📋 (antigo)</button></span>
               </div>
             ` : `
-              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
                 <span class="secret-label">Diego Jacob (Sacerdote)</span>
-                <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+                <span class="secret-value locked-val text-muted"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
               </div>
             `}
             ${isUnlocked && tTatiana ? `
@@ -1832,9 +1877,9 @@ class EuropaApp {
                 <span class="secret-value">Passaporte: ${tTatiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tTatiana.passport}', 'Passaporte Tatiana')">📋</button></span>
               </div>
             ` : `
-              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
                 <span class="secret-label">Tatiana Araújo (Isis)</span>
-                <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+                <span class="secret-value locked-val text-muted"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
               </div>
             `}
             ${isUnlocked && tFabiana ? `
@@ -1843,9 +1888,9 @@ class EuropaApp {
                 <span class="secret-value">Passaporte: ${tFabiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tFabiana.passport}', 'Passaporte Fabiana')">📋</button></span>
               </div>
             ` : `
-              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
                 <span class="secret-label">Fabiana Nunes Poli (Isis)</span>
-                <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+                <span class="secret-value locked-val text-muted"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
               </div>
             `}
             <div class="secret-item">
@@ -1855,20 +1900,20 @@ class EuropaApp {
           </div>
 
           <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
-            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
-              📄 Carta Convite Diego
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
+              📄 Carta Convite Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
-            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
-              📄 Carta Convite Tatiana
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
+              📄 Carta Convite Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
-            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
-              📄 Paz y Salvo Diego & Tatiana
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+              📄 Paz y Salvo Diego & Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
-            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
-              📄 Paz y Salvo Fabiana
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+              📄 Paz y Salvo Fabiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
-            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-hotel-toledo', 'El Mirador del Valle - Reserva Hotel Toledo')">
-              🏨 Voucher Hotel Toledo
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-hotel-toledo', 'El Mirador del Valle - Reserva Hotel Toledo')">
+              🏨 Voucher Hotel Toledo ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
           </div>
         </div>
@@ -1935,25 +1980,34 @@ class EuropaApp {
                 <span class="secret-label">Tatiana Araujo de Sousa Jacob</span>
                 <span class="secret-value">Apólice: ${tTatiana?.apolice || pSeguro?.apóliceTatiana || ""} ${tTatiana?.certSchengen ? `(Cert: ${tTatiana.certSchengen})` : ""}</span>
               </div>
-            ` : ""}
+            ` : `
+              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
+                <span class="secret-label">Diego Jacob Fernandes Leite</span>
+                <span class="secret-value locked-val text-muted"><span class="locked-asterisks">•••••••••••••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
+              </div>
+              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">
+                <span class="secret-label">Tatiana Araujo de Sousa Jacob</span>
+                <span class="secret-value locked-val text-muted"><span class="locked-asterisks">•••••••••••••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
+              </div>
+            `}
           </div>
           <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
-            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
-              📄 Bilhete Seguro Diego
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
+              📄 Bilhete Seguro Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
-            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
-              📄 Certificado Schengen Diego
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
+              📄 Certificado Schengen Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
-            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
-              📄 Bilhete Seguro Tatiana
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-tatiana-bilhete', 'Bilhete de Seguro - Tatiana Araujo de Sousa Jacob')">
+              📄 Bilhete Seguro Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
-            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
-              📄 Certificado Schengen Tatiana
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
+              📄 Certificado Schengen Tatiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
           </div>
           ${!isUnlocked ? `
             <div class="locked-indicator" style="margin-top: 8px;">
-              <span>🔒 Apólices protegidas com criptografia AES-256-GCM. Toque em qualquer documento acima para destravar e visualizar.</span>
+              <span>🔒 Apólices e dados protegidos com criptografia AES-256-GCM. Toque em qualquer documento acima para destravar e visualizar.</span>
             </div>
           ` : ""}
         </div>

@@ -320,7 +320,11 @@ async function main() {
         chevronOpen: chevron ? chevron.classList.contains("open") : null,
         chevronChar: chevron ? chevron.textContent.trim() : "",
         isBadgeVisible: badge ? window.getComputedStyle(badge).display !== "none" : false,
-        hasLockedProtegido: text.includes("Protegido no cofre"),
+        hasLockedAsterisks: text.includes("••••••••") || Boolean(card.querySelector(".locked-asterisks")),
+        hasLockedBadge: text.includes("Bloqueado") || Boolean(card.querySelector(".locked-tag-inline")),
+        hasUnlockBanner: Boolean(card.querySelector(".unlock-info-banner")),
+        hasDocLockedButtons: Boolean(card.querySelector(".btn-doc-locked")),
+        hasNoMasterPassword: !text.includes("ti8mao"),
         hasNoDiegoPolicy: !text.includes("16023-0003-69-260122474"),
         hasNoDiegoCert: !text.includes("32572804832"),
         hasNoDiegoPassport: !text.includes("GO506551"),
@@ -337,7 +341,11 @@ async function main() {
   if (!expandedCheck.isExpandedClass || !expandedCheck.isWrapperExpanded || !expandedCheck.isBodyAriaVisible) {
     throw new Error("Card failed to expand: " + JSON.stringify(expandedCheck));
   }
-  if (!expandedCheck.hasLockedProtegido) throw new Error("Missing 'Protegido no cofre' placeholder in locked card");
+  if (!expandedCheck.hasLockedAsterisks) throw new Error("Missing asterisks placeholder '••••••••' in locked card");
+  if (!expandedCheck.hasLockedBadge) throw new Error("Missing 'Bloqueado' badge in locked card");
+  if (!expandedCheck.hasUnlockBanner) throw new Error("Missing .unlock-info-banner in locked card");
+  if (!expandedCheck.hasDocLockedButtons) throw new Error("Missing .btn-doc-locked buttons in locked card");
+  if (!expandedCheck.hasNoMasterPassword) throw new Error("Master password leaked in locked card!");
   if (!expandedCheck.hasNoDiegoPassport || !expandedCheck.hasNoDiegoOldPassport) throw new Error("Diego passport leaked in locked card!");
   if (!expandedCheck.hasNoTatianaPassport || !expandedCheck.hasNoFabianaPassport) throw new Error("Tatiana/Fabiana passport leaked in locked card!");
   if (!expandedCheck.hasNoDiegoPolicy || !expandedCheck.hasNoTatianaPolicy) throw new Error("Policy numbers leaked in locked card!");
@@ -405,6 +413,114 @@ async function main() {
     deviceScaleFactor: 3,
     mobile: true
   });
+
+  // Step D4: Verify Locked State Formatting Across All Tabs (btn-doc-locked, asterisks, zero password leak)
+  console.log("\n[TEST D4] Verifying locked-state UI styling (.btn-doc-locked, .locked-asterisks) across all tabs...");
+  const lockedTabsCheck = await cdp.evaluate(`
+    (() => {
+      const results = {};
+
+      // 1. Immigration card in main view
+      const immCard = document.getElementById("immigration-docs-card");
+      const immLockedBtns = immCard.querySelectorAll(".btn-doc-locked");
+      const immAsterisks = immCard.querySelectorAll(".locked-asterisks");
+      results.immCard = {
+        lockedBtnsCount: immLockedBtns.length,
+        asterisksCount: immAsterisks.length,
+        hasNoPassword: !immCard.innerText.includes("ti8mao")
+      };
+
+      // 2. Timeline Tab
+      app.switchTab("timeline");
+      const day17 = document.getElementById("day-2026-10-17");
+      const day17LockedBtns = day17 ? day17.querySelectorAll(".btn-doc-locked").length : 0;
+      const day17Asterisks = day17 ? day17.querySelectorAll(".locked-asterisks").length : 0;
+      const day22 = document.getElementById("day-2026-10-22");
+      const day22LockedBtns = day22 ? day22.querySelectorAll(".btn-doc-locked").length : 0;
+      const day22Asterisks = day22 ? day22.querySelectorAll(".locked-asterisks").length : 0;
+      results.timeline = {
+        day17LockedBtns,
+        day17Asterisks,
+        day22LockedBtns,
+        day22Asterisks,
+        hasNoPassword: !document.getElementById("tab-content-container").innerText.includes("ti8mao")
+      };
+
+      // 3. Flights Tab
+      app.switchTab("flights");
+      const flightsContainer = document.getElementById("tab-content-container");
+      results.flights = {
+        lockedBtnsCount: flightsContainer.querySelectorAll(".btn-doc-locked").length,
+        hasNoPassword: !flightsContainer.innerText.includes("ti8mao")
+      };
+
+      // 4. Stays Tab
+      app.switchTab("stays");
+      const staysContainer = document.getElementById("tab-content-container");
+      results.stays = {
+        lockedBtnsCount: staysContainer.querySelectorAll(".btn-doc-locked").length,
+        hasNoPassword: !staysContainer.innerText.includes("ti8mao")
+      };
+
+      // 5. Car Tab
+      app.switchTab("car");
+      const carContainer = document.getElementById("tab-content-container");
+      results.car = {
+        lockedBtnsCount: carContainer.querySelectorAll(".btn-doc-locked").length,
+        hasNoPassword: !carContainer.innerText.includes("ti8mao")
+      };
+
+      // 6. Congress Tab
+      app.switchTab("congress");
+      const congressContainer = document.getElementById("tab-content-container");
+      results.congress = {
+        lockedBtnsCount: congressContainer.querySelectorAll(".btn-doc-locked").length,
+        asterisksCount: congressContainer.querySelectorAll(".locked-asterisks").length,
+        hasNoPassword: !congressContainer.innerText.includes("ti8mao")
+      };
+
+      // 7. Emergency Tab
+      app.switchTab("emergency");
+      const emergencyContainer = document.getElementById("tab-content-container");
+      results.emergency = {
+        lockedBtnsCount: emergencyContainer.querySelectorAll(".btn-doc-locked").length,
+        asterisksCount: emergencyContainer.querySelectorAll(".locked-asterisks").length,
+        hasNoPassword: !emergencyContainer.innerText.includes("ti8mao")
+      };
+
+      // Reset to timeline tab
+      app.switchTab("timeline");
+
+      return results;
+    })()
+  `);
+
+  if (lockedTabsCheck.immCard.lockedBtnsCount < 8 || lockedTabsCheck.immCard.asterisksCount < 6 || !lockedTabsCheck.immCard.hasNoPassword) {
+    throw new Error("Immigration card locked styling failed: " + JSON.stringify(lockedTabsCheck.immCard));
+  }
+  if (lockedTabsCheck.timeline.day17LockedBtns < 6 || lockedTabsCheck.timeline.day17Asterisks < 2 || !lockedTabsCheck.timeline.hasNoPassword) {
+    throw new Error("Timeline Day 17 locked styling failed: " + JSON.stringify(lockedTabsCheck.timeline));
+  }
+  if (lockedTabsCheck.timeline.day22LockedBtns < 5 || lockedTabsCheck.timeline.day22Asterisks < 3) {
+    throw new Error("Timeline Day 22 locked styling failed: " + JSON.stringify(lockedTabsCheck.timeline));
+  }
+  if (lockedTabsCheck.flights.lockedBtnsCount < 4 || !lockedTabsCheck.flights.hasNoPassword) {
+    throw new Error("Flights tab locked styling failed: " + JSON.stringify(lockedTabsCheck.flights));
+  }
+  if (lockedTabsCheck.stays.lockedBtnsCount < 6 || !lockedTabsCheck.stays.hasNoPassword) {
+    throw new Error("Stays tab locked styling failed: " + JSON.stringify(lockedTabsCheck.stays));
+  }
+  if (lockedTabsCheck.car.lockedBtnsCount < 2 || !lockedTabsCheck.car.hasNoPassword) {
+    throw new Error("Car tab locked styling failed: " + JSON.stringify(lockedTabsCheck.car));
+  }
+  if (lockedTabsCheck.congress.lockedBtnsCount < 5 || lockedTabsCheck.congress.asterisksCount < 3 || !lockedTabsCheck.congress.hasNoPassword) {
+    throw new Error("Congress tab locked styling failed: " + JSON.stringify(lockedTabsCheck.congress));
+  }
+  if (lockedTabsCheck.emergency.lockedBtnsCount < 4 || lockedTabsCheck.emergency.asterisksCount < 2 || !lockedTabsCheck.emergency.hasNoPassword) {
+    throw new Error("Emergency tab locked styling failed: " + JSON.stringify(lockedTabsCheck.emergency));
+  }
+
+  console.log("  ✓ All tabs verified in locked state: .btn-doc-locked present everywhere, asterisks masking confidential fields, zero password leak!");
 
   // Step F: Test Locked Button Click -> Unlock Modal Prompt -> Vault Unlock -> PDF Open
   console.log("\n[TEST E] Testing locked button click and pending PDF auto-open on unlock...");
