@@ -119,12 +119,15 @@ async function main() {
   const seguros = manifest.filter(m => m.id.startsWith("doc-seguro-"));
   if (seguros.length !== 4) throw new Error(`Expected 4 insurance documents in manifest, found ${seguros.length}`);
 
-  for (const s of seguros) {
-    const buf = fs.readFileSync(path.join(ROOT_DIR, `vault/assets/${s.id}.enc`));
-    const pdfBytes = await decryptPdf(sessionDek, buf, vaultId, s.id);
+  const congressDocs = manifest.filter(m => m.id.startsWith("doc-convite-") || m.id.startsWith("doc-pazsalvo-"));
+  if (congressDocs.length !== 4) throw new Error(`Expected 4 congress documents in manifest, found ${congressDocs.length}`);
+
+  for (const doc of [...seguros, ...congressDocs]) {
+    const buf = fs.readFileSync(path.join(ROOT_DIR, `vault/assets/${doc.id}.enc`));
+    const pdfBytes = await decryptPdf(sessionDek, buf, vaultId, doc.id);
     const header = Buffer.from(pdfBytes.buffer, pdfBytes.byteOffset, 5).toString("utf8");
-    if (header !== "%PDF-") throw new Error(`Decrypted document ${s.id} does not start with %PDF- (got ${header})`);
-    console.log(`  ✓ ${s.id}: ${pdfBytes.length} bytes decifrados com sucesso (Cabeçalho: ${header})`);
+    if (header !== "%PDF-") throw new Error(`Decrypted document ${doc.id} does not start with %PDF- (got ${header})`);
+    console.log(`  ✓ ${doc.id}: ${pdfBytes.length} bytes decifrados com sucesso (Cabeçalho: ${header})`);
   }
 
   // Step B: Start HTTP server
@@ -305,8 +308,11 @@ async function main() {
         isBadgeVisible: badge ? window.getComputedStyle(badge).display !== "none" : false,
         hasDiegoPolicy: text.includes("16023-0003-69-260122474"),
         hasDiegoCert: text.includes("32572804832"),
+        hasDiegoPassport: text.includes("GO506551"),
         hasTatianaPolicy: text.includes("16023-0003-69-260122473"),
         hasTatianaCert: text.includes("29340388828"),
+        hasTatianaPassport: text.includes("GB464034"),
+        hasFabianaPassport: text.includes("G0872312"),
         buttons: Array.from(card.querySelectorAll(".traveler-actions button")).map(b => b.innerText.trim())
       };
     })()
@@ -316,10 +322,26 @@ async function main() {
     throw new Error("Card failed to expand: " + JSON.stringify(expandedCheck));
   }
   if (!expandedCheck.hasDiegoPolicy || !expandedCheck.hasDiegoCert) throw new Error("Missing Diego credentials in expanded card");
+  if (!expandedCheck.hasDiegoPassport) throw new Error("Missing Diego passport GO506551 in expanded card");
   if (!expandedCheck.hasTatianaPolicy || !expandedCheck.hasTatianaCert) throw new Error("Missing Tatiana credentials in expanded card");
+  if (!expandedCheck.hasTatianaPassport) throw new Error("Missing Tatiana passport GB464034 in expanded card");
+  if (!expandedCheck.hasFabianaPassport) throw new Error("Missing Fabiana passport G0872312 in expanded card");
+
+  const requiredButtons = [
+    "Carta Convite Diego",
+    "Paz y Salvo",
+    "Carta Convite Tatiana",
+    "Paz y Salvo Fabiana"
+  ];
+  for (const bName of requiredButtons) {
+    if (!expandedCheck.buttons.some(b => b.includes(bName))) {
+      throw new Error(`Missing button "${bName}" in expanded card: ${JSON.stringify(expandedCheck.buttons)}`);
+    }
+  }
+
   if (!expandedCheck.isBadgeVisible) throw new Error("Status badge / Destravar button should be visible in expanded state!");
   if (expandedCheck.chevronOpen !== true) throw new Error("Expanded chevron should have .open class (rotated 180deg to point up)");
-  console.log("  ✓ Card expanded successfully via toggle click! Toggle text:", expandedCheck.toggleText, "Chevron open:", expandedCheck.chevronOpen, "Badge visible:", expandedCheck.isBadgeVisible);
+  console.log("  ✓ Card expanded successfully via toggle click! Toggle text:", expandedCheck.toggleText, "Chevron open:", expandedCheck.chevronOpen, "Passports verified (Diego, Tatiana, Fabiana), Badge visible:", expandedCheck.isBadgeVisible);
 
   // Test collapsing via header click delegation
   console.log("  Testing header click delegation to collapse card...");
@@ -420,6 +442,37 @@ async function main() {
   console.log(`  ✓ Tatiana's certificate opened: "${tatianaPdfState.title}" with valid Blob URL`);
   await cdp.evaluate(`app.closeModals()`);
 
+  // Step F3: Test Instant PDF Deciphering of all 4 Congress Documents
+  console.log("\n[TEST F3] Testing instant deciphering of the 4 new Congress documents in browser...");
+  const congressPdfTests = [
+    { id: "doc-convite-diego", label: "Carta de Invitación - Diego Jacob Fernandes Leite", match: "Diego" },
+    { id: "doc-convite-tatiana", label: "Carta de Invitación - Tatiana Araújo de Sousa Jacob", match: "Tatiana" },
+    { id: "doc-pazsalvo-diego-tatiana", label: "Paz y Salvo - Diego Jacob & Tatiana Araújo", match: "Paz y Salvo" },
+    { id: "doc-pazsalvo-fabiana", label: "Paz y Salvo - Fabiana Nunes Poli", match: "Fabiana" }
+  ];
+
+  for (const cTest of congressPdfTests) {
+    await cdp.evaluate(`app.openPdf("${cTest.id}", "${cTest.label}")`);
+    await new Promise(r => setTimeout(r, 250));
+    const cState = await cdp.evaluate(`
+      (() => {
+        const modal = document.getElementById("modal-pdf");
+        const title = document.getElementById("pdf-modal-title");
+        const iframe = document.getElementById("pdf-viewer-frame");
+        return {
+          open: modal.classList.contains("open"),
+          title: title ? title.innerText : "",
+          src: iframe ? iframe.src : ""
+        };
+      })()
+    `);
+    if (!cState.open || !cState.src.startsWith("blob:") || !cState.title.includes(cTest.match)) {
+      throw new Error(`Failed to decrypt and open congress doc ${cTest.id}: ` + JSON.stringify(cState));
+    }
+    console.log(`  ✓ Opened ${cTest.id}: "${cState.title}" with valid Blob URL (${cState.src.slice(0, 30)}...)`);
+    await cdp.evaluate(`app.closeModals()`);
+  }
+
   // Step F2: Test Hero Quick-Action '🛂 Seguros Imigração Lisboa' Auto-Expands from Collapsed State
   console.log("\n[TEST F2] Testing Hero Quick-Action '🛂 Seguros Imigração Lisboa' auto-expands from collapsed state...");
   await cdp.evaluate(`app.collapseImmigrationDocs()`);
@@ -466,6 +519,27 @@ async function main() {
   }
   console.log("  ✓ Day 17 timeline contains immigration passport control event with credentials and action buttons");
 
+  // Step H2: Check Timeline Event on Day 22 (Toledo Congress Check-in & Credenciamento)
+  console.log("\n[TEST G2] Checking Day 22 Timeline Congress check-in & credenciamento event...");
+  const day22Event = await cdp.evaluate(`
+    (() => {
+      app.switchTab("timeline");
+      const day22 = document.getElementById("day-2026-10-22");
+      if (!day22) return { error: "Day 22 not found" };
+      const text = day22.innerText;
+      return {
+        hasCongressEvent: text.includes("Credenciamento do Congresso"),
+        hasPassports: text.includes("GO506551") && text.includes("GB464034") && text.includes("G0872312"),
+        hasButtons: text.includes("Carta Convite Diego") && text.includes("Carta Convite Tatiana") && text.includes("Paz y Salvo") && text.includes("Paz y Salvo Fabiana")
+      };
+    })()
+  `);
+
+  if (!day22Event.hasCongressEvent || !day22Event.hasPassports || !day22Event.hasButtons) {
+    throw new Error("Day 22 timeline event missing congress details or buttons: " + JSON.stringify(day22Event));
+  }
+  console.log("  ✓ Day 22 timeline contains congress credenciamento event with passports and action buttons");
+
   // Step I: Check Flights Tab (Only TP110 should show Lisbon Immigration card)
   console.log("\n[TEST H] Checking Flights Tab (verifying only TP110 shows Lisbon Immigration card)...");
   const flightsCheck = await cdp.evaluate(`
@@ -508,6 +582,33 @@ async function main() {
     throw new Error("Emergency tab missing insurance document buttons: " + JSON.stringify(emergencyCheck));
   }
   console.log("  ✓ Emergency tab contains all 4 insurance action buttons");
+
+  // Step K: Check Congress Tab
+  console.log("\n[TEST I2] Checking Congress Tab...");
+  const congressCheck = await cdp.evaluate(`
+    (() => {
+      app.switchTab("congress");
+      const area = document.getElementById("tab-content-container");
+      const text = area.innerText;
+      const btns = Array.from(area.querySelectorAll("button")).map(b => b.innerText.trim());
+      return {
+        hasTitle: text.includes("Congresso Internacional de Gnosis"),
+        hasDocSection: text.includes("Documentos Oficiais & Credenciamento"),
+        hasPassports: text.includes("GO506551") && text.includes("GB464034") && text.includes("G0872312"),
+        hasDiegoConvite: btns.some(b => b.includes("Carta Convite Diego")),
+        hasTatianaConvite: btns.some(b => b.includes("Carta Convite Tatiana")),
+        hasPazSalvo: btns.some(b => b.includes("Paz y Salvo")),
+        hasFabianaPazSalvo: btns.some(b => b.includes("Paz y Salvo Fabiana")),
+        hasHotelVoucher: btns.some(b => b.includes("Voucher Hotel Toledo")),
+        buttons: btns
+      };
+    })()
+  `);
+
+  if (!congressCheck.hasTitle || !congressCheck.hasDocSection || !congressCheck.hasPassports || !congressCheck.hasDiegoConvite || !congressCheck.hasTatianaConvite || !congressCheck.hasPazSalvo || !congressCheck.hasFabianaPazSalvo || !congressCheck.hasHotelVoucher) {
+    throw new Error("Congress tab missing required elements or buttons: " + JSON.stringify(congressCheck));
+  }
+  console.log("  ✓ Congress tab contains all documentation, passports, and action buttons");
 
   // Teardown
   cdp.close();

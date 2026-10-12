@@ -481,10 +481,14 @@ class EuropaApp {
                   <div class="traveler-avatar">👤</div>
                   <div>
                     <strong class="traveler-name">Diego Jacob Fernandes Leite</strong>
-                    <span class="traveler-role">Titular • Voo TAP TP110</span>
+                    <span class="traveler-role">Titular • Voo TAP TP110 • Sacerdote</span>
                   </div>
                 </div>
                 <div class="policy-details">
+                  <div class="policy-row">
+                    <span class="policy-label">Passaporte Brasileiro:</span>
+                    <span class="policy-val">GO506551 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button></span>
+                  </div>
                   <div class="policy-row">
                     <span class="policy-label">Apólice Porto Seguro:</span>
                     <span class="policy-val">16023-0003-69-260122474 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('16023-0003-69-260122474', 'Apólice Diego')">📋</button></span>
@@ -501,6 +505,12 @@ class EuropaApp {
                   <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-diego-cert', 'Certificado Schengen - Diego Jacob Fernandes Leite')">
                     📄 Certificado Schengen Diego
                   </button>
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
+                    📄 Carta Convite Diego
+                  </button>
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+                    📄 Paz y Salvo
+                  </button>
                 </div>
               </div>
 
@@ -510,10 +520,14 @@ class EuropaApp {
                   <div class="traveler-avatar">👤</div>
                   <div>
                     <strong class="traveler-name">Tatiana Araujo de Sousa Jacob</strong>
-                    <span class="traveler-role">Esposa / Segurada • Voo TAP TP110</span>
+                    <span class="traveler-role">Esposa / Segurada • Voo TAP TP110 • Isis</span>
                   </div>
                 </div>
                 <div class="policy-details">
+                  <div class="policy-row">
+                    <span class="policy-label">Passaporte Brasileiro:</span>
+                    <span class="policy-val">GB464034 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('GB464034', 'Passaporte Tatiana')">📋</button></span>
+                  </div>
                   <div class="policy-row">
                     <span class="policy-label">Apólice Porto Seguro:</span>
                     <span class="policy-val">16023-0003-69-260122473 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('16023-0003-69-260122473', 'Apólice Tatiana')">📋</button></span>
@@ -529,6 +543,45 @@ class EuropaApp {
                   </button>
                   <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
                     📄 Certificado Schengen Tatiana
+                  </button>
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
+                    📄 Carta Convite Tatiana
+                  </button>
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+                    📄 Paz y Salvo
+                  </button>
+                </div>
+              </div>
+
+              <!-- Fabiana Poli -->
+              <div class="traveler-doc-box">
+                <div class="traveler-header">
+                  <div class="traveler-avatar">👤</div>
+                  <div>
+                    <strong class="traveler-name">Fabiana Nunes Poli</strong>
+                    <span class="traveler-role">Congressista • Lumisial Zeus Daimon • Isis</span>
+                  </div>
+                </div>
+                <div class="policy-details">
+                  <div class="policy-row">
+                    <span class="policy-label">Passaporte Brasileiro:</span>
+                    <span class="policy-val">G0872312 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('G0872312', 'Passaporte Fabiana')">📋</button></span>
+                  </div>
+                  <div class="policy-row">
+                    <span class="policy-label">Credencial Congresso:</span>
+                    <span class="policy-val">Mem 209/2026 – VIC <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('Mem 209/2026 – VIC', 'Credencial Fabiana')">📋</button></span>
+                  </div>
+                  <div class="policy-row">
+                    <span class="policy-label">Lumisial / Grau:</span>
+                    <span class="policy-val" style="font-family: inherit; font-size: 0.76rem; color: var(--text-muted);">Zeus Daimon • Isis</span>
+                  </div>
+                </div>
+                <div class="traveler-actions">
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+                    📄 Paz y Salvo Fabiana
+                  </button>
+                  <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm doc-action-btn" onclick="event.stopPropagation(); app.openPdf('doc-aireuropa-fabiana', 'Voo Air Europa - Fabiana Nunes Poli')">
+                    ✈️ Voo Air Europa Fabiana
                   </button>
                 </div>
               </div>
@@ -975,6 +1028,88 @@ class EuropaApp {
               </div>
             </div>
           `;
+        } else if (evt.isCongressCheckin || (evt.protectedId === "stay-toledo-congresso" && day.date === "2026-10-22")) {
+          html += `
+            <div class="secret-badge" style="border-left: 3px solid var(--accent-emerald); margin-top: 10px;">
+              <div style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 8px;">
+                🎓 <strong>Credenciamento do Congresso & Documentação Oficial (Toledo)</strong><br>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                  Apresentar na recepção / credenciamento do Palacio de Congresos El Greco: Cartas de Convite oficiais da Igreja Gnóstica e certificados de Paz y Salvo da delegação (Lumisial Zeus Daimon).
+                </span>
+              </div>
+              <div class="secret-grid" style="margin-bottom: 10px;">
+                <div class="secret-item">
+                  <span class="secret-label">Diego Jacob (Sacerdote)</span>
+                  <span class="secret-value">Passaporte: GO506551 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button></span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Tatiana Araújo (Isis)</span>
+                  <span class="secret-value">Passaporte: GB464034 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GB464034', 'Passaporte Tatiana')">📋</button></span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Fabiana Poli (Isis)</span>
+                  <span class="secret-value">Passaporte: G0872312 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('G0872312', 'Passaporte Fabiana')">📋</button></span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Credenciais Paz y Salvo</span>
+                  <span class="secret-value">VIC 207/2026 & VIC 209/2026 (Zeus Daimon)</span>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
+                  📄 Carta Convite Diego
+                </button>
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
+                  📄 Carta Convite Tatiana
+                </button>
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+                  📄 Paz y Salvo Diego & Tatiana
+                </button>
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+                  📄 Paz y Salvo Fabiana
+                </button>
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-hotel-toledo', 'El Mirador del Valle - Reserva Hotel Toledo')">
+                  🏨 Voucher Hotel Toledo
+                </button>
+              </div>
+            </div>
+          `;
+          if (isUnlocked && privateBooking) {
+            html += `
+              <div class="secret-badge" style="margin-top: 8px;">
+                <div class="secret-grid">
+                  ${privateBooking.bookingRef ? `
+                    <div class="secret-item">
+                      <span class="secret-label">Código de Reserva Booking</span>
+                      <span class="secret-value">${privateBooking.bookingRef} <button class="copy-icon-btn" onclick="app.copyToClipboard('${privateBooking.bookingRef}', 'Reserva')">📋</button></span>
+                    </div>
+                  ` : ""}
+                  ${privateBooking.pin ? `
+                    <div class="secret-item">
+                      <span class="secret-label">Código PIN</span>
+                      <span class="secret-value">${privateBooking.pin}</span>
+                    </div>
+                  ` : ""}
+                  ${privateBooking.phone ? `
+                    <div class="secret-item">
+                      <span class="secret-label">Telefone Hotel Toledo</span>
+                      <span class="secret-value">
+                        <a href="https://wa.me/${privateBooking.phone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="whatsapp-badge-link" title="Abrir conversa no WhatsApp">
+                          💬 ${privateBooking.phone} ↗
+                        </a>
+                      </span>
+                    </div>
+                  ` : ""}
+                  ${privateBooking.address ? `
+                    <div class="secret-item" style="grid-column: 1 / -1;">
+                      <span class="secret-label">Endereço Toledo</span>
+                      <span class="secret-value">${privateBooking.address} <button class="copy-icon-btn" onclick="app.copyToClipboard('${privateBooking.address}', 'Endereço')">📋</button></span>
+                    </div>
+                  ` : ""}
+                </div>
+              </div>
+            `;
+          }
         } else if (isUnlocked && privateBooking) {
           html += `
             <div class="secret-badge">
@@ -1268,7 +1403,7 @@ class EuropaApp {
         ref: "5889.928.483",
         pin: "8037",
         phone: "+34 687 08 04 76",
-        docs: ["doc-hotel-toledo"],
+        docs: ["doc-hotel-toledo", "doc-convite-diego", "doc-convite-tatiana", "doc-pazsalvo-diego-tatiana", "doc-pazsalvo-fabiana"],
         notes: "Período do Congresso. Vista magnífica de Toledo. Lembrete: Fim do Horário de Verão em 25/Out!"
       },
       {
@@ -1331,11 +1466,23 @@ class EuropaApp {
                 <a href="tel:${s.phone}" class="btn btn-secondary btn-sm" title="Fazer ligação de voz">
                   📞 Ligar
                 </a>
-                ${s.docs.map(docId => `
-                  <button class="btn btn-secondary btn-sm" onclick="app.openPdf('${docId}', '${s.title}')">
-                    📄 Ver Comprovante de Reserva
-                  </button>
-                `).join("")}
+                ${s.docs.map(docId => {
+                  const labels = {
+                    "doc-hotel-toledo": "🏨 Voucher Hotel Toledo",
+                    "doc-convite-diego": "📄 Carta Convite Diego",
+                    "doc-convite-tatiana": "📄 Carta Convite Tatiana",
+                    "doc-pazsalvo-diego-tatiana": "📄 Paz y Salvo Diego & Tatiana",
+                    "doc-pazsalvo-fabiana": "📄 Paz y Salvo Fabiana",
+                    "doc-airbnb-saillon-res": "📄 Recibo Reserva Airbnb",
+                    "doc-airbnb-saillon-anuncio": "📄 Detalhes do Anúncio Airbnb"
+                  };
+                  const label = labels[docId] || "📄 Ver Comprovante de Reserva";
+                  return `
+                    <button class="btn btn-secondary btn-sm" onclick="app.openPdf('${docId}', '${s.title}')">
+                      ${label}
+                    </button>
+                  `;
+                }).join("")}
               </div>
             </div>
           ` : `
@@ -1384,10 +1531,66 @@ class EuropaApp {
   }
 
   _renderCongressView() {
+    const isUnlocked = vault.isUnlocked;
+
     this.elMainContainer.innerHTML = `
       <div class="timeline-section-title">
-        <span>🎓 Congresso Acadêmico em Toledo</span>
+        <span>🎓 Congresso Internacional de Gnosis • Toledo</span>
+        ${!isUnlocked ? `<button class="btn btn-primary btn-sm" onclick="app.openUnlockModal()">Destravar Documentos</button>` : ""}
       </div>
+
+      <!-- Card de Documentos Oficiais & Credenciamento -->
+      <div class="event-card" style="border-left: 4px solid var(--accent-emerald);">
+        <div class="event-name">📜 Documentos Oficiais & Credenciamento do Congresso</div>
+        <div class="event-desc">Cartas de convite internacional e comprovantes eclesiais de Paz y Salvo para os congressistas.</div>
+
+        <div class="secret-badge" style="margin-top: 12px;">
+          <div style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
+            🏛️ <strong>Evento Oficial:</strong> Congreso Gnóstico Internacional – España 2026 (23 a 27 de Outubro)<br>
+            📍 <strong>Sede Oficial:</strong> Palacio de Congresos “El Greco”, Toledo (Espanha)<br>
+            🕊️ <strong>Delegação:</strong> Lumisial Zeus Daimon (São Pedro de Alcântara / SC, Brasil) • Igreja Gnóstica (RER 013873)
+          </div>
+
+          <div class="secret-grid" style="margin-bottom: 12px;">
+            <div class="secret-item">
+              <span class="secret-label">Diego Jacob (Sacerdote)</span>
+              <span class="secret-value">Passaporte: GO506551 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button></span>
+            </div>
+            <div class="secret-item">
+              <span class="secret-label">Tatiana Araújo (Isis)</span>
+              <span class="secret-value">Passaporte: GB464034 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GB464034', 'Passaporte Tatiana')">📋</button></span>
+            </div>
+            <div class="secret-item">
+              <span class="secret-label">Fabiana Nunes Poli (Isis)</span>
+              <span class="secret-value">Passaporte: G0872312 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('G0872312', 'Passaporte Fabiana')">📋</button></span>
+            </div>
+            <div class="secret-item">
+              <span class="secret-label">Credenciais Paz y Salvo</span>
+              <span class="secret-value">VIC 207/2026 & VIC 209/2026</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
+              📄 Carta Convite Diego
+            </button>
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
+              📄 Carta Convite Tatiana
+            </button>
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+              📄 Paz y Salvo
+            </button>
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+              📄 Paz y Salvo Fabiana
+            </button>
+            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-hotel-toledo', 'El Mirador del Valle - Reserva Hotel Toledo')">
+              🏨 Voucher Hotel Toledo
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card de Informações da Cidade & Hospedagem -->
       <div class="event-card">
         <div class="event-name">Toledo • Cidade Histórica & Congresso</div>
         <div class="event-desc">Período: 22 a 28 de Outubro de 2026 (6 noites)</div>

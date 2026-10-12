@@ -130,8 +130,9 @@
         },
         {
           "time": "16:00",
-          "title": "Check-in El Mirador del Valle (Toledo)",
+          "title": "Check-in El Mirador del Valle (Toledo) • Credenciamento do Congresso",
           "category": "stay",
+          "isCongressCheckin": true,
           "protectedId": "stay-toledo-congresso"
         }
       ]
