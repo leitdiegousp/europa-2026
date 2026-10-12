@@ -246,13 +246,14 @@ class EuropaApp {
 
   copyToClipboard(text, label = "Item") {
     if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
-      navigator.clipboard.writeText(text).then(() => {
+      return navigator.clipboard.writeText(text).then(() => {
         this._showToast(`✓ ${label} copiado!`);
+        return true;
       }).catch(() => {
-        this._fallbackCopy(text, label);
+        return this._fallbackCopy(text, label);
       });
     } else {
-      this._fallbackCopy(text, label);
+      return Promise.resolve(this._fallbackCopy(text, label));
     }
   }
 
@@ -466,6 +467,7 @@ class EuropaApp {
     if (!this.elImmigrationDocsCard) return;
 
     const isUnlocked = vault.isUnlocked;
+    const privateData = vault.getData();
 
     this.elImmigrationDocsCard.innerHTML = `
       <div class="immigration-card-inner">
@@ -513,7 +515,7 @@ class EuropaApp {
                 <div class="policy-details">
                   <div class="policy-row">
                     <span class="policy-label">Passaporte Brasileiro:</span>
-                    <span class="policy-val">GO506551 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button><br><span style="font-size:0.75rem; color:var(--text-muted); font-family:inherit;">Passaporte Novo (Antigo: FR302881)</span></span>
+                    <span class="policy-val">GO506551 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button><br><span style="font-size:0.75rem; color:var(--text-muted); font-family:inherit;">Passaporte Novo (Antigo: FR302881 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('FR302881', 'Passaporte Antigo Diego')">📋</button>)</span></span>
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Apólice Porto Seguro:</span>
@@ -621,6 +623,16 @@ class EuropaApp {
               <div class="immigration-unlocked-hint">
                 <span>✓ Apólices e certificados decifrados em memória (RAM) • Toque em qualquer botão para visualização imediata ou download offline.</span>
               </div>
+              ${privateData && privateData.travelers ? `
+                <div class="immigration-unlocked-travelers" style="margin-top: 10px; padding: 10px 14px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-sm); font-size: 0.82rem; color: var(--accent-emerald); line-height: 1.5;">
+                  <div style="font-weight: 600; margin-bottom: 4px;">✓ Dossiê de Viajantes Decifrado & Confirmado no Cofre EV26:</div>
+                  <div style="display: flex; flex-direction: column; gap: 4px; color: var(--text-main);">
+                    ${privateData.travelers.map(t => `
+                      <div>• <strong>${t.name}</strong> (${t.role}): Passaporte <code>${t.passportStatus || t.passport}</code> <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${t.passport}', 'Passaporte ${t.name}')">📋</button></div>
+                    `).join("")}
+                  </div>
+                </div>
+              ` : ""}
             `}
           </div>
         </div>
@@ -737,7 +749,8 @@ class EuropaApp {
 
     let targetTime = null;
     if (this.simulatedDate) {
-      targetTime = `${this.simulatedDate}T12:00:00`;
+      const tzOffset = this.simulatedDate >= "2026-10-25" ? "+01:00" : "+02:00";
+      targetTime = `${this.simulatedDate}T10:30:00${tzOffset}`;
     }
 
     const step = computeCurrentStep(bookings, targetTime);
@@ -814,7 +827,24 @@ class EuropaApp {
       `;
     }
 
-    if (evt.documents && evt.documents.length > 0) {
+    if (evt.mapsUrl) {
+      actionButtonsHtml += `
+        <a href="${evt.mapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display:inline-flex;align-items:center;gap:4px;">
+          🗺️ Rota no Google Maps ↗
+        </a>
+      `;
+    }
+
+    if (evt.category === "temple" || evt.id === "templo-divino-daimon-valais") {
+      actionButtonsHtml += `
+        <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+          📄 Paz y Salvo Diego & Tatiana
+        </button>
+        <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+          📄 Paz y Salvo Fabiana
+        </button>
+      `;
+    } else if (evt.documents && evt.documents.length > 0) {
       actionButtonsHtml += `
         <button class="btn btn-secondary btn-sm" onclick="app.openPdf('${evt.documents[0]}', '${evt.title}')">
           📄 Ver Voucher PDF
@@ -843,6 +873,8 @@ class EuropaApp {
         </div>
         ${evt.address ? `<div class="detail-item"><span>📍</span> ${evt.address}</div>` : ""}
         ${evt.criticalNotice ? `<div class="detail-item" style="color:var(--accent-amber);font-weight:600;">${evt.criticalNotice}</div>` : ""}
+        ${evt.credentials ? `<div class="detail-item" style="color:var(--accent-emerald);"><span>🕊️</span> <strong>Credenciais:</strong> ${evt.credentials}</div>` : ""}
+        ${evt.recommendations ? `<div class="detail-item" style="font-size:0.82rem;color:var(--text-muted);"><span>✨</span> <strong>Recomendações:</strong> ${evt.recommendations}</div>` : ""}
       </div>
       <div class="step-actions">
         ${actionButtonsHtml}
@@ -1036,7 +1068,7 @@ class EuropaApp {
               <div class="secret-grid" style="margin-bottom: 10px;">
                 <div class="secret-item">
                   <span class="secret-label">Diego Jacob (Titular)</span>
-                  <span class="secret-value">Passaporte: GO506551 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button><br>Apólice: 16023-0003-69-260122474 (Cert: 32572804832)</span>
+                  <span class="secret-value">Passaporte NOVO: GO506551 (antigo: FR302881) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('FR302881', 'Passaporte Antigo Diego')">📋 (antigo)</button><br>Apólice: 16023-0003-69-260122474 (Cert: 32572804832)</span>
                 </div>
                 <div class="secret-item">
                   <span class="secret-label">Tatiana Jacob (Esposa)</span>
@@ -1080,7 +1112,7 @@ class EuropaApp {
               <div class="secret-grid" style="margin-bottom: 10px;">
                 <div class="secret-item">
                   <span class="secret-label">Diego Jacob (Sacerdote)</span>
-                  <span class="secret-value">Passaporte: GO506551 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button></span>
+                  <span class="secret-value">Passaporte NOVO: GO506551 (antigo: FR302881) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('FR302881', 'Passaporte Antigo Diego')">📋 (antigo)</button></span>
                 </div>
                 <div class="secret-item">
                   <span class="secret-label">Tatiana Araújo (Isis)</span>
@@ -1188,6 +1220,11 @@ class EuropaApp {
                   🗺️ Rota Saillon ➔ Riddes (Google Maps) ↗
                 </a>
               </div>
+              ${isUnlocked && privateBooking && privateBooking.notes ? `
+                <div style="font-size: 0.78rem; color: var(--accent-emerald); margin-top: 8px;">
+                  ✓ Informação confidencial autenticada: ${privateBooking.notes}
+                </div>
+              ` : ""}
             </div>
           `;
         } else if (isUnlocked && privateBooking) {
@@ -1463,8 +1500,8 @@ class EuropaApp {
         ref: "HMSFDZ52SZ",
         host: "Victor",
         phone: "+33 6 12 25 75 63",
-        docs: ["doc-airbnb-saillon-res", "doc-airbnb-saillon-anuncio"],
-        notes: "Vila medieval suíça com termas famosas (Les Bains de Saillon). Moeda: CHF."
+        docs: ["doc-airbnb-saillon-res", "doc-airbnb-saillon-anuncio", "doc-pazsalvo-diego-tatiana", "doc-pazsalvo-fabiana"],
+        notes: "Vila medieval no Cantão de Valais com águas termais (Les Bains de Saillon). Base estratégica para a visita no Dia 19 ao Templo Divino Daimon em Riddes (~4 km / 7 min). Portar credenciais Paz y Salvo Zeus Daimon. Moeda: CHF."
       },
       {
         title: "Centro Madrid Rio • Madrid (2 Noites)",
@@ -1583,7 +1620,7 @@ class EuropaApp {
 
     this.elMainContainer.innerHTML = `
       <div class="timeline-section-title">
-        <span>🚗 Aluguel de Carro & Rotas na Suíça</span>
+        <span>🇨🇭 Suíça & Aluguel de Carro (Valais)</span>
         ${!isUnlocked ? `<button class="btn btn-primary btn-sm" onclick="app.openUnlockModal()">Destravar Documentos</button>` : ""}
       </div>
 
@@ -1703,7 +1740,7 @@ class EuropaApp {
           <div class="secret-grid" style="margin-bottom: 12px;">
             <div class="secret-item">
               <span class="secret-label">Diego Jacob (Sacerdote)</span>
-              <span class="secret-value">Passaporte: GO506551 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button></span>
+              <span class="secret-value">Passaporte NOVO: GO506551 (antigo: FR302881) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('FR302881', 'Passaporte Antigo Diego')">📋 (antigo)</button></span>
             </div>
             <div class="secret-item">
               <span class="secret-label">Tatiana Araújo (Isis)</span>

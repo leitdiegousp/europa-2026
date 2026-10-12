@@ -168,6 +168,24 @@ async function main() {
   await cdp.send("DOM.enable");
   await cdp.send("Runtime.enable");
 
+  // Grant clipboard permissions via Browser CDP session
+  try {
+    const versionResp = await fetch(`http://127.0.0.1:${CDP_PORT}/json/version`);
+    const versionData = await versionResp.json();
+    if (versionData.webSocketDebuggerUrl) {
+      const browserCdp = new CdpSession(versionData.webSocketDebuggerUrl);
+      await browserCdp.connect();
+      await browserCdp.send("Browser.grantPermissions", {
+        permissions: ["clipboardReadWrite", "clipboardSanitizedWrite"],
+        origin: `http://127.0.0.1:${PORT}`
+      });
+      browserCdp.close();
+      console.log("  ✓ Clipboard permissions granted via Browser CDP session");
+    }
+  } catch (err) {
+    console.log("Browser.grantPermissions warning:", err.message);
+  }
+
   // Wait for page to initialize
   await new Promise(r => setTimeout(r, 800));
 
@@ -305,6 +323,7 @@ async function main() {
         hasDiegoPolicy: text.includes("16023-0003-69-260122474"),
         hasDiegoCert: text.includes("32572804832"),
         hasDiegoPassport: text.includes("GO506551"),
+        hasDiegoOldPassport: text.includes("FR302881"),
         hasTatianaPolicy: text.includes("16023-0003-69-260122473"),
         hasTatianaCert: text.includes("29340388828"),
         hasTatianaPassport: text.includes("GB464034"),
@@ -319,6 +338,7 @@ async function main() {
   }
   if (!expandedCheck.hasDiegoPolicy || !expandedCheck.hasDiegoCert) throw new Error("Missing Diego credentials in expanded card");
   if (!expandedCheck.hasDiegoPassport) throw new Error("Missing Diego passport GO506551 in expanded card");
+  if (!expandedCheck.hasDiegoOldPassport) throw new Error("Missing Diego old passport FR302881 in expanded card");
   if (!expandedCheck.hasTatianaPolicy || !expandedCheck.hasTatianaCert) throw new Error("Missing Tatiana credentials in expanded card");
   if (!expandedCheck.hasTatianaPassport) throw new Error("Missing Tatiana passport GB464034 in expanded card");
   if (!expandedCheck.hasFabianaPassport) throw new Error("Missing Fabiana passport G0872312 in expanded card");
@@ -503,6 +523,25 @@ async function main() {
     await cdp.evaluate(`app.closeModals()`);
   }
 
+  // Step F1.8: Verifying Unlocked Cofre Decrypted Traveler Dossier
+  console.log("\n[TEST F4] Verifying Unlocked Cofre Decrypted Traveler Dossier...");
+  const unlockedTravelersCheck = await cdp.evaluate(`
+    (() => {
+      const card = document.getElementById("immigration-docs-card");
+      const text = card.innerText;
+      return {
+        hasDecryptedHeader: text.includes("Dossiê de Viajantes Decifrado & Confirmado no Cofre EV26"),
+        hasDiego: text.includes("Diego Jacob Fernandes Leite") && text.includes("GO506551") && text.includes("FR302881"),
+        hasTatiana: text.includes("Tatiana Araújo de Sousa Jacob") && text.includes("GB464034"),
+        hasFabiana: text.includes("Fabiana Nunes Poli") && text.includes("G0872312")
+      };
+    })()
+  `);
+  if (!unlockedTravelersCheck.hasDecryptedHeader || !unlockedTravelersCheck.hasDiego || !unlockedTravelersCheck.hasTatiana || !unlockedTravelersCheck.hasFabiana) {
+    throw new Error("Unlocked cofre traveler dossier failed to render: " + JSON.stringify(unlockedTravelersCheck));
+  }
+  console.log("  ✓ Unlocked cofre traveler dossier verified from decrypted index.enc");
+
   // Step F2: Test Hero Quick-Action '🛂 Seguros Imigração Lisboa' Auto-Expands from Collapsed State
   console.log("\n[TEST F2] Testing Hero Quick-Action '🛂 Seguros Imigração Lisboa' auto-expands from collapsed state...");
   await cdp.evaluate(`app.collapseImmigrationDocs()`);
@@ -538,7 +577,7 @@ async function main() {
       const text = day17.innerText;
       return {
         hasImmigrationEvent: text.includes("Controle de Passaporte & Imigração Schengen"),
-        hasPassports: text.includes("GO506551") && text.includes("GB464034"),
+        hasPassports: text.includes("GO506551") && text.includes("GB464034") && text.includes("FR302881"),
         hasCredentials: text.includes("16023-0003-69-260122474") && text.includes("16023-0003-69-260122473"),
         hasButtons: text.includes("Bilhete Seguro Diego") && text.includes("Certificado Schengen Tatiana") && text.includes("Carta Convite Diego") && text.includes("Carta Convite Tatiana")
       };
@@ -587,7 +626,7 @@ async function main() {
       const text = day22.innerText;
       return {
         hasCongressEvent: text.includes("Credenciamento do Congresso"),
-        hasPassports: text.includes("GO506551") && text.includes("GB464034") && text.includes("G0872312"),
+        hasPassports: text.includes("GO506551") && text.includes("GB464034") && text.includes("G0872312") && text.includes("FR302881"),
         hasButtons: text.includes("Carta Convite Diego") && text.includes("Carta Convite Tatiana") && text.includes("Paz y Salvo") && text.includes("Paz y Salvo Fabiana")
       };
     })()
@@ -631,7 +670,10 @@ async function main() {
       const area = document.getElementById("tab-content-container");
       const text = area.innerText;
       const linksAndBtns = Array.from(area.querySelectorAll("button, a")).map(b => b.innerText.trim());
+      const navBtn = document.querySelector('.nav-tab[data-tab="car"]');
       return {
+        hasSwissSectionTitle: text.includes("Suíça & Aluguel de Carro (Valais)"),
+        hasSwissNavTab: navBtn ? navBtn.innerText.includes("Suíça") : false,
         hasSwissSectorAlert: text.includes("ALERTA OPERACIONAL: Setor Suíço"),
         hasMainRoute: text.includes("Rota Principal: Aeroporto de Genebra") && text.includes("Saillon"),
         hasValaisRoteiro: text.includes("Roteiro em Valais: Saillon ➔ Riddes (Templo Divino Daimon)"),
@@ -650,7 +692,7 @@ async function main() {
     })()
   `);
 
-  if (!carCheck.hasSwissSectorAlert || !carCheck.hasMainRoute || !carCheck.hasValaisRoteiro || !carCheck.hasDistance || !carCheck.hasCredentials || !carCheck.hasArredores || !carCheck.hasDrivingRules || !carCheck.hasSpeedLimits || !carCheck.hasHeadlightsRule || !carCheck.hasParkingRule || !carCheck.hasAutumnWeather || !carCheck.hasMapsRouteBtn || !carCheck.hasPazSalvoDiegoTatiana || !carCheck.hasPazSalvoFabiana) {
+  if (!carCheck.hasSwissSectionTitle || !carCheck.hasSwissNavTab || !carCheck.hasSwissSectorAlert || !carCheck.hasMainRoute || !carCheck.hasValaisRoteiro || !carCheck.hasDistance || !carCheck.hasCredentials || !carCheck.hasArredores || !carCheck.hasDrivingRules || !carCheck.hasSpeedLimits || !carCheck.hasHeadlightsRule || !carCheck.hasParkingRule || !carCheck.hasAutumnWeather || !carCheck.hasMapsRouteBtn || !carCheck.hasPazSalvoDiegoTatiana || !carCheck.hasPazSalvoFabiana) {
     throw new Error("Car tab missing required elements, driving rules, or buttons: " + JSON.stringify(carCheck));
   }
   console.log("  ✓ Car & Swiss Routes tab contains Valais itinerary, Templo Daimon route, credentials, Swiss driving guidelines, and action buttons");
@@ -684,7 +726,7 @@ async function main() {
       return {
         hasTitle: text.includes("Congresso Internacional de Gnosis"),
         hasDocSection: text.includes("Documentos Oficiais & Credenciamento"),
-        hasPassports: text.includes("GO506551") && text.includes("GB464034") && text.includes("G0872312"),
+        hasPassports: text.includes("GO506551") && text.includes("GB464034") && text.includes("G0872312") && text.includes("FR302881"),
         hasDiegoConvite: btns.some(b => b.includes("Carta Convite Diego")),
         hasTatianaConvite: btns.some(b => b.includes("Carta Convite Tatiana")),
         hasPazSalvo: btns.some(b => b.includes("Paz y Salvo")),
@@ -699,6 +741,78 @@ async function main() {
     throw new Error("Congress tab missing required elements or buttons: " + JSON.stringify(congressCheck));
   }
   console.log("  ✓ Congress tab contains all documentation, passports, and action buttons");
+
+  // Step L: Check Day 19 Current Step Simulation
+  console.log("\n[TEST J] Checking Day 19 Current Step simulation for Templo Divino Daimon...");
+  await cdp.evaluate(`app.setSimulatedDate('2026-10-19')`);
+  const step19 = await cdp.evaluate(`
+    (() => {
+      const card = document.getElementById("current-step-card");
+      const text = card.innerText;
+      const links = Array.from(card.querySelectorAll("a, button")).map(b => b.innerText.trim());
+      return {
+        hasTitle: text.includes("Templo Divino Daimon"),
+        hasStatus: text.includes("EM ANDAMENTO") || text.includes("PRÓXIMA ETAPA"),
+        hasCredentials: text.includes("Mem 207/2026") || text.includes("Zeus Daimon"),
+        hasMapsBtn: links.some(l => l.includes("Google Maps")),
+        hasPazSalvoDiego: links.some(l => l.includes("Paz y Salvo Diego & Tatiana")),
+        hasPazSalvoFabiana: links.some(l => l.includes("Paz y Salvo Fabiana"))
+      };
+    })()
+  `);
+  if (!step19.hasTitle || !step19.hasStatus || !step19.hasCredentials || !step19.hasMapsBtn || !step19.hasPazSalvoDiego || !step19.hasPazSalvoFabiana) {
+    throw new Error("Day 19 current step failed to recognize Templo Divino Daimon: " + JSON.stringify(step19));
+  }
+  console.log("  ✓ Day 19 current step successfully recognizes Templo Divino Daimon with action buttons and route");
+
+  // Step M: Testing Clipboard Copy with CDP User Interaction
+  console.log("\n[TEST K] Testing Clipboard Copy Functionality...");
+  await cdp.send("Page.bringToFront");
+
+  // Locate a copy button for Diego's passport GO506551
+  const copyBtnCoords = await cdp.evaluate(`
+    (() => {
+      const btns = Array.from(document.querySelectorAll(".copy-icon-btn"));
+      const btn = btns.find(b => b.getAttribute("onclick") && b.getAttribute("onclick").includes("GO506551"));
+      if (!btn) return null;
+      btn.scrollIntoView({ block: "center", inline: "center" });
+      const r = btn.getBoundingClientRect();
+      return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) };
+    })()
+  `);
+
+  if (copyBtnCoords) {
+    await cdp.send("Input.dispatchMouseEvent", {
+      type: "mousePressed",
+      x: copyBtnCoords.x,
+      y: copyBtnCoords.y,
+      button: "left",
+      clickCount: 1
+    });
+    await cdp.send("Input.dispatchMouseEvent", {
+      type: "mouseReleased",
+      x: copyBtnCoords.x,
+      y: copyBtnCoords.y,
+      button: "left",
+      clickCount: 1
+    });
+  } else {
+    await cdp.evaluate(`app.copyToClipboard("GO506551", "Passaporte Diego")`);
+  }
+
+  await new Promise(r => setTimeout(r, 200));
+
+  const copyToastTest = await cdp.evaluate(`
+    (() => {
+      const toast = document.getElementById("toast-notification") || document.querySelector(".toast");
+      return toast ? toast.innerText : "";
+    })()
+  `);
+
+  if (!copyToastTest.includes("Passaporte Diego copiado")) {
+    throw new Error("Clipboard copy toast failed for new passport: " + copyToastTest);
+  }
+  console.log("  ✓ Clipboard copy confirmed: " + copyToastTest);
 
   // Teardown
   cdp.close();

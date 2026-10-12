@@ -108,6 +108,10 @@ export function computeCurrentStep(bookings = [], simulatedNow = null) {
       startIso = b.pickup.time;
       endIso = b.dropoff.time;
       tz = b.pickup.tz || tz;
+    } else if (b.category === "temple" || b.category === "activity" || b.startTime || b.time) {
+      startIso = b.startTime || b.time;
+      endIso = b.endTime || b.end || null;
+      tz = b.tz || tz;
     }
 
     const startDate = startIso ? new Date(startIso) : null;
@@ -125,40 +129,66 @@ export function computeCurrentStep(bookings = [], simulatedNow = null) {
 
   normalized.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
 
-  // 1. Verificar se há algum evento EM ANDAMENTO
-  for (const item of normalized) {
-    if (item.startDate <= now && item.endDate && now <= item.endDate) {
-      return {
-        status: "EM ANDAMENTO",
-        badgeColor: "emerald",
-        event: item.raw,
-        startFormatted: formatTimeInZone(item.startIso, item.tz),
-        endFormatted: formatTimeInZone(item.endIso, item.tz),
-        tzLabel: getTimezoneLabel(item.startIso, item.tz),
-        countdown: null,
-        notes: "Você está vivendo esta etapa agora."
-      };
-    }
+  // 1. Identificar eventos EM ANDAMENTO
+  const activeEvents = normalized.filter(item => item.startDate <= now && item.endDate && now <= item.endDate);
+
+  // Se houver evento ativo que NÃO seja apenas estadia (ex: templo, voo, passeio), ele tem prioridade absoluta
+  const specificActive = activeEvents.filter(item => item.raw.category !== "stay");
+  if (specificActive.length > 0) {
+    // Escolhe o que iniciou mais recentemente
+    specificActive.sort((a, b) => b.startDate.getTime() - a.startDate.getTime());
+    const currentItem = specificActive[0];
+    return {
+      status: "EM ANDAMENTO",
+      badgeColor: "emerald",
+      event: currentItem.raw,
+      startFormatted: formatTimeInZone(currentItem.startIso, currentItem.tz),
+      endFormatted: formatTimeInZone(currentItem.endIso, currentItem.tz),
+      tzLabel: getTimezoneLabel(currentItem.startIso, currentItem.tz),
+      countdown: null,
+      notes: "Você está vivendo esta etapa agora."
+    };
   }
 
-  // 2. Procurar o PRÓXIMO evento a ocorrer
-  for (const item of normalized) {
-    if (item.startDate > now) {
-      const cd = getCountdown(item.startIso, now);
+  // 2. Se a única atividade em andamento for uma estadia de hotel (que dura dias),
+  // verificar se há uma PRÓXIMA ETAPA iminente nas próximas 36 horas para orientar o viajante
+  const upcomingEvents = normalized.filter(item => item.startDate > now);
+  if (upcomingEvents.length > 0) {
+    const nextItem = upcomingEvents[0];
+    const diffHours = (nextItem.startDate.getTime() - now.getTime()) / (1000 * 3600);
+
+    // Se houver evento iminente (dentro de 36 horas) ou se não houver nenhuma estadia em andamento, exibe como Próxima Etapa
+    if (activeEvents.length === 0 || diffHours <= 36) {
+      const cd = getCountdown(nextItem.startIso, now);
       return {
         status: "PRÓXIMA ETAPA",
         badgeColor: "amber",
-        event: item.raw,
-        startFormatted: formatTimeInZone(item.startIso, item.tz),
-        endFormatted: item.endIso ? formatTimeInZone(item.endIso, item.tz) : null,
-        tzLabel: getTimezoneLabel(item.startIso, item.tz),
+        event: nextItem.raw,
+        startFormatted: formatTimeInZone(nextItem.startIso, nextItem.tz),
+        endFormatted: nextItem.endIso ? formatTimeInZone(nextItem.endIso, nextItem.tz) : null,
+        tzLabel: getTimezoneLabel(nextItem.startIso, nextItem.tz),
         countdown: cd.text,
         notes: `Faltam ${cd.text} para o início desta etapa.`
       };
     }
   }
 
-  // 3. Caso todos já tenham passado
+  // 3. Caso haja estadia em andamento sem eventos nas próximas 36h
+  if (activeEvents.length > 0) {
+    const currentItem = activeEvents[0];
+    return {
+      status: "EM ANDAMENTO",
+      badgeColor: "emerald",
+      event: currentItem.raw,
+      startFormatted: formatTimeInZone(currentItem.startIso, currentItem.tz),
+      endFormatted: formatTimeInZone(currentItem.endIso, currentItem.tz),
+      tzLabel: getTimezoneLabel(currentItem.startIso, currentItem.tz),
+      countdown: null,
+      notes: "Hospedagem ativa neste momento."
+    };
+  }
+
+  // 4. Caso todos já tenham passado
   return {
     status: "VIAGEM CONCLUÍDA",
     badgeColor: "slate",
