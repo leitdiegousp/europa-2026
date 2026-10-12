@@ -116,13 +116,9 @@ async function main() {
   const { sessionDek, vaultId } = await unwrapDek("ti8mao", env);
 
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, "vault/asset-manifest.json"), "utf8"));
-  const seguros = manifest.filter(m => m.id.startsWith("doc-seguro-"));
-  if (seguros.length !== 4) throw new Error(`Expected 4 insurance documents in manifest, found ${seguros.length}`);
+  if (manifest.length !== 20) throw new Error(`Expected 20 documents in manifest, found ${manifest.length}`);
 
-  const congressDocs = manifest.filter(m => m.id.startsWith("doc-convite-") || m.id.startsWith("doc-pazsalvo-"));
-  if (congressDocs.length !== 4) throw new Error(`Expected 4 congress documents in manifest, found ${congressDocs.length}`);
-
-  for (const doc of [...seguros, ...congressDocs]) {
+  for (const doc of manifest) {
     const buf = fs.readFileSync(path.join(ROOT_DIR, `vault/assets/${doc.id}.enc`));
     const pdfBytes = await decryptPdf(sessionDek, buf, vaultId, doc.id);
     const header = Buffer.from(pdfBytes.buffer, pdfBytes.byteOffset, 5).toString("utf8");
@@ -356,6 +352,40 @@ async function main() {
   await cdp.evaluate(`document.getElementById("immigration-toggle-btn").click()`);
   await new Promise(r => setTimeout(r, 200));
 
+  // Step D4: Test Mobile Viewports with Card EXPANDED (320px to 430px)
+  console.log("\n[TEST C2] Verifying Mobile Viewports with Immigration Card EXPANDED (320px, 360px, 375px, 390px, 412px, 430px)...");
+  for (const width of viewports) {
+    await cdp.send("Emulation.setDeviceMetricsOverride", {
+      width,
+      height: 800,
+      deviceScaleFactor: 2,
+      mobile: true
+    });
+    await new Promise(r => setTimeout(r, 100));
+
+    const check = await cdp.evaluate(`
+      (() => {
+        const docW = document.documentElement.scrollWidth;
+        const winW = window.innerWidth;
+        const bodyW = document.body.scrollWidth;
+        return { docW, winW, bodyW, blowout: docW > winW || bodyW > winW };
+      })()
+    `);
+
+    if (check.blowout) {
+      throw new Error(`Horizontal scroll blowout detected with EXPANDED card at viewport ${width}px: docW=${check.docW}, winW=${check.winW}, bodyW=${check.bodyW}`);
+    }
+    console.log(`  ✓ Expanded Viewport ${width}px: docW=${check.docW}, winW=${check.winW} (overflow-x contained)`);
+  }
+
+  // Reset viewport to 390px
+  await cdp.send("Emulation.setDeviceMetricsOverride", {
+    width: 390,
+    height: 844,
+    deviceScaleFactor: 3,
+    mobile: true
+  });
+
   // Step F: Test Locked Button Click -> Unlock Modal Prompt -> Vault Unlock -> PDF Open
   console.log("\n[TEST E] Testing locked button click and pending PDF auto-open on unlock...");
   const triggerRes = await cdp.evaluate(`
@@ -508,16 +538,17 @@ async function main() {
       const text = day17.innerText;
       return {
         hasImmigrationEvent: text.includes("Controle de Passaporte & Imigração Schengen"),
+        hasPassports: text.includes("GO506551") && text.includes("GB464034"),
         hasCredentials: text.includes("16023-0003-69-260122474") && text.includes("16023-0003-69-260122473"),
-        hasButtons: text.includes("Bilhete Seguro Diego") && text.includes("Certificado Schengen Tatiana")
+        hasButtons: text.includes("Bilhete Seguro Diego") && text.includes("Certificado Schengen Tatiana") && text.includes("Carta Convite Diego") && text.includes("Carta Convite Tatiana")
       };
     })()
   `);
 
-  if (!day17Event.hasImmigrationEvent || !day17Event.hasCredentials || !day17Event.hasButtons) {
-    throw new Error("Day 17 timeline event missing immigration details or buttons: " + JSON.stringify(day17Event));
+  if (!day17Event.hasImmigrationEvent || !day17Event.hasPassports || !day17Event.hasCredentials || !day17Event.hasButtons) {
+    throw new Error("Day 17 timeline event missing immigration details, passports, or buttons: " + JSON.stringify(day17Event));
   }
-  console.log("  ✓ Day 17 timeline contains immigration passport control event with credentials and action buttons");
+  console.log("  ✓ Day 17 timeline contains immigration passport control event with passports, credentials, and action buttons");
 
   // Step H2: Check Timeline Event on Day 22 (Toledo Congress Check-in & Credenciamento)
   console.log("\n[TEST G2] Checking Day 22 Timeline Congress check-in & credenciamento event...");

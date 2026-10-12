@@ -245,11 +245,37 @@ class EuropaApp {
   }
 
   copyToClipboard(text, label = "Item") {
-    navigator.clipboard.writeText(text).then(() => {
-      this._showToast(`✓ ${label} copiado!`);
-    }).catch(() => {
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+      navigator.clipboard.writeText(text).then(() => {
+        this._showToast(`✓ ${label} copiado!`);
+      }).catch(() => {
+        this._fallbackCopy(text, label);
+      });
+    } else {
+      this._fallbackCopy(text, label);
+    }
+  }
+
+  _fallbackCopy(text, label) {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-9999px";
+      textArea.style.top = "-9999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const success = document.execCommand("copy");
+      document.body.removeChild(textArea);
+      if (success) {
+        this._showToast(`✓ ${label} copiado!`);
+      } else {
+        this._showToast(`Falha ao copiar.`);
+      }
+    } catch (_) {
       this._showToast(`Falha ao copiar.`);
-    });
+    }
   }
 
   openUnlockModal() {
@@ -471,7 +497,7 @@ class EuropaApp {
         <div class="immigration-card-body-wrapper ${this.isImmigrationExpanded ? 'expanded' : 'collapsed'}" id="immigration-card-body-wrapper">
           <div class="immigration-card-body" id="immigration-card-body" aria-hidden="${!this.isImmigrationExpanded}">
             <p class="immigration-notice">
-              <strong>Apresentação Obrigatória na Imigração:</strong> Para ingressar em Portugal e no Espaço Schengen, apresente os passaportes brasileiros e os certificados de seguro viagem com cobertura médica/hospitalar mínima de <strong>€ 30.000</strong> (Porto Seguro).
+              <strong>Apresentação Obrigatória na Imigração & Viagem:</strong> Para ingressar em Portugal e no Espaço Schengen, apresente os passaportes brasileiros e os certificados de seguro viagem com cobertura médica/hospitalar mínima de <strong>€ 30.000</strong> (Porto Seguro). Abaixo constam também as Cartas de Convite oficiais e credenciais de Paz y Salvo para o Congresso em Toledo.
             </p>
 
             <div class="immigration-travelers-grid">
@@ -1002,11 +1028,11 @@ class EuropaApp {
               <div class="secret-grid" style="margin-bottom: 10px;">
                 <div class="secret-item">
                   <span class="secret-label">Diego Jacob (Titular)</span>
-                  <span class="secret-value">Apólice: 16023-0003-69-260122474 (Cert: 32572804832)</span>
+                  <span class="secret-value">Passaporte: GO506551 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button><br>Apólice: 16023-0003-69-260122474 (Cert: 32572804832)</span>
                 </div>
                 <div class="secret-item">
                   <span class="secret-label">Tatiana Jacob (Esposa)</span>
-                  <span class="secret-value">Apólice: 16023-0003-69-260122473 (Cert: 29340388828)</span>
+                  <span class="secret-value">Passaporte: GB464034 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GB464034', 'Passaporte Tatiana')">📋</button><br>Apólice: 16023-0003-69-260122473 (Cert: 29340388828)</span>
                 </div>
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
@@ -1021,6 +1047,12 @@ class EuropaApp {
                 </button>
                 <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-tatiana-cert', 'Certificado Schengen - Tatiana Araujo de Sousa Jacob')">
                   📄 Certificado Schengen Tatiana
+                </button>
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
+                  📄 Carta Convite Diego
+                </button>
+                <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
+                  📄 Carta Convite Tatiana
                 </button>
                 <button class="btn btn-secondary btn-sm" onclick="app.scrollToImmigrationDocs()">
                   ⬆️ Ver Card de Imigração no Topo
@@ -1571,19 +1603,19 @@ class EuropaApp {
           </div>
 
           <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
-            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-diego', 'Carta de Invitación - Diego Jacob Fernandes Leite')">
               📄 Carta Convite Diego
             </button>
-            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-convite-tatiana', 'Carta de Invitación - Tatiana Araújo de Sousa Jacob')">
               📄 Carta Convite Tatiana
             </button>
-            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
-              📄 Paz y Salvo
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-diego-tatiana', 'Paz y Salvo - Diego Jacob & Tatiana Araújo')">
+              📄 Paz y Salvo Diego & Tatiana
             </button>
-            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-pazsalvo-fabiana', 'Paz y Salvo - Fabiana Nunes Poli')">
               📄 Paz y Salvo Fabiana
             </button>
-            <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-hotel-toledo', 'El Mirador del Valle - Reserva Hotel Toledo')">
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-hotel-toledo', 'El Mirador del Valle - Reserva Hotel Toledo')">
               🏨 Voucher Hotel Toledo
             </button>
           </div>

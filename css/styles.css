@@ -1448,14 +1448,6 @@ img, svg, video, iframe {
     line-height: 1.3;
   }
 
-@media (max-width: 360px) {
-  .doc-action-btn {
-    min-width: 95px;
-    font-size: 0.72rem;
-    padding: 6px 5px;
-  }
-}
-
   .step-title {
     font-size: 1.15rem;
   }
@@ -1654,6 +1646,8 @@ img, svg, video, iframe {
   .doc-action-btn {
     flex: 1 1 100%;
     min-width: 100%;
+    font-size: 0.72rem;
+    padding: 6px 5px;
   }
 
   .policy-row {

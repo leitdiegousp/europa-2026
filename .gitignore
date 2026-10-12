@@ -21,6 +21,7 @@ private-*.json
 raw-*
 tools/*
 !tools/test_e2e.mjs
+!tools/seal_vault.py
 scripts/
 
 # Arquivos de sistema e IDE
