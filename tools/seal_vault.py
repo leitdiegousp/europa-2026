@@ -198,19 +198,26 @@ def main():
                 "role": "Titular • Sacerdote",
                 "passport": "GO506551",
                 "oldPassport": "FR302881",
-                "passportStatus": "NOVO: GO506551 (antigo: FR302881)"
+                "passportStatus": "NOVO: GO506551 (antigo: FR302881)",
+                "apolice": "16023-0003-69-260122474",
+                "certSchengen": "32572804832",
+                "credencial": "Mem 207/2026 – VIC"
             },
             {
                 "id": "tatiana",
                 "name": "Tatiana Araújo de Sousa Jacob",
                 "role": "Esposa • Isis",
-                "passport": "GB464034"
+                "passport": "GB464034",
+                "apolice": "16023-0003-69-260122473",
+                "certSchengen": "29340388828",
+                "credencial": "Mem 207/2026 – VIC"
             },
             {
                 "id": "fabiana",
                 "name": "Fabiana Nunes Poli",
                 "role": "Congressista • Isis",
-                "passport": "G0872312"
+                "passport": "G0872312",
+                "credencial": "Mem 209/2026 – VIC"
             }
         ],
         "emergencyContacts": {

@@ -320,14 +320,15 @@ async function main() {
         chevronOpen: chevron ? chevron.classList.contains("open") : null,
         chevronChar: chevron ? chevron.textContent.trim() : "",
         isBadgeVisible: badge ? window.getComputedStyle(badge).display !== "none" : false,
-        hasDiegoPolicy: text.includes("16023-0003-69-260122474"),
-        hasDiegoCert: text.includes("32572804832"),
-        hasDiegoPassport: text.includes("GO506551"),
-        hasDiegoOldPassport: text.includes("FR302881"),
-        hasTatianaPolicy: text.includes("16023-0003-69-260122473"),
-        hasTatianaCert: text.includes("29340388828"),
-        hasTatianaPassport: text.includes("GB464034"),
-        hasFabianaPassport: text.includes("G0872312"),
+        hasLockedProtegido: text.includes("Protegido no cofre"),
+        hasNoDiegoPolicy: !text.includes("16023-0003-69-260122474"),
+        hasNoDiegoCert: !text.includes("32572804832"),
+        hasNoDiegoPassport: !text.includes("GO506551"),
+        hasNoDiegoOldPassport: !text.includes("FR302881"),
+        hasNoTatianaPolicy: !text.includes("16023-0003-69-260122473"),
+        hasNoTatianaCert: !text.includes("29340388828"),
+        hasNoTatianaPassport: !text.includes("GB464034"),
+        hasNoFabianaPassport: !text.includes("G0872312"),
         buttons: Array.from(card.querySelectorAll(".traveler-actions button")).map(b => b.innerText.trim())
       };
     })()
@@ -336,12 +337,11 @@ async function main() {
   if (!expandedCheck.isExpandedClass || !expandedCheck.isWrapperExpanded || !expandedCheck.isBodyAriaVisible) {
     throw new Error("Card failed to expand: " + JSON.stringify(expandedCheck));
   }
-  if (!expandedCheck.hasDiegoPolicy || !expandedCheck.hasDiegoCert) throw new Error("Missing Diego credentials in expanded card");
-  if (!expandedCheck.hasDiegoPassport) throw new Error("Missing Diego passport GO506551 in expanded card");
-  if (!expandedCheck.hasDiegoOldPassport) throw new Error("Missing Diego old passport FR302881 in expanded card");
-  if (!expandedCheck.hasTatianaPolicy || !expandedCheck.hasTatianaCert) throw new Error("Missing Tatiana credentials in expanded card");
-  if (!expandedCheck.hasTatianaPassport) throw new Error("Missing Tatiana passport GB464034 in expanded card");
-  if (!expandedCheck.hasFabianaPassport) throw new Error("Missing Fabiana passport G0872312 in expanded card");
+  if (!expandedCheck.hasLockedProtegido) throw new Error("Missing 'Protegido no cofre' placeholder in locked card");
+  if (!expandedCheck.hasNoDiegoPassport || !expandedCheck.hasNoDiegoOldPassport) throw new Error("Diego passport leaked in locked card!");
+  if (!expandedCheck.hasNoTatianaPassport || !expandedCheck.hasNoFabianaPassport) throw new Error("Tatiana/Fabiana passport leaked in locked card!");
+  if (!expandedCheck.hasNoDiegoPolicy || !expandedCheck.hasNoTatianaPolicy) throw new Error("Policy numbers leaked in locked card!");
+  if (!expandedCheck.hasNoDiegoCert || !expandedCheck.hasNoTatianaCert) throw new Error("Schengen cert numbers leaked in locked card!");
 
   const requiredButtons = [
     "Carta Convite Diego",
@@ -357,7 +357,7 @@ async function main() {
 
   if (!expandedCheck.isBadgeVisible) throw new Error("Status badge / Destravar button should be visible in expanded state!");
   if (expandedCheck.chevronOpen !== true) throw new Error("Expanded chevron should have .open class (rotated 180deg to point up)");
-  console.log("  ✓ Card expanded successfully via toggle click! Toggle text:", expandedCheck.toggleText, "Chevron open:", expandedCheck.chevronOpen, "Passports verified (Diego, Tatiana, Fabiana), Badge visible:", expandedCheck.isBadgeVisible);
+  console.log("  ✓ Card expanded successfully via toggle click! Toggle text:", expandedCheck.toggleText, "Chevron open:", expandedCheck.chevronOpen, "Protected placeholders verified (Zero plain text leaks when locked), Badge visible:", expandedCheck.isBadgeVisible);
 
   // Test collapsing via header click delegation
   console.log("  Testing header click delegation to collapse card...");
@@ -523,8 +523,8 @@ async function main() {
     await cdp.evaluate(`app.closeModals()`);
   }
 
-  // Step F1.8: Verifying Unlocked Cofre Decrypted Traveler Dossier
-  console.log("\n[TEST F4] Verifying Unlocked Cofre Decrypted Traveler Dossier...");
+  // Step F1.8: Verifying Unlocked Cofre Decrypted Traveler Dossier & Revealed Credentials
+  console.log("\n[TEST F4] Verifying Unlocked Cofre Decrypted Traveler Dossier & Revealed Credentials...");
   const unlockedTravelersCheck = await cdp.evaluate(`
     (() => {
       const card = document.getElementById("immigration-docs-card");
@@ -533,14 +533,18 @@ async function main() {
         hasDecryptedHeader: text.includes("Dossiê de Viajantes Decifrado & Confirmado no Cofre EV26"),
         hasDiego: text.includes("Diego Jacob Fernandes Leite") && text.includes("GO506551") && text.includes("FR302881"),
         hasTatiana: text.includes("Tatiana Araújo de Sousa Jacob") && text.includes("GB464034"),
-        hasFabiana: text.includes("Fabiana Nunes Poli") && text.includes("G0872312")
+        hasFabiana: text.includes("Fabiana Nunes Poli") && text.includes("G0872312"),
+        hasDiegoPolicy: text.includes("16023-0003-69-260122474"),
+        hasDiegoCert: text.includes("32572804832"),
+        hasTatianaPolicy: text.includes("16023-0003-69-260122473"),
+        hasTatianaCert: text.includes("29340388828")
       };
     })()
   `);
-  if (!unlockedTravelersCheck.hasDecryptedHeader || !unlockedTravelersCheck.hasDiego || !unlockedTravelersCheck.hasTatiana || !unlockedTravelersCheck.hasFabiana) {
-    throw new Error("Unlocked cofre traveler dossier failed to render: " + JSON.stringify(unlockedTravelersCheck));
+  if (!unlockedTravelersCheck.hasDecryptedHeader || !unlockedTravelersCheck.hasDiego || !unlockedTravelersCheck.hasTatiana || !unlockedTravelersCheck.hasFabiana || !unlockedTravelersCheck.hasDiegoPolicy || !unlockedTravelersCheck.hasDiegoCert || !unlockedTravelersCheck.hasTatianaPolicy || !unlockedTravelersCheck.hasTatianaCert) {
+    throw new Error("Unlocked cofre traveler dossier failed to render or credentials not revealed: " + JSON.stringify(unlockedTravelersCheck));
   }
-  console.log("  ✓ Unlocked cofre traveler dossier verified from decrypted index.enc");
+  console.log("  ✓ Unlocked cofre traveler dossier verified from decrypted index.enc with all credentials revealed");
 
   // Step F2: Test Hero Quick-Action '🛂 Seguros Imigração Lisboa' Auto-Expands from Collapsed State
   console.log("\n[TEST F2] Testing Hero Quick-Action '🛂 Seguros Imigração Lisboa' auto-expands from collapsed state...");

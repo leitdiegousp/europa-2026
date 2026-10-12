@@ -468,6 +468,9 @@ class EuropaApp {
 
     const isUnlocked = vault.isUnlocked;
     const privateData = vault.getData();
+    const tDiego = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "diego") : null;
+    const tTatiana = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "tatiana") : null;
+    const tFabiana = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "fabiana") : null;
 
     this.elImmigrationDocsCard.innerHTML = `
       <div class="immigration-card-inner">
@@ -515,15 +518,27 @@ class EuropaApp {
                 <div class="policy-details">
                   <div class="policy-row">
                     <span class="policy-label">Passaporte Brasileiro:</span>
-                    <span class="policy-val">GO506551 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button><br><span style="font-size:0.75rem; color:var(--text-muted); font-family:inherit;">Passaporte Novo (Antigo: FR302881 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('FR302881', 'Passaporte Antigo Diego')">📋</button>)</span></span>
+                    ${isUnlocked && tDiego ? `
+                      <span class="policy-val">${tDiego.passport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.passport}', 'Passaporte Diego')">📋</button><br><span style="font-size:0.75rem; color:var(--text-muted); font-family:inherit;">Passaporte Novo (Antigo: ${tDiego.oldPassport || 'FR302881'} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.oldPassport || 'FR302881'}', 'Passaporte Antigo Diego')">📋</button>)</span></span>
+                    ` : `
+                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre (toque para destravar)</span>
+                    `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Apólice Porto Seguro:</span>
-                    <span class="policy-val">16023-0003-69-260122474 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('16023-0003-69-260122474', 'Apólice Diego')">📋</button></span>
+                    ${isUnlocked && tDiego ? `
+                      <span class="policy-val">${tDiego.apolice || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.apolice || ''}', 'Apólice Diego')">📋</button></span>
+                    ` : `
+                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                    `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Certificado Schengen:</span>
-                    <span class="policy-val">32572804832 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('32572804832', 'Certificado Diego')">📋</button></span>
+                    ${isUnlocked && tDiego ? `
+                      <span class="policy-val">${tDiego.certSchengen || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.certSchengen || ''}', 'Certificado Diego')">📋</button></span>
+                    ` : `
+                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                    `}
                   </div>
                 </div>
                 <div class="traveler-actions">
@@ -554,15 +569,27 @@ class EuropaApp {
                 <div class="policy-details">
                   <div class="policy-row">
                     <span class="policy-label">Passaporte Brasileiro:</span>
-                    <span class="policy-val">GB464034 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('GB464034', 'Passaporte Tatiana')">📋</button></span>
+                    ${isUnlocked && tTatiana ? `
+                      <span class="policy-val">${tTatiana.passport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tTatiana.passport}', 'Passaporte Tatiana')">📋</button></span>
+                    ` : `
+                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre (toque para destravar)</span>
+                    `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Apólice Porto Seguro:</span>
-                    <span class="policy-val">16023-0003-69-260122473 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('16023-0003-69-260122473', 'Apólice Tatiana')">📋</button></span>
+                    ${isUnlocked && tTatiana ? `
+                      <span class="policy-val">${tTatiana.apolice || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tTatiana.apolice || ''}', 'Apólice Tatiana')">📋</button></span>
+                    ` : `
+                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                    `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Certificado Schengen:</span>
-                    <span class="policy-val">29340388828 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('29340388828', 'Certificado Tatiana')">📋</button></span>
+                    ${isUnlocked && tTatiana ? `
+                      <span class="policy-val">${tTatiana.certSchengen || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tTatiana.certSchengen || ''}', 'Certificado Tatiana')">📋</button></span>
+                    ` : `
+                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                    `}
                   </div>
                 </div>
                 <div class="traveler-actions">
@@ -593,11 +620,19 @@ class EuropaApp {
                 <div class="policy-details">
                   <div class="policy-row">
                     <span class="policy-label">Passaporte Brasileiro:</span>
-                    <span class="policy-val">G0872312 <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('G0872312', 'Passaporte Fabiana')">📋</button></span>
+                    ${isUnlocked && tFabiana ? `
+                      <span class="policy-val">${tFabiana.passport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tFabiana.passport}', 'Passaporte Fabiana')">📋</button></span>
+                    ` : `
+                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre (toque para destravar)</span>
+                    `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Credencial Congresso:</span>
-                    <span class="policy-val">Mem 209/2026 – VIC <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('Mem 209/2026 – VIC', 'Credencial Fabiana')">📋</button></span>
+                    ${isUnlocked && tFabiana ? `
+                      <span class="policy-val">${tFabiana.credencial || 'Mem 209/2026 – VIC'} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tFabiana.credencial || 'Mem 209/2026 – VIC'}', 'Credencial Fabiana')">📋</button></span>
+                    ` : `
+                      <span class="policy-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar">🔒 Protegido no cofre</span>
+                    `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Lumisial / Grau:</span>
@@ -1019,6 +1054,9 @@ class EuropaApp {
 
     const privateData = vault.getData();
     const isUnlocked = vault.isUnlocked;
+    const tDiego = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "diego") : null;
+    const tTatiana = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "tatiana") : null;
+    const tFabiana = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "fabiana") : null;
 
     let html = `
       <div class="timeline-section-title">
@@ -1066,14 +1104,28 @@ class EuropaApp {
                 </span>
               </div>
               <div class="secret-grid" style="margin-bottom: 10px;">
-                <div class="secret-item">
-                  <span class="secret-label">Diego Jacob (Titular)</span>
-                  <span class="secret-value">Passaporte NOVO: GO506551 (antigo: FR302881) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('FR302881', 'Passaporte Antigo Diego')">📋 (antigo)</button><br>Apólice: 16023-0003-69-260122474 (Cert: 32572804832)</span>
-                </div>
-                <div class="secret-item">
-                  <span class="secret-label">Tatiana Jacob (Esposa)</span>
-                  <span class="secret-value">Passaporte: GB464034 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GB464034', 'Passaporte Tatiana')">📋</button><br>Apólice: 16023-0003-69-260122473 (Cert: 29340388828)</span>
-                </div>
+                ${isUnlocked && tDiego ? `
+                  <div class="secret-item">
+                    <span class="secret-label">Diego Jacob (Titular)</span>
+                    <span class="secret-value">Passaporte NOVO: ${tDiego.passport} (antigo: ${tDiego.oldPassport || ''}) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tDiego.passport}', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('${tDiego.oldPassport || ''}', 'Passaporte Antigo Diego')">📋 (antigo)</button><br>Apólice: ${tDiego.apolice || ''} (Cert: ${tDiego.certSchengen || ''})</span>
+                  </div>
+                ` : `
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                    <span class="secret-label">Diego Jacob (Titular)</span>
+                    <span class="secret-value text-muted">🔒 Passaporte e apólice protegidos no cofre (toque para destravar)</span>
+                  </div>
+                `}
+                ${isUnlocked && tTatiana ? `
+                  <div class="secret-item">
+                    <span class="secret-label">Tatiana Jacob (Esposa)</span>
+                    <span class="secret-value">Passaporte: ${tTatiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tTatiana.passport}', 'Passaporte Tatiana')">📋</button><br>Apólice: ${tTatiana.apolice || ''} (Cert: ${tTatiana.certSchengen || ''})</span>
+                  </div>
+                ` : `
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                    <span class="secret-label">Tatiana Jacob (Esposa)</span>
+                    <span class="secret-value text-muted">🔒 Passaporte e apólice protegidos no cofre (toque para destravar)</span>
+                  </div>
+                `}
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
                 <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-outline-amber'} btn-sm" onclick="app.openPdf('doc-seguro-diego-bilhete', 'Bilhete de Seguro - Diego Jacob Fernandes Leite')">
@@ -1110,21 +1162,42 @@ class EuropaApp {
                 </span>
               </div>
               <div class="secret-grid" style="margin-bottom: 10px;">
-                <div class="secret-item">
-                  <span class="secret-label">Diego Jacob (Sacerdote)</span>
-                  <span class="secret-value">Passaporte NOVO: GO506551 (antigo: FR302881) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('FR302881', 'Passaporte Antigo Diego')">📋 (antigo)</button></span>
-                </div>
-                <div class="secret-item">
-                  <span class="secret-label">Tatiana Araújo (Isis)</span>
-                  <span class="secret-value">Passaporte: GB464034 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GB464034', 'Passaporte Tatiana')">📋</button></span>
-                </div>
-                <div class="secret-item">
-                  <span class="secret-label">Fabiana Poli (Isis)</span>
-                  <span class="secret-value">Passaporte: G0872312 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('G0872312', 'Passaporte Fabiana')">📋</button></span>
-                </div>
+                ${isUnlocked && tDiego ? `
+                  <div class="secret-item">
+                    <span class="secret-label">Diego Jacob (Sacerdote)</span>
+                    <span class="secret-value">Passaporte NOVO: ${tDiego.passport} (antigo: ${tDiego.oldPassport || 'FR302881'}) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tDiego.passport}', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('${tDiego.oldPassport || 'FR302881'}', 'Passaporte Antigo Diego')">📋 (antigo)</button></span>
+                  </div>
+                ` : `
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                    <span class="secret-label">Diego Jacob (Sacerdote)</span>
+                    <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+                  </div>
+                `}
+                ${isUnlocked && tTatiana ? `
+                  <div class="secret-item">
+                    <span class="secret-label">Tatiana Araújo (Isis)</span>
+                    <span class="secret-value">Passaporte: ${tTatiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tTatiana.passport}', 'Passaporte Tatiana')">📋</button></span>
+                  </div>
+                ` : `
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                    <span class="secret-label">Tatiana Araújo (Isis)</span>
+                    <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+                  </div>
+                `}
+                ${isUnlocked && tFabiana ? `
+                  <div class="secret-item">
+                    <span class="secret-label">Fabiana Poli (Isis)</span>
+                    <span class="secret-value">Passaporte: ${tFabiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tFabiana.passport}', 'Passaporte Fabiana')">📋</button></span>
+                  </div>
+                ` : `
+                  <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                    <span class="secret-label">Fabiana Poli (Isis)</span>
+                    <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+                  </div>
+                `}
                 <div class="secret-item">
                   <span class="secret-label">Credenciais Paz y Salvo</span>
-                  <span class="secret-value">VIC 207/2026 & VIC 209/2026 (Zeus Daimon)</span>
+                  <span class="secret-value">${isUnlocked && tFabiana?.credencial ? `Mem 207/2026 & ${tFabiana.credencial} (Zeus Daimon)` : `VIC 207/2026 & VIC 209/2026 (Zeus Daimon)`}</span>
                 </div>
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
@@ -1718,6 +1791,10 @@ class EuropaApp {
 
   _renderCongressView() {
     const isUnlocked = vault.isUnlocked;
+    const privateData = vault.getData();
+    const tDiego = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "diego") : null;
+    const tTatiana = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "tatiana") : null;
+    const tFabiana = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "fabiana") : null;
 
     this.elMainContainer.innerHTML = `
       <div class="timeline-section-title">
@@ -1738,21 +1815,42 @@ class EuropaApp {
           </div>
 
           <div class="secret-grid" style="margin-bottom: 12px;">
-            <div class="secret-item">
-              <span class="secret-label">Diego Jacob (Sacerdote)</span>
-              <span class="secret-value">Passaporte NOVO: GO506551 (antigo: FR302881) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GO506551', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('FR302881', 'Passaporte Antigo Diego')">📋 (antigo)</button></span>
-            </div>
-            <div class="secret-item">
-              <span class="secret-label">Tatiana Araújo (Isis)</span>
-              <span class="secret-value">Passaporte: GB464034 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('GB464034', 'Passaporte Tatiana')">📋</button></span>
-            </div>
-            <div class="secret-item">
-              <span class="secret-label">Fabiana Nunes Poli (Isis)</span>
-              <span class="secret-value">Passaporte: G0872312 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('G0872312', 'Passaporte Fabiana')">📋</button></span>
-            </div>
+            ${isUnlocked && tDiego ? `
+              <div class="secret-item">
+                <span class="secret-label">Diego Jacob (Sacerdote)</span>
+                <span class="secret-value">Passaporte NOVO: ${tDiego.passport} (antigo: ${tDiego.oldPassport || 'FR302881'}) <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tDiego.passport}', 'Passaporte Diego')">📋</button> <button type="button" class="copy-icon-btn" title="Copiar passaporte antigo" onclick="app.copyToClipboard('${tDiego.oldPassport || 'FR302881'}', 'Passaporte Antigo Diego')">📋 (antigo)</button></span>
+              </div>
+            ` : `
+              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                <span class="secret-label">Diego Jacob (Sacerdote)</span>
+                <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+              </div>
+            `}
+            ${isUnlocked && tTatiana ? `
+              <div class="secret-item">
+                <span class="secret-label">Tatiana Araújo (Isis)</span>
+                <span class="secret-value">Passaporte: ${tTatiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tTatiana.passport}', 'Passaporte Tatiana')">📋</button></span>
+              </div>
+            ` : `
+              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                <span class="secret-label">Tatiana Araújo (Isis)</span>
+                <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+              </div>
+            `}
+            ${isUnlocked && tFabiana ? `
+              <div class="secret-item">
+                <span class="secret-label">Fabiana Nunes Poli (Isis)</span>
+                <span class="secret-value">Passaporte: ${tFabiana.passport} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${tFabiana.passport}', 'Passaporte Fabiana')">📋</button></span>
+              </div>
+            ` : `
+              <div class="secret-item" onclick="app.openUnlockModal()" style="cursor:pointer;">
+                <span class="secret-label">Fabiana Nunes Poli (Isis)</span>
+                <span class="secret-value text-muted">🔒 Passaporte protegido no cofre (toque para destravar)</span>
+              </div>
+            `}
             <div class="secret-item">
               <span class="secret-label">Credenciais Paz y Salvo</span>
-              <span class="secret-value">VIC 207/2026 & VIC 209/2026</span>
+              <span class="secret-value">${isUnlocked && tFabiana?.credencial ? `Mem 207/2026 & ${tFabiana.credencial}` : `VIC 207/2026 & VIC 209/2026`}</span>
             </div>
           </div>
 
@@ -1797,6 +1895,10 @@ class EuropaApp {
 
   _renderEmergencyView() {
     const isUnlocked = vault.isUnlocked;
+    const privateData = vault.getData();
+    const tDiego = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "diego") : null;
+    const tTatiana = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "tatiana") : null;
+    const pSeguro = isUnlocked && privateData?.emergencyContacts?.portoSeguro ? privateData.emergencyContacts.portoSeguro : null;
 
     this.elMainContainer.innerHTML = `
       <div class="timeline-section-title">
@@ -1827,11 +1929,11 @@ class EuropaApp {
             ${isUnlocked ? `
               <div class="secret-item">
                 <span class="secret-label">Diego Jacob Fernandes Leite</span>
-                <span class="secret-value">Apólice: 16023-0003-69-260122474 (Cert: 32572804832)</span>
+                <span class="secret-value">Apólice: ${tDiego?.apolice || pSeguro?.apóliceDiego || ""} ${tDiego?.certSchengen ? `(Cert: ${tDiego.certSchengen})` : ""}</span>
               </div>
               <div class="secret-item">
                 <span class="secret-label">Tatiana Araujo de Sousa Jacob</span>
-                <span class="secret-value">Apólice: 16023-0003-69-260122473 (Cert: 29340388828)</span>
+                <span class="secret-value">Apólice: ${tTatiana?.apolice || pSeguro?.apóliceTatiana || ""} ${tTatiana?.certSchengen ? `(Cert: ${tTatiana.certSchengen})` : ""}</span>
               </div>
             ` : ""}
           </div>
