@@ -113,7 +113,7 @@ async function main() {
   console.log("\n[TEST A] Verifying Node.js WebCrypto PBKDF2 + AES-GCM decryption...");
   const { unwrapDek, decryptPdf } = await import("../js/crypto-format.js");
   const env = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, "vault/key-envelope.json"), "utf8"));
-  const { sessionDek, vaultId } = await unwrapDek("ti8mao", env);
+  const { sessionDek, vaultId } = await unwrapDek("samael", env);
 
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, "vault/asset-manifest.json"), "utf8"));
   if (manifest.length !== 21) throw new Error(`Expected 21 documents in manifest, found ${manifest.length}`);
@@ -324,7 +324,7 @@ async function main() {
         hasLockedBadge: text.includes("Bloqueado") || Boolean(card.querySelector(".locked-tag-inline")),
         hasUnlockBanner: Boolean(card.querySelector(".unlock-info-banner")),
         hasDocLockedButtons: Boolean(card.querySelector(".btn-doc-locked")),
-        hasNoMasterPassword: !text.includes("ti8mao"),
+        hasNoMasterPassword: !text.includes("samael") && !text.includes("ti8mao"),
         hasNoDiegoPolicy: !text.includes("16023-0003-69-260122474"),
         hasNoDiegoCert: !text.includes("32572804832"),
         hasNoDiegoPassport: !text.includes("GO506551"),
@@ -427,7 +427,7 @@ async function main() {
       results.immCard = {
         lockedBtnsCount: immLockedBtns.length,
         asterisksCount: immAsterisks.length,
-        hasNoPassword: !immCard.innerText.includes("ti8mao")
+        hasNoPassword: !immCard.innerText.includes("samael") && !immCard.innerText.includes("ti8mao")
       };
 
       // 2. Timeline Tab
@@ -443,7 +443,7 @@ async function main() {
         day17Asterisks,
         day22LockedBtns,
         day22Asterisks,
-        hasNoPassword: !document.getElementById("tab-content-container").innerText.includes("ti8mao")
+        hasNoPassword: !document.getElementById("tab-content-container").innerText.includes("samael") && !document.getElementById("tab-content-container").innerText.includes("ti8mao")
       };
 
       // 3. Flights Tab
@@ -451,7 +451,7 @@ async function main() {
       const flightsContainer = document.getElementById("tab-content-container");
       results.flights = {
         lockedBtnsCount: flightsContainer.querySelectorAll(".btn-doc-locked").length,
-        hasNoPassword: !flightsContainer.innerText.includes("ti8mao")
+        hasNoPassword: !flightsContainer.innerText.includes("samael") && !flightsContainer.innerText.includes("ti8mao")
       };
 
       // 4. Stays Tab
@@ -459,7 +459,7 @@ async function main() {
       const staysContainer = document.getElementById("tab-content-container");
       results.stays = {
         lockedBtnsCount: staysContainer.querySelectorAll(".btn-doc-locked").length,
-        hasNoPassword: !staysContainer.innerText.includes("ti8mao")
+        hasNoPassword: !staysContainer.innerText.includes("samael") && !staysContainer.innerText.includes("ti8mao")
       };
 
       // 5. Car Tab
@@ -467,7 +467,7 @@ async function main() {
       const carContainer = document.getElementById("tab-content-container");
       results.car = {
         lockedBtnsCount: carContainer.querySelectorAll(".btn-doc-locked").length,
-        hasNoPassword: !carContainer.innerText.includes("ti8mao")
+        hasNoPassword: !carContainer.innerText.includes("samael") && !carContainer.innerText.includes("ti8mao")
       };
 
       // 6. Congress Tab
@@ -476,7 +476,7 @@ async function main() {
       results.congress = {
         lockedBtnsCount: congressContainer.querySelectorAll(".btn-doc-locked").length,
         asterisksCount: congressContainer.querySelectorAll(".locked-asterisks").length,
-        hasNoPassword: !congressContainer.innerText.includes("ti8mao")
+        hasNoPassword: !congressContainer.innerText.includes("samael") && !congressContainer.innerText.includes("ti8mao")
       };
 
       // 7. Emergency Tab
@@ -485,7 +485,7 @@ async function main() {
       results.emergency = {
         lockedBtnsCount: emergencyContainer.querySelectorAll(".btn-doc-locked").length,
         asterisksCount: emergencyContainer.querySelectorAll(".locked-asterisks").length,
-        hasNoPassword: !emergencyContainer.innerText.includes("ti8mao")
+        hasNoPassword: !emergencyContainer.innerText.includes("samael") && !emergencyContainer.innerText.includes("ti8mao")
       };
 
       // Reset to timeline tab
@@ -539,12 +539,12 @@ async function main() {
   if (!triggerRes.modalOpen) throw new Error("Clicking document button while locked did not open unlock modal");
   console.log("  ✓ Unlock modal opened automatically upon tapping document button");
 
-  // Type password 'ti8mao' and submit
-  console.log("  Entering master password 'ti8mao'...");
+  // Type password 'samael' and submit
+  console.log("  Entering master password 'samael'...");
   await cdp.evaluate(`
     (() => {
       const input = document.getElementById("unlock-password");
-      input.value = "ti8mao";
+      input.value = "samael";
       app._handleUnlockSubmit();
     })()
   `);

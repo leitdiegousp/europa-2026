@@ -79,7 +79,7 @@ def main():
     data_dir.mkdir(parents=True, exist_ok=True)
 
     # Senha Mestra solicitada pelo usuário
-    passphrase = os.environ.get("VAULT_PASSPHRASE", "ti8mao")
+    passphrase = os.environ.get("VAULT_PASSPHRASE", "samael")
     print(f"🔒 Selando cofre de viagem Europa 2026...")
 
     # Pasta de origem dos arquivos reais

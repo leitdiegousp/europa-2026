@@ -1,16 +1,16 @@
 {
   "format": "europa-vault-key",
   "version": 1,
-  "vaultId": "p6FzQVvLRoVzauTRgtDWTA",
+  "vaultId": "rLy3IDw_OEn50Iib12j4CQ",
   "kdf": {
     "name": "PBKDF2",
     "hash": "SHA-256",
     "iterations": 600000,
-    "salt": "2yM-9oR-ciBCAhUSFkg4VQ"
+    "salt": "A5xBCrmyKYwGIJf_7Ob3FQ"
   },
   "wrap": {
     "name": "AES-GCM",
-    "iv": "Nng2nwD_-ModYukV",
-    "ciphertext": "1t3HMAfY0QIvupFXZszqTd7GQ25ocyJkjO5a4H4WELrPk5giVVtUJx3hxF_Jr-0X"
+    "iv": "oi8B-02CVsOfyseO",
+    "ciphertext": "3sLEPUyTodXk8r1pjQlZ8X5xgvqHRpSvZKafr-B7f6gEccLaquIlgm7eST0hxH-Q"
   }
 }
