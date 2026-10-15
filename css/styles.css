@@ -1796,4 +1796,196 @@ img, svg, video, iframe {
   }
 }
 
+/* ==========================================================================
+   Salas VIP & Lounges Section (Aba Voos • C6 Carbon • LoungeKey)
+   ========================================================================== */
+.vip-lounges-wrapper {
+  margin-top: 24px;
+}
+
+.vip-benefit-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-left: 4px solid var(--accent-amber);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+}
+
+.vip-benefit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.vip-benefit-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.vip-benefit-badge {
+  background: var(--accent-amber-subtle);
+  color: var(--accent-amber);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.vip-strategy-box {
+  background: var(--bg-main);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  border: 1px dashed var(--border-subtle);
+}
+
+.vip-lounges-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.vip-lounge-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.vip-lounge-card:hover {
+  border-color: var(--border-focus);
+}
+
+.vip-lounge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vip-lounge-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.vip-tag-free {
+  background: var(--accent-emerald-subtle);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.vip-tag-optional {
+  background: var(--accent-sky-subtle);
+  color: var(--accent-sky);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.vip-lounge-name {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.vip-lounge-location {
+  font-size: 0.82rem;
+  color: var(--accent-amber);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vip-lounge-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  background: var(--bg-main);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+}
+
+.vip-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.vip-meta-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.vip-meta-val {
+  color: var(--text-main);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.vip-lounge-details {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.vip-amenities-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.vip-amenity-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.vip-recommendation-note {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  background: rgba(14, 165, 233, 0.08);
+  border-left: 3px solid var(--accent-sky);
+  color: #bae6fd;
+}
+
+.vip-recommendation-note.alert-tight {
+  background: rgba(245, 158, 11, 0.08);
+  border-left: 3px solid var(--accent-amber);
+  color: #fde68a;
+}
+
+
 

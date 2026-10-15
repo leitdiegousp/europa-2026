@@ -782,6 +782,34 @@ async function main() {
   }
   console.log("  ✓ Confirmed only international arrival flight TP110 displays the Schengen immigration card");
 
+  // Step VIP: Check VIP Lounges in Flights Tab
+  console.log("\n[TEST H-VIP] Checking VIP Lounges Section in Flights Tab (FLN, LIS, MAD, GVA and C6 Carbon rules)...");
+  const vipCheck = await cdp.evaluate(`
+    (() => {
+      app.switchTab("flights");
+      const wrapper = document.querySelector(".vip-lounges-wrapper");
+      if (!wrapper) return { found: false };
+      const text = wrapper.innerText;
+      const cards = Array.from(wrapper.querySelectorAll(".vip-lounge-card"));
+      return {
+        found: true,
+        cardsCount: cards.length,
+        hasC6Carbon: text.includes("C6 Carbon Mastercard Black"),
+        hasLoungeKey: text.includes("LoungeKey"),
+        hasFLN: text.includes("The Lounge Florianópolis"),
+        hasLIS: text.includes("ANA Lounge"),
+        hasMAD: text.includes("Puerta de Alcalá"),
+        hasGVA: text.includes("Crystal Lounge"),
+        hasCoupleRules: text.includes("Diego & Tatiana") && text.includes("2 acessos da cota")
+      };
+    })()
+  `);
+
+  if (!vipCheck.found || vipCheck.cardsCount !== 4 || !vipCheck.hasC6Carbon || !vipCheck.hasLoungeKey || !vipCheck.hasFLN || !vipCheck.hasLIS || !vipCheck.hasMAD || !vipCheck.hasGVA || !vipCheck.hasCoupleRules) {
+    throw new Error("VIP Lounges check in Flights tab failed: " + JSON.stringify(vipCheck));
+  }
+  console.log("  ✓ Confirmed VIP Lounges section rendered with 4 airport cards (FLN, LIS, MAD, GVA) and C6 Carbon LoungeKey couple rules");
+
   // Step I0: Check Car & Swiss Routes Tab
   console.log("\n[TEST H2] Checking Car & Swiss Routes Tab (Valais Templo Daimon route, credentials, and Swiss driving rules)...");
   const carCheck = await cdp.evaluate(`

@@ -1632,6 +1632,238 @@ class EuropaApp {
     });
 
     html += `</div>`;
+
+    // Seção de Salas VIP & Lounges nos Aeroportos (C6 Carbon • LoungeKey)
+    html += `
+      <div class="vip-lounges-wrapper">
+        <div class="timeline-section-title" style="margin-top: 32px; margin-bottom: 12px;">
+          <span>🛋️ Salas VIP & Lounges nos Aeroportos (C6 Carbon • LoungeKey)</span>
+        </div>
+
+        <!-- Card Resumo de Regras C6 Carbon & LoungeKey -->
+        <div class="vip-benefit-card">
+          <div class="vip-benefit-header">
+            <div class="vip-benefit-title">
+              <span style="font-size: 1.25rem;">💳</span>
+              <span>Regras de Acesso • C6 Carbon Mastercard Black</span>
+            </div>
+            <span class="vip-benefit-badge">LoungeKey Oficial</span>
+          </div>
+          
+          <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px;">
+            O cartão <strong>C6 Carbon Mastercard Black</strong> concede <strong>4 acessos gratuitos por ano</strong> às salas VIP credenciadas ao programa <strong>LoungeKey / Mastercard Airport Experiences</strong> (compartilhados entre titular e adicionais da conta).
+          </p>
+
+          <div class="vip-strategy-box">
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--accent-amber); margin-bottom: 6px;">
+              👫 Dinâmica para o Casal (Diego & Tatiana) & Acompanhantes:
+            </div>
+            <ul style="font-size: 0.8rem; color: var(--text-main); line-height: 1.6; padding-left: 18px; margin: 0;">
+              <li>Cada entrada em casal (Diego + Tatiana) consome <strong>2 acessos da cota anual</strong> (1 para Diego e 1 para Tatiana).</li>
+              <li>Com a cota de 4 acessos, vocês realizam <strong>2 visitas completas em casal 100% grátis</strong> sem nenhum custo adicional.</li>
+              <li><strong>Estratégia Recomendada para o Casal:</strong> Usar a 1ª entrada em <strong>Florianópolis (FLN)</strong> na ida (espera noturna antes do voo transatlântico de 10h) e a 2ª entrada em <strong>Lisboa (LIS)</strong> na volta dia 30/10 (café da manhã completo antes do voo direto TP109).</li>
+              <li>Acessos excedentes ou convidados adicionais (ex: Fabiana): Custo tabelado padrão do LoungeKey de <strong>~US$ 32 a US$ 35</strong> (+ IOF) debitados automaticamente na fatura do cartão C6 Carbon.</li>
+            </ul>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px;">
+            <a href="https://airport.mastercard.com/pt" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="font-size: 0.78rem;">
+              📱 Abrir Mastercard Airport Experiences ↗
+            </a>
+            <span style="font-size: 0.75rem; color: var(--text-dim);">
+              Acesso na porta: QR Code do app ou cartão físico C6 Carbon com PIN + cartão de embarque.
+            </span>
+          </div>
+        </div>
+
+        <!-- Grid das 4 Salas VIP dos Aeroportos da Viagem -->
+        <div class="vip-lounges-grid">
+          <!-- 1. Florianópolis (FLN) -->
+          <div class="vip-lounge-card" id="vip-lounge-fln">
+            <div class="vip-lounge-header">
+              <div>
+                <span class="vip-lounge-tag vip-tag-free">⭐ Recomendado Ida • Cota Grátis (1/2)</span>
+                <div class="vip-lounge-name">The Lounge Florianópolis (Área Internacional)</div>
+              </div>
+              <span style="font-size: 0.76rem; color: var(--accent-amber); font-weight: 700;">FLN • Florianópolis</span>
+            </div>
+            <div class="vip-lounge-location">
+              📍 Aeroporto Hercílio Luz • Mezanino da Área de Embarque Internacional (após Polícia Federal & Raio-X)
+            </div>
+            <div class="vip-lounge-meta">
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Programa / Convênio</span>
+                <span class="vip-meta-val">LoungeKey / Mastercard Black</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Custo Diego & Tatiana</span>
+                <span class="vip-meta-val" style="color: var(--accent-emerald);">R$ 0,00 (Consome 2 acessos)</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Horário de Funcionamento</span>
+                <span class="vip-meta-val">Opera nos voos noturnos da TAP</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Voo Correspondente</span>
+                <span class="vip-meta-val">TAP TP110 (00:25 de 17/10)</span>
+              </div>
+            </div>
+            <div class="vip-lounge-details">
+              Sala confortável com buffet quente e frio, bebidas alcoólicas e não-alcoólicas, cervejas artesanais, duchas quentes privativas, tomadas e Wi-Fi de alta velocidade.
+            </div>
+            <div class="vip-amenities-list">
+              <span class="vip-amenity-pill">🍲 Buffet Quente</span>
+              <span class="vip-amenity-pill">🍷 Vinhos & Cervejas</span>
+              <span class="vip-amenity-pill">🚿 Duchas</span>
+              <span class="vip-amenity-pill">📶 Wi-Fi 5G</span>
+              <span class="vip-amenity-pill">🛋️ Área Relax</span>
+            </div>
+            <div class="vip-recommendation-note">
+              💡 <strong>Dica de Ouro:</strong> Ideal para jantar e relaxar na noite do dia 16/10 antes de embarcar no voo transatlântico de 10 horas até Lisboa.
+            </div>
+          </div>
+
+          <!-- 2. Lisboa (LIS) -->
+          <div class="vip-lounge-card" id="vip-lounge-lis">
+            <div class="vip-lounge-header">
+              <div>
+                <span class="vip-lounge-tag vip-tag-free">⭐ Recomendado Volta • Cota Grátis (2/2)</span>
+                <div class="vip-lounge-name">ANA Lounge (Terminal 1)</div>
+              </div>
+              <span style="font-size: 0.76rem; color: var(--accent-amber); font-weight: 700;">LIS • Lisboa</span>
+            </div>
+            <div class="vip-lounge-location">
+              📍 Terminal 1 • Praça Central após Raio-X, Mezanino (acesso escada rolante em frente portões 15-25)
+            </div>
+            <div class="vip-lounge-meta">
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Programa / Convênio</span>
+                <span class="vip-meta-val">LoungeKey / Mastercard Black</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Custo Diego & Tatiana</span>
+                <span class="vip-meta-val" style="color: var(--accent-emerald);">R$ 0,00 (Consome 2 acessos)</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Horário de Funcionamento</span>
+                <span class="vip-meta-val">05:00 às 23:00 diariamente</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Voo Recomendado</span>
+                <span class="vip-meta-val">TAP TP109 Volta (11:00 de 30/10)</span>
+              </div>
+            </div>
+            <div class="vip-lounge-details">
+              Vista panorâmica única para as pistas de Lisboa, buffet com pastel de nata, sanduíches, vinhos e queijos portugueses, duchas privativas e área de descanso.
+            </div>
+            <div class="vip-amenities-list">
+              <span class="vip-amenity-pill">🥮 Pastéis de Nata</span>
+              <span class="vip-amenity-pill">🍷 Vinhos Portugueses</span>
+              <span class="vip-amenity-pill">🛫 Vista da Pista</span>
+              <span class="vip-amenity-pill">🚿 Duchas</span>
+              <span class="vip-amenity-pill">☕ Cafés & Snacks</span>
+            </div>
+            <div class="vip-recommendation-note alert-tight">
+              ⚠️ <strong>Na Ida (17/10): NÃO USAR.</strong> Conexão curta de apenas 1h05 com controle de passaporte. O tempo é estrito para ir direto ao portão do TP1018.<br>
+              ✅ <strong>Na Volta (30/10): USO IDEAL!</strong> Voo direto para Florianópolis às 11:00. Chegando por volta das 08:00, há mais de 2 horas para café da manhã completo na sala.
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 8px;">
+              ℹ️ <em>Nota: A sala TAP Premium Lounge é exclusiva para executiva/Star Alliance Gold. Para LoungeKey/C6 Carbon, a sala oficial é a <strong>ANA Lounge</strong>.</em>
+            </div>
+          </div>
+
+          <!-- 3. Madrid-Barajas (MAD) -->
+          <div class="vip-lounge-card" id="vip-lounge-mad">
+            <div class="vip-lounge-header">
+              <div>
+                <span class="vip-lounge-tag vip-tag-optional">✈️ Terminal 2 • Schengen (AENA)</span>
+                <div class="vip-lounge-name">Sala VIP Puerta de Alcalá (Terminal 2)</div>
+              </div>
+              <span style="font-size: 0.76rem; color: var(--accent-amber); font-weight: 700;">MAD • Madrid</span>
+            </div>
+            <div class="vip-lounge-location">
+              📍 Terminal 2 • Piso 2, próximo ao Portão D62 (Área de Embarque Schengen)
+            </div>
+            <div class="vip-lounge-meta">
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Programa / Convênio</span>
+                <span class="vip-meta-val">LoungeKey / Rede Oficial AENA</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Custo Diego & Tatiana</span>
+                <span class="vip-meta-val">Gratuito (com cota) ou ~US$ 35/pessoa</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Horário de Funcionamento</span>
+                <span class="vip-meta-val">05:00 às 23:00 diariamente</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Voos no T2</span>
+                <span class="vip-meta-val">UX1663 (18/10) & TP1013 (29/10)</span>
+              </div>
+            </div>
+            <div class="vip-lounge-details">
+              Sala oficial da operadora aeroportuária espanhola AENA. Buffet variado com tapas espanholas, jamón, queijos, bebidas, vinhos espanhóis, cafés e espaço tranquilo para trabalho e descanso.
+            </div>
+            <div class="vip-amenities-list">
+              <span class="vip-amenity-pill">🥩 Tapas & Jamón</span>
+              <span class="vip-amenity-pill">🍷 Vinhos Espanhóis</span>
+              <span class="vip-amenity-pill">☕ Cafés Expressos</span>
+              <span class="vip-amenity-pill">🚿 Duchas</span>
+              <span class="vip-amenity-pill">🔌 Estações de Carga</span>
+            </div>
+            <div class="vip-recommendation-note">
+              💡 <strong>Localização Perfeita:</strong> Tanto a Air Europa quanto a TAP operam no Terminal 2 em Barajas, exatamente onde fica a Puerta de Alcalá. Excelente ponto de apoio caso sobre tempo após vir de Toledo no dia 29/10.
+            </div>
+          </div>
+
+          <!-- 4. Genebra (GVA) -->
+          <div class="vip-lounge-card" id="vip-lounge-gva">
+            <div class="vip-lounge-header">
+              <div>
+                <span class="vip-lounge-tag vip-tag-optional">🇨🇭 Setor Schengen • Pós-Segurança</span>
+                <div class="vip-lounge-name">Crystal Lounge by Swissport / Marhaba Lounge</div>
+              </div>
+              <span style="font-size: 0.76rem; color: var(--accent-amber); font-weight: 700;">GVA • Genebra</span>
+            </div>
+            <div class="vip-lounge-location">
+              📍 Terminal 1 • Mezanino após Raio-X, Setor Schengen (área superior aos restaurantes)
+            </div>
+            <div class="vip-lounge-meta">
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Programa / Convênio</span>
+                <span class="vip-meta-val">LoungeKey / Mastercard Black</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Custo Diego & Tatiana</span>
+                <span class="vip-meta-val">Gratuito (com cota) ou ~US$ 35/pessoa</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Horário de Funcionamento</span>
+                <span class="vip-meta-val">06:00 às 21:00 diariamente</span>
+              </div>
+              <div class="vip-meta-item">
+                <span class="vip-meta-label">Voo Correspondente</span>
+                <span class="vip-meta-val">Air Europa UX1666 (18:55 de 20/10)</span>
+              </div>
+            </div>
+            <div class="vip-lounge-details">
+              Ambiente moderno e aconchegante com vista para as operações do aeroporto internacional de Genebra. Oferece queijos suíços, snacks, refrigerantes, vinhos e cervejas, além de Wi-Fi veloz e poltronas confortáveis.
+            </div>
+            <div class="vip-amenities-list">
+              <span class="vip-amenity-pill">🧀 Queijos & Aperitivos Suíços</span>
+              <span class="vip-amenity-pill">☕ Cafés & Bebidas</span>
+              <span class="vip-amenity-pill">📶 Wi-Fi Alta Velocidade</span>
+              <span class="vip-amenity-pill">🛫 Vista da Pista</span>
+            </div>
+            <div class="vip-recommendation-note">
+              💡 <strong>Dica de Uso:</strong> No dia 20/10, após devolver o carro alugado no setor suíço e despachar as bagagens por volta das 16:30/17:00, há cerca de 1h30 a 2h livres para descansar antes da decolagem para Madrid.
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
     this.elMainContainer.innerHTML = html;
   }
 
