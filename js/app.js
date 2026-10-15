@@ -546,7 +546,15 @@ class EuropaApp {
                   <div class="policy-row">
                     <span class="policy-label">Passaporte Brasileiro:</span>
                     ${isUnlocked ? `
-                      <span class="policy-val">${diegoPassport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${diegoPassport}', 'Passaporte Diego')">📋</button><br><span style="font-size:0.75rem; color:var(--text-muted); font-family:inherit;">Passaporte Novo (Antigo: ${diegoOldPassport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${diegoOldPassport}', 'Passaporte Antigo Diego')">📋</button>)</span></span>
+                      <span class="policy-val">${diegoPassport} <button type="button" class="copy-icon-btn" title="Copiar passaporte atual" onclick="event.stopPropagation(); app.copyToClipboard('${diegoPassport}', 'Passaporte Diego')">📋</button></span>
+                    ` : `
+                      <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
+                    `}
+                  </div>
+                  <div class="policy-row">
+                    <span class="policy-label">Passaporte Anterior:</span>
+                    ${isUnlocked ? `
+                      <span class="policy-val policy-val-muted">${diegoOldPassport} <button type="button" class="copy-icon-btn" title="Copiar passaporte anterior" onclick="event.stopPropagation(); app.copyToClipboard('${diegoOldPassport}', 'Passaporte Antigo Diego')">📋</button></span>
                     ` : `
                       <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
