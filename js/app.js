@@ -1341,43 +1341,73 @@ class EuropaApp {
           `;
         } else if (evt.isTrain || (evt.category === "transport" && evt.title.includes("Trem"))) {
           const isIda = day.date === "2026-10-22";
+          const trainPnr = "CZYW4V";
+          const trainNum = isIda ? "AVANT 08132" : "AVANT 08283";
+          const routeText = isIda ? "Madrid-Puerta de Atocha ➔ Toledo" : "Toledo ➔ Madrid-Puerta de Atocha";
+          const timeText = isIda ? "13:45 ➔ 14:19 (34 min)" : "07:55 ➔ 08:29 (34 min)";
+          const coachDiego = isIda ? "4" : "1";
+          const seatDiego = isIda ? "232" : "54";
+          const ticketDiego = isIda ? "7033902108464" : "7033902108480";
+          const coachTatiana = isIda ? "4" : "1";
+          const seatTatiana = isIda ? "231" : "53";
+          const ticketTatiana = isIda ? "7033902108472" : "7033902108498";
+
           html += `
             <div class="secret-badge" style="border-left: 3px solid var(--accent-sky); margin-top: 10px;">
               <div style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 6px;">
-                🚄 <strong>Trem de Alta Velocidade: Renfe Avant (${isIda ? 'Madrid-Atocha ➔ Toledo' : 'Toledo ➔ Madrid-Atocha'})</strong><br>
+                🚄 <strong>Trem de Alta Velocidade: Renfe Avant • ${trainNum} (${routeText})</strong><br>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">
                   ${isIda ? 
-                    'Viagem rápida de alta velocidade de apenas <strong>33 minutos</strong> entre Madrid Puerta de Atocha e Toledo. Horário recomendado: ~13:50 ou 14:50 para check-in às 16:00 em Toledo.' : 
-                    'Viagem de <strong>33 minutos</strong> até Madrid-Atocha. O bilhete Avant inclui <strong>Combinado Cercanías Grátis</strong> (linhas C-1 / C-10 até Aeroporto T4). Para T1/T2, há táxi tarifa fixa (€ 33) ou ônibus de conexão gratuito.'}
+                    'Viagem direta de alta velocidade de apenas <strong>34 minutos</strong>. Embarque em Puerta de Atocha pela <strong>Planta Baja (piso inferior)</strong>. Raio-X de bagagens obrigatório antes do acesso à plataforma.' : 
+                    'Viagem direta de apenas <strong>34 minutos</strong> até Madrid-Atocha. ⚠️ <strong>Acesso fecha 2 min antes da saída (07:53)</strong>. Chegada em Atocha às 08:29 permite conexão tranquila para o Aeroporto Barajas T2 e entrada na Sala VIP a partir das 09:10.'}
                 </span>
               </div>
               <div class="secret-grid" style="margin-bottom: 8px;">
                 <div class="secret-item">
                   <span class="secret-label">Status do Bilhete</span>
-                  <span class="secret-value" style="color: var(--accent-amber);">Aguardando Compra • Promoção Ida y Vuelta</span>
+                  <span class="secret-value" style="color: var(--accent-emerald); font-weight: 600;">✅ Confirmado • Bilhete Emitido</span>
                 </div>
                 <div class="secret-item">
-                  <span class="secret-label">Desconto Renfe</span>
-                  <span class="secret-value">20% de desconto na volta comprando ida e volta juntas</span>
+                  <span class="secret-label">Localizador Renfe</span>
+                  <span class="secret-value">${trainPnr} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${trainPnr}', 'Localizador Renfe')">📋</button></span>
                 </div>
                 <div class="secret-item">
-                  <span class="secret-label">Estação em Madrid</span>
-                  <span class="secret-value">Madrid - Puerta de Atocha Almudena Grandes</span>
+                  <span class="secret-label">Horário do Trem</span>
+                  <span class="secret-value">${timeText}</span>
                 </div>
                 <div class="secret-item">
-                  <span class="secret-label">Estação em Toledo</span>
-                  <span class="secret-value">Estación de Tren de Toledo (Paseo de la Rosa)</span>
+                  <span class="secret-label">Tarifa & Desconto</span>
+                  <span class="secret-value">Ida y Vuelta (€ 11,10 / pessoa / trecho)</span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Assento Tatiana Jacob</span>
+                  <span class="secret-value">Vagão ${coachTatiana} • Assento ${seatTatiana} <span style="font-size: 0.72rem; color: var(--text-dim);">(Bilhete: ${ticketTatiana})</span></span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Assento Diego Jacob</span>
+                  <span class="secret-value">Vagão ${coachDiego} • Assento ${seatDiego} <span style="font-size: 0.72rem; color: var(--text-dim);">(Bilhete: ${ticketDiego})</span></span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Tarjeta Más Renfe (Diego)</span>
+                  <span class="secret-value">23906860 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('23906860', 'Cartão Mais Renfe')">📋</button></span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Plataforma / Acesso</span>
+                  <span class="secret-value">${isIda ? 'Madrid-Atocha (Planta Baja / Piso Inferior)' : 'Estação Toledo (Fecha às 07:53)'}</span>
                 </div>
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-trem-renfe', 'Bilhete Trem Renfe Avant - Madrid ⇄ Toledo (CZYW4V)')">
+                  📄 Bilhete Trem Renfe PDF ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
+                </button>
+                <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-tarjeta-masrenfe', 'Tarjeta Más Renfe - Diego Jacob')">
+                  💳 Cartão Mais Renfe Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
+                </button>
                 <a href="https://www.renfe.com/es/es" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
-                  🚄 Consultar Horários na Renfe Oficial ↗
+                  🚄 Renfe Oficial ↗
                 </a>
-                <a href="https://www.thetrainline.com/pt-br" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
-                  🎟️ Consultar no Trainline ↗
-                </a>
-                <a href="https://www.google.com/maps/search/?api=1&query=Estacion+de+Tren+de+Toledo" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
-                  📍 Estação Toledo no Maps ↗
+                <a href="${isIda ? 'https://www.google.com/maps/search/?api=1&query=Estacion+Puerta+de+Atocha+Madrid' : 'https://www.google.com/maps/search/?api=1&query=Estacion+de+Tren+de+Toledo'}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
+                  📍 ${isIda ? 'Atocha no Maps' : 'Estação Toledo no Maps'} ↗
                 </a>
               </div>
             </div>
@@ -2306,6 +2336,62 @@ class EuropaApp {
             <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-hotel-toledo', 'El Mirador del Valle - Reserva Hotel Toledo')">
               🏨 Voucher Hotel Toledo ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card de Deslocamento de Trem Renfe Avant (Madrid ⇄ Toledo) -->
+      <div class="event-card" style="border-left: 4px solid var(--accent-sky);">
+        <div class="event-name">🚄 Transporte Oficial: Trem de Alta Velocidade Renfe Avant (Ida & Volta)</div>
+        <div class="event-desc">Passagens confirmadas de ida e volta entre Madrid-Puerta de Atocha e Toledo para Diego & Tatiana.</div>
+
+        <div class="secret-badge" style="margin-top: 12px;">
+          <div style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5;">
+            🎫 <strong>Localizador Geral Renfe:</strong> <strong style="color:var(--text-main);">CZYW4V</strong> <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('CZYW4V', 'Localizador Renfe')">📋</button> • Tarifa <em>Ida y Vuelta</em> (€ 44,40 total / € 11,10 por trecho por pessoa)<br>
+            💳 <strong>Tarjeta Más Renfe (Diego):</strong> 23906860 <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('23906860', 'Cartão Mais Renfe')">📋</button><br>
+            ⏱️ <strong>Duração do Trajeto:</strong> Apenas 34 minutos direto por trecho.
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 12px;">
+            <!-- Ida -->
+            <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <div style="font-weight: 600; color: var(--accent-sky); margin-bottom: 6px;">
+                ➡️ IDA: 22/10/2026 (Quinta-feira) • Avant 08132
+              </div>
+              <div style="font-size: 0.84rem; line-height: 1.6; color: var(--text-main);">
+                • <strong>Saída:</strong> 13:45 — Madrid - Puerta de Atocha Almudena Grandes (Planta Baja / Piso Inferior)<br>
+                • <strong>Chegada:</strong> 14:19 — Estación de Toledo<br>
+                • <strong>Tatiana Araújo:</strong> Vagão (Coche) <strong>4</strong>, Assento (Plaza) <strong>231</strong> (Bilhete: 7033902108472)<br>
+                • <strong>Diego Jacob:</strong> Vagão (Coche) <strong>4</strong>, Assento (Plaza) <strong>232</strong> (Bilhete: 7033902108464)<br>
+                • <em>Observação:</em> Raio-x de bagagem no piso inferior de Atocha. Chegar 20 min antes.
+              </div>
+            </div>
+
+            <!-- Volta -->
+            <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+              <div style="font-weight: 600; color: var(--accent-emerald); margin-bottom: 6px;">
+                ⬅️ VOLTA: 29/10/2026 (Quinta-feira) • Avant 08283
+              </div>
+              <div style="font-size: 0.84rem; line-height: 1.6; color: var(--text-main);">
+                • <strong>Saída:</strong> 07:55 — Estación de Toledo (Acesso fecha às 07:53)<br>
+                • <strong>Chegada:</strong> 08:29 — Madrid - Puerta de Atocha Almudena Grandes<br>
+                • <strong>Tatiana Araújo:</strong> Vagão (Coche) <strong>1</strong>, Assento (Plaza) <strong>53</strong> (Bilhete: 7033902108498)<br>
+                • <strong>Diego Jacob:</strong> Vagão (Coche) <strong>1</strong>, Assento (Plaza) <strong>54</strong> (Bilhete: 7033902108480)<br>
+                • <em>Conexão Aeroporto T2:</em> Translado de Atocha ao Barajas T2 para o voo TP1013 (12:10). Entrada na Sala VIP liberada a partir de 09:10.
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-trem-renfe', 'Bilhete Trem Renfe Avant - Madrid ⇄ Toledo (CZYW4V)')">
+              📄 Bilhete Trem Renfe PDF (CZYW4V) ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
+            </button>
+            <button type="button" class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-tarjeta-masrenfe', 'Tarjeta Más Renfe - Diego Jacob')">
+              💳 Cartão Mais Renfe Diego ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
+            </button>
+            <a href="https://www.renfe.com/es/es" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
+              🚄 Renfe Oficial ↗
+            </a>
           </div>
         </div>
       </div>

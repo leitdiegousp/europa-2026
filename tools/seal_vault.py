@@ -157,6 +157,8 @@ def main():
         "doc-pazsalvo-diego-tatiana": resolve_source_file("2026207 - VIC - Paz y Salvo Diego.Tatiana - CONGRESO.pdf"),
         "doc-pazsalvo-fabiana": resolve_source_file("2026209 - VIC - Paz y Salvo Fabiana Nunes Poli - CONGRESO.pdf"),
         "doc-carro-suica": resolve_source_file("Carro_Reservation Details - HMSFDZ52SZ.pdf"),
+        "doc-trem-renfe": resolve_source_file("CZYW4V.pdf"),
+        "doc-tarjeta-masrenfe": resolve_source_file("Trem_Renfe_generaTarjeta.pdf"),
     }
 
     dek_cipher = AESGCM(dek)
@@ -202,7 +204,10 @@ def main():
                 "passportStatus": "NOVO: GO506551 (antigo: FR302881)",
                 "apolice": "16023-0003-69-260122474",
                 "certSchengen": "32572804832",
-                "credencial": "Mem 207/2026 – VIC"
+                "credencial": "Mem 207/2026 – VIC",
+                "tarjetaMasRenfe": "23906860",
+                "bilheteTremIda": "7033902108464 (Coche 4, Plaza 232)",
+                "bilheteTremVolta": "7033902108480 (Coche 1, Plaza 54)"
             },
             {
                 "id": "tatiana",
@@ -211,7 +216,9 @@ def main():
                 "passport": "GB464034",
                 "apolice": "16023-0003-69-260122473",
                 "certSchengen": "29340388828",
-                "credencial": "Mem 207/2026 – VIC"
+                "credencial": "Mem 207/2026 – VIC",
+                "bilheteTremIda": "7033902108472 (Coche 4, Plaza 231)",
+                "bilheteTremVolta": "7033902108498 (Coche 1, Plaza 53)"
             },
             {
                 "id": "fabiana",
@@ -413,6 +420,35 @@ def main():
                 "notes": "2 noites em Madrid para descanso e passeios antes do deslocamento a Toledo."
             },
             {
+                "id": "train-renfe-ida",
+                "category": "train",
+                "title": "Trem Renfe Avant 08132 • Madrid-Atocha ➔ Toledo",
+                "operator": "Renfe (Alta Velocidad / Avant)",
+                "trainNumber": "AVANT 08132",
+                "localizador": "CZYW4V",
+                "tarifa": "Tarifa Ida y Vuelta (€ 11,10 / pessoa)",
+                "departure": {
+                    "station": "Madrid - Puerta de Atocha - Almudena Grandes",
+                    "city": "Madrid",
+                    "floor": "Planta Baja (Piso Inferior)",
+                    "time": "2026-10-22T13:45:00+02:00",
+                    "tz": "Europe/Madrid"
+                },
+                "arrival": {
+                    "station": "Estación de Toledo",
+                    "city": "Toledo",
+                    "time": "2026-10-22T14:19:00+02:00",
+                    "tz": "Europe/Madrid"
+                },
+                "duration": "34 minutos",
+                "passengers": [
+                    {"name": "Diego Jacob", "ticket": "7033902108464", "coach": "4", "seat": "232"},
+                    {"name": "Tatiana Jacob", "ticket": "7033902108472", "coach": "4", "seat": "231"}
+                ],
+                "documents": ["doc-trem-renfe", "doc-tarjeta-masrenfe"],
+                "notes": "Embarque em Puerta de Atocha pela Planta Baja. Controle de raio-x de bagagens antes do acesso à plataforma. Chegar 20 min antes."
+            },
+            {
                 "id": "stay-toledo-congresso",
                 "category": "stay",
                 "title": "El Mirador del Valle • Toledo (6 Noites • Congresso)",
@@ -449,6 +485,34 @@ def main():
                 "paidAmount": "€ 135,00",
                 "documents": ["doc-hotel-toledo-2"],
                 "notes": "Noite extra no centro histórico de Toledo após o congresso (Callejón Cura). Atenção logística para o dia 29: saída cedo de Toledo para o Aeroporto Madrid-Barajas (voo TP1013 às 12:10)."
+            },
+            {
+                "id": "train-renfe-volta",
+                "category": "train",
+                "title": "Trem Renfe Avant 08283 • Toledo ➔ Madrid-Atocha",
+                "operator": "Renfe (Alta Velocidad / Avant)",
+                "trainNumber": "AVANT 08283",
+                "localizador": "CZYW4V",
+                "tarifa": "Tarifa Ida y Vuelta (€ 11,10 / pessoa)",
+                "departure": {
+                    "station": "Estación de Toledo",
+                    "city": "Toledo",
+                    "time": "2026-10-29T07:55:00+01:00",
+                    "tz": "Europe/Madrid"
+                },
+                "arrival": {
+                    "station": "Madrid - Puerta de Atocha - Almudena Grandes",
+                    "city": "Madrid",
+                    "time": "2026-10-29T08:29:00+01:00",
+                    "tz": "Europe/Madrid"
+                },
+                "duration": "34 minutos",
+                "passengers": [
+                    {"name": "Diego Jacob", "ticket": "7033902108480", "coach": "1", "seat": "54"},
+                    {"name": "Tatiana Jacob", "ticket": "7033902108498", "coach": "1", "seat": "53"}
+                ],
+                "documents": ["doc-trem-renfe", "doc-tarjeta-masrenfe"],
+                "notes": "Acesso ao trem fecha 2 minutos antes da saída (07:53). Chegar na estação de Toledo com 20 min de antecedência. Chegada em Atocha às 08:29, translado imediato para o Aeroporto Barajas T2 para o voo TP1013 das 12:10 (sala VIP abre 09:10)."
             },
             {
                 "id": "flight-tap-mad-lis",
@@ -615,7 +679,7 @@ def main():
                 "city": "Madrid ➔ Toledo",
                 "events": [
                     {"time": "11:00", "title": "Checkout Centro Madrid Rio", "category": "stay", "protectedId": "stay-madrid-2"},
-                    {"time": "13:30", "title": "Trem Renfe Avant: Madrid-Atocha ➔ Toledo (Aguardando Compra)", "category": "transport", "isTrain": True, "protectedId": "stay-toledo-congresso"},
+                    {"time": "13:45", "title": "Trem Renfe Avant 08132 • Madrid-Atocha ➔ Toledo (Confirmado • CZYW4V)", "category": "transport", "isTrain": True, "protectedId": "train-renfe-ida"},
                     {"time": "16:00", "title": "Check-in El Mirador del Valle (Toledo) • Credenciamento do Congresso", "category": "stay", "isCongressCheckin": True, "protectedId": "stay-toledo-congresso"}
                 ]
             },
@@ -667,10 +731,10 @@ def main():
                 "date": "2026-10-29",
                 "city": "Toledo ➔ Madrid ➔ Lisboa",
                 "events": [
-                    {"time": "08:00", "title": "Checkout Apto Centro Toledo ➔ Estação Toledo", "category": "stay", "protectedId": "stay-toledo-2"},
-                    {"time": "08:25", "title": "Trem Renfe Avant: Toledo ➔ Madrid-Atocha (Conexão Voo TAP 12:10)", "category": "transport", "isTrain": True, "protectedId": "stay-toledo-2"},
+                    {"time": "07:15", "title": "Checkout Apto Centro Toledo ➔ Estação Toledo (Acesso fecha 07:53)", "category": "stay", "protectedId": "stay-toledo-2"},
+                    {"time": "07:55", "title": "Trem Renfe Avant 08283 • Toledo ➔ Madrid-Atocha (Confirmado • CZYW4V • Chegada 08:29)", "category": "transport", "isTrain": True, "protectedId": "train-renfe-volta"},
+                    {"time": "09:10", "title": "Chegada Aeroporto Barajas T2 • Acesso Sala VIP Puerta de Alcalá (Voo TAP 12:10)", "category": "activity", "protectedId": "flight-tap-mad-lis"},
                     {"time": "12:10", "title": "Voo TAP TP1013 (MAD ➔ LIS)", "category": "flight", "protectedId": "flight-tap-mad-lis"},
-                    {"time": "13:25", "title": "Trem Renfe Avant: Toledo ➔ Madrid-Atocha (Opção Voo 18:00 Fabiana)", "category": "transport", "isTrain": True, "protectedId": "stay-toledo-2"},
                     {"time": "15:00", "title": "Check-in Central Lisbon Stay (Lisboa)", "category": "stay", "protectedId": "stay-lisboa"}
                 ]
             },

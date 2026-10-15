@@ -124,11 +124,11 @@
           "protectedId": "stay-madrid-2"
         },
         {
-          "time": "13:30",
-          "title": "Trem Renfe Avant: Madrid-Atocha ➔ Toledo (Aguardando Compra)",
+          "time": "13:45",
+          "title": "Trem Renfe Avant 08132 • Madrid-Atocha ➔ Toledo (Confirmado • CZYW4V)",
           "category": "transport",
           "isTrain": true,
-          "protectedId": "stay-toledo-congresso"
+          "protectedId": "train-renfe-ida"
         },
         {
           "time": "16:00",
@@ -228,30 +228,29 @@
       "city": "Toledo ➔ Madrid ➔ Lisboa",
       "events": [
         {
-          "time": "08:00",
-          "title": "Checkout Apto Centro Toledo ➔ Estação Toledo",
+          "time": "07:15",
+          "title": "Checkout Apto Centro Toledo ➔ Estação Toledo (Acesso fecha 07:53)",
           "category": "stay",
           "protectedId": "stay-toledo-2"
         },
         {
-          "time": "08:25",
-          "title": "Trem Renfe Avant: Toledo ➔ Madrid-Atocha (Conexão Voo TAP 12:10)",
+          "time": "07:55",
+          "title": "Trem Renfe Avant 08283 • Toledo ➔ Madrid-Atocha (Confirmado • CZYW4V • Chegada 08:29)",
           "category": "transport",
           "isTrain": true,
-          "protectedId": "stay-toledo-2"
+          "protectedId": "train-renfe-volta"
+        },
+        {
+          "time": "09:10",
+          "title": "Chegada Aeroporto Barajas T2 • Acesso Sala VIP Puerta de Alcalá (Voo TAP 12:10)",
+          "category": "activity",
+          "protectedId": "flight-tap-mad-lis"
         },
         {
           "time": "12:10",
           "title": "Voo TAP TP1013 (MAD ➔ LIS)",
           "category": "flight",
           "protectedId": "flight-tap-mad-lis"
-        },
-        {
-          "time": "13:25",
-          "title": "Trem Renfe Avant: Toledo ➔ Madrid-Atocha (Opção Voo 18:00 Fabiana)",
-          "category": "transport",
-          "isTrain": true,
-          "protectedId": "stay-toledo-2"
         },
         {
           "time": "15:00",

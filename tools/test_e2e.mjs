@@ -116,7 +116,7 @@ async function main() {
   const { sessionDek, vaultId } = await unwrapDek("samael", env);
 
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, "vault/asset-manifest.json"), "utf8"));
-  if (manifest.length !== 21) throw new Error(`Expected 21 documents in manifest, found ${manifest.length}`);
+  if (manifest.length !== 23) throw new Error(`Expected 23 documents in manifest, found ${manifest.length}`);
 
   for (const doc of manifest) {
     const buf = fs.readFileSync(path.join(ROOT_DIR, `vault/assets/${doc.id}.enc`));
@@ -737,7 +737,7 @@ async function main() {
   console.log("  ✓ Day 19 timeline contains Templo Divino Daimon visit with credentials, recommendations, Paz y Salvo buttons, and Google Maps route link");
 
   // Step H2: Check Timeline Event on Day 22 (Toledo Congress Check-in & Credenciamento)
-  console.log("\n[TEST G2] Checking Day 22 Timeline Congress check-in & credenciamento event...");
+  console.log("\n[TEST G2] Checking Day 22 Timeline Congress check-in & Renfe Avant train...");
   const day22Event = await cdp.evaluate(`
     (() => {
       app.switchTab("timeline");
@@ -747,15 +747,40 @@ async function main() {
       return {
         hasCongressEvent: text.includes("Credenciamento do Congresso"),
         hasPassports: text.includes("GO506551") && text.includes("GB464034") && text.includes("G0872312") && text.includes("FR302881"),
-        hasButtons: text.includes("Carta Convite Diego") && text.includes("Carta Convite Tatiana") && text.includes("Paz y Salvo") && text.includes("Paz y Salvo Fabiana")
+        hasButtons: text.includes("Carta Convite Diego") && text.includes("Carta Convite Tatiana") && text.includes("Paz y Salvo") && text.includes("Paz y Salvo Fabiana"),
+        hasTrainAvant: text.includes("AVANT 08132") && text.includes("CZYW4V"),
+        hasTrainSeats: text.includes("Vagão 4") && text.includes("231") && text.includes("232"),
+        hasTrainButtons: text.includes("Bilhete Trem Renfe PDF") && text.includes("Cartão Mais Renfe Diego")
       };
     })()
   `);
 
-  if (!day22Event.hasCongressEvent || !day22Event.hasPassports || !day22Event.hasButtons) {
-    throw new Error("Day 22 timeline event missing congress details or buttons: " + JSON.stringify(day22Event));
+  if (!day22Event.hasCongressEvent || !day22Event.hasPassports || !day22Event.hasButtons || !day22Event.hasTrainAvant || !day22Event.hasTrainSeats || !day22Event.hasTrainButtons) {
+    throw new Error("Day 22 timeline event missing congress details, train info, or buttons: " + JSON.stringify(day22Event));
   }
-  console.log("  ✓ Day 22 timeline contains congress credenciamento event with passports and action buttons");
+  console.log("  ✓ Day 22 timeline contains congress credenciamento and confirmed Renfe Avant 08132 train with seats & PDF buttons");
+
+  // Step G3: Check Timeline Event on Day 29 (Toledo -> Madrid-Atocha Return Train & Barajas T2 VIP Lounge Connection)
+  console.log("\n[TEST G3] Checking Day 29 Timeline Return Renfe Avant train & VIP connection...");
+  const day29Event = await cdp.evaluate(`
+    (() => {
+      app.switchTab("timeline");
+      const day29 = document.getElementById("day-2026-10-29");
+      if (!day29) return { error: "Day 29 not found" };
+      const text = day29.innerText;
+      return {
+        hasReturnTrain: text.includes("AVANT 08283") && text.includes("CZYW4V"),
+        hasReturnSeats: text.includes("Vagão 1") && text.includes("53") && text.includes("54"),
+        hasReturnButtons: text.includes("Bilhete Trem Renfe PDF") && text.includes("Cartão Mais Renfe Diego"),
+        hasVipArrival: text.includes("Sala VIP Puerta de Alcalá") || text.includes("09:10")
+      };
+    })()
+  `);
+
+  if (!day29Event.hasReturnTrain || !day29Event.hasReturnSeats || !day29Event.hasReturnButtons || !day29Event.hasVipArrival) {
+    throw new Error("Day 29 timeline event missing return train details, seats, or VIP connection: " + JSON.stringify(day29Event));
+  }
+  console.log("  ✓ Day 29 timeline contains confirmed Renfe Avant 08283 return train, seats 53/54, and Barajas T2 VIP connection at 09:10");
 
   // Step I: Check Flights Tab (Only TP110 should show Lisbon Immigration card)
   console.log("\n[TEST H] Checking Flights Tab (verifying only TP110 shows Lisbon Immigration card)...");
@@ -907,15 +932,60 @@ async function main() {
         hasPazSalvo: btns.some(b => b.includes("Paz y Salvo")),
         hasFabianaPazSalvo: btns.some(b => b.includes("Paz y Salvo Fabiana")),
         hasHotelVoucher: btns.some(b => b.includes("Voucher Hotel Toledo")),
+        hasRenfeTrain: text.includes("Renfe Avant") && text.includes("CZYW4V"),
+        hasTremRenfeBtn: btns.some(b => b.includes("Bilhete Trem Renfe PDF")),
+        hasTarjetaRenfeBtn: btns.some(b => b.includes("Cartão Mais Renfe Diego")),
         buttons: btns
       };
     })()
   `);
 
-  if (!congressCheck.hasTitle || !congressCheck.hasDocSection || !congressCheck.hasPassports || !congressCheck.hasDiegoConvite || !congressCheck.hasTatianaConvite || !congressCheck.hasPazSalvo || !congressCheck.hasFabianaPazSalvo || !congressCheck.hasHotelVoucher) {
-    throw new Error("Congress tab missing required elements or buttons: " + JSON.stringify(congressCheck));
+  if (!congressCheck.hasTitle || !congressCheck.hasDocSection || !congressCheck.hasPassports || !congressCheck.hasDiegoConvite || !congressCheck.hasTatianaConvite || !congressCheck.hasPazSalvo || !congressCheck.hasFabianaPazSalvo || !congressCheck.hasHotelVoucher || !congressCheck.hasRenfeTrain || !congressCheck.hasTremRenfeBtn || !congressCheck.hasTarjetaRenfeBtn) {
+    throw new Error("Congress tab missing required elements, trains, or buttons: " + JSON.stringify(congressCheck));
   }
-  console.log("  ✓ Congress tab contains all documentation, passports, and action buttons");
+  console.log("  ✓ Congress tab contains all documentation, confirmed Renfe Avant train, passports, and action buttons");
+
+  // Step K1.5: Test Deciphering and Opening Renfe Train PDF & Tarjeta Mas Renfe PDF
+  console.log("\n[TEST I2.5] Testing deciphering and opening of Renfe Train PDF & Tarjeta Mas Renfe in browser...");
+  await cdp.evaluate(`app.openPdf("doc-trem-renfe", "Bilhete Trem Renfe Avant - Madrid ⇄ Toledo (CZYW4V)")`);
+  await new Promise(r => setTimeout(r, 250));
+  const renfePdfState = await cdp.evaluate(`
+    (() => {
+      const modal = document.getElementById("modal-pdf");
+      const title = document.getElementById("pdf-modal-title");
+      const iframe = document.getElementById("pdf-viewer-frame");
+      return {
+        open: modal.classList.contains("open"),
+        title: title ? title.innerText : "",
+        src: iframe ? iframe.src : ""
+      };
+    })()
+  `);
+  if (!renfePdfState.open || !renfePdfState.src.startsWith("blob:") || !renfePdfState.title.includes("Renfe Avant")) {
+    throw new Error("Failed to open doc-trem-renfe: " + JSON.stringify(renfePdfState));
+  }
+  console.log("  ✓ Decrypted and opened doc-trem-renfe voucher successfully: " + renfePdfState.title);
+  await cdp.evaluate(`app.closeModals()`);
+
+  await cdp.evaluate(`app.openPdf("doc-tarjeta-masrenfe", "Tarjeta Más Renfe - Diego Jacob")`);
+  await new Promise(r => setTimeout(r, 250));
+  const tarjetaPdfState = await cdp.evaluate(`
+    (() => {
+      const modal = document.getElementById("modal-pdf");
+      const title = document.getElementById("pdf-modal-title");
+      const iframe = document.getElementById("pdf-viewer-frame");
+      return {
+        open: modal.classList.contains("open"),
+        title: title ? title.innerText : "",
+        src: iframe ? iframe.src : ""
+      };
+    })()
+  `);
+  if (!tarjetaPdfState.open || !tarjetaPdfState.src.startsWith("blob:") || !tarjetaPdfState.title.includes("Más Renfe")) {
+    throw new Error("Failed to open doc-tarjeta-masrenfe: " + JSON.stringify(tarjetaPdfState));
+  }
+  console.log("  ✓ Decrypted and opened doc-tarjeta-masrenfe voucher successfully: " + tarjetaPdfState.title);
+  await cdp.evaluate(`app.closeModals()`);
 
   // Step K2: Check Stays Tab for Apartamento Centro de Toledo (replacing Villa Potasa)
   console.log("\n[TEST I3] Checking Stays Tab for Apartamento Centro de Toledo...");
