@@ -212,7 +212,7 @@
     },
     {
       "date": "2026-10-28",
-      "city": "Toledo ➔ Madrid",
+      "city": "Toledo",
       "events": [
         {
           "time": "11:00",
@@ -221,22 +221,22 @@
           "protectedId": "stay-toledo-congresso"
         },
         {
-          "time": "15:00",
-          "title": "Check-in Villa Potasa 19 (Madrid)",
+          "time": "13:00",
+          "title": "Check-in Apartamento Centro de Toledo",
           "category": "stay",
-          "protectedId": "stay-madrid-3"
+          "protectedId": "stay-toledo-2"
         }
       ]
     },
     {
       "date": "2026-10-29",
-      "city": "Madrid ➔ Lisboa",
+      "city": "Toledo ➔ Madrid ➔ Lisboa",
       "events": [
         {
-          "time": "10:00",
-          "title": "Checkout Villa Potasa 19 (Madrid)",
+          "time": "08:00",
+          "title": "Checkout Apto Centro Toledo ➔ Ida Aeroporto Madrid (MAD)",
           "category": "stay",
-          "protectedId": "stay-madrid-3"
+          "protectedId": "stay-toledo-2"
         },
         {
           "time": "12:10",

@@ -472,6 +472,18 @@ class EuropaApp {
     const tTatiana = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "tatiana") : null;
     const tFabiana = isUnlocked && privateData?.travelers ? privateData.travelers.find(t => t.id === "fabiana") : null;
 
+    const diegoPassport = isUnlocked ? (tDiego?.passport || "GO506551") : null;
+    const diegoOldPassport = isUnlocked ? (tDiego?.oldPassport || "FR302881") : null;
+    const diegoApolice = isUnlocked ? (tDiego?.apolice || "16023-0003-69-260122474") : null;
+    const diegoCert = isUnlocked ? (tDiego?.certSchengen || "32572804832") : null;
+
+    const tatianaPassport = isUnlocked ? (tTatiana?.passport || "GB464034") : null;
+    const tatianaApolice = isUnlocked ? (tTatiana?.apolice || "16023-0003-69-260122473") : null;
+    const tatianaCert = isUnlocked ? (tTatiana?.certSchengen || "29340388828") : null;
+
+    const fabianaPassport = isUnlocked ? (tFabiana?.passport || "G0872312") : null;
+    const fabianaCredencial = isUnlocked ? (tFabiana?.credencial || "Mem 209/2026 – VIC") : null;
+
     this.elImmigrationDocsCard.innerHTML = `
       <div class="immigration-card-inner">
         <div class="immigration-card-header" id="immigration-card-header" onclick="app.toggleImmigrationDocs(event)">
@@ -533,24 +545,24 @@ class EuropaApp {
                 <div class="policy-details">
                   <div class="policy-row">
                     <span class="policy-label">Passaporte Brasileiro:</span>
-                    ${isUnlocked && tDiego ? `
-                      <span class="policy-val">${tDiego.passport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.passport}', 'Passaporte Diego')">📋</button><br><span style="font-size:0.75rem; color:var(--text-muted); font-family:inherit;">Passaporte Novo (Antigo: ${tDiego.oldPassport || 'FR302881'} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.oldPassport || 'FR302881'}', 'Passaporte Antigo Diego')">📋</button>)</span></span>
+                    ${isUnlocked ? `
+                      <span class="policy-val">${diegoPassport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${diegoPassport}', 'Passaporte Diego')">📋</button><br><span style="font-size:0.75rem; color:var(--text-muted); font-family:inherit;">Passaporte Novo (Antigo: ${diegoOldPassport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${diegoOldPassport}', 'Passaporte Antigo Diego')">📋</button>)</span></span>
                     ` : `
                       <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Apólice Porto Seguro:</span>
-                    ${isUnlocked && tDiego ? `
-                      <span class="policy-val">${tDiego.apolice || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.apolice || ''}', 'Apólice Diego')">📋</button></span>
+                    ${isUnlocked ? `
+                      <span class="policy-val">${diegoApolice} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${diegoApolice}', 'Apólice Diego')">📋</button></span>
                     ` : `
                       <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">•••••••••••••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Certificado Schengen:</span>
-                    ${isUnlocked && tDiego ? `
-                      <span class="policy-val">${tDiego.certSchengen || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tDiego.certSchengen || ''}', 'Certificado Diego')">📋</button></span>
+                    ${isUnlocked ? `
+                      <span class="policy-val">${diegoCert} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${diegoCert}', 'Certificado Diego')">📋</button></span>
                     ` : `
                       <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">•••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
@@ -584,24 +596,24 @@ class EuropaApp {
                 <div class="policy-details">
                   <div class="policy-row">
                     <span class="policy-label">Passaporte Brasileiro:</span>
-                    ${isUnlocked && tTatiana ? `
-                      <span class="policy-val">${tTatiana.passport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tTatiana.passport}', 'Passaporte Tatiana')">📋</button></span>
+                    ${isUnlocked ? `
+                      <span class="policy-val">${tatianaPassport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tatianaPassport}', 'Passaporte Tatiana')">📋</button></span>
                     ` : `
                       <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Apólice Porto Seguro:</span>
-                    ${isUnlocked && tTatiana ? `
-                      <span class="policy-val">${tTatiana.apolice || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tTatiana.apolice || ''}', 'Apólice Tatiana')">📋</button></span>
+                    ${isUnlocked ? `
+                      <span class="policy-val">${tatianaApolice} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tatianaApolice}', 'Apólice Tatiana')">📋</button></span>
                     ` : `
                       <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">•••••••••••••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Certificado Schengen:</span>
-                    ${isUnlocked && tTatiana ? `
-                      <span class="policy-val">${tTatiana.certSchengen || ''} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tTatiana.certSchengen || ''}', 'Certificado Tatiana')">📋</button></span>
+                    ${isUnlocked ? `
+                      <span class="policy-val">${tatianaCert} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tatianaCert}', 'Certificado Tatiana')">📋</button></span>
                     ` : `
                       <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">•••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
@@ -635,16 +647,16 @@ class EuropaApp {
                 <div class="policy-details">
                   <div class="policy-row">
                     <span class="policy-label">Passaporte Brasileiro:</span>
-                    ${isUnlocked && tFabiana ? `
-                      <span class="policy-val">${tFabiana.passport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tFabiana.passport}', 'Passaporte Fabiana')">📋</button></span>
+                    ${isUnlocked ? `
+                      <span class="policy-val">${fabianaPassport} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${fabianaPassport}', 'Passaporte Fabiana')">📋</button></span>
                     ` : `
                       <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
                   </div>
                   <div class="policy-row">
                     <span class="policy-label">Credencial Congresso:</span>
-                    ${isUnlocked && tFabiana ? `
-                      <span class="policy-val">${tFabiana.credencial || 'Mem 209/2026 – VIC'} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${tFabiana.credencial || 'Mem 209/2026 – VIC'}', 'Credencial Fabiana')">📋</button></span>
+                    ${isUnlocked ? `
+                      <span class="policy-val">${fabianaCredencial} <button type="button" class="copy-icon-btn" onclick="event.stopPropagation(); app.copyToClipboard('${fabianaCredencial}', 'Credencial Fabiana')">📋</button></span>
                     ` : `
                       <span class="policy-val locked-val text-muted" onclick="event.stopPropagation(); app.openUnlockModal()" style="cursor:pointer;" title="Toque para destravar"><span class="locked-asterisks">••••••••••••••</span> <span class="locked-tag-inline">🔒 Bloqueado</span></span>
                     `}
@@ -988,9 +1000,9 @@ class EuropaApp {
         date: "2026-10-28",
         icon: "🏨",
         dateLabel: "28/Out",
-        title: "Madrid Noite",
-        tag: "Madrid",
-        city: "Villa Potasa"
+        title: "Apto Toledo",
+        tag: "Toledo",
+        city: "Centro Toledo"
       },
       {
         date: "2026-10-29",
@@ -1621,14 +1633,14 @@ class EuropaApp {
         notes: "Período do Congresso. Vista magnífica de Toledo. Lembrete: Fim do Horário de Verão em 25/Out!"
       },
       {
-        title: "Villa Potasa 19 • Madrid (1 Noite)",
+        title: "Apartamento Centro de Toledo • Toledo (1 Noite)",
         dates: "28 a 29/Outubro/2026",
-        address: "Calle Potasa 19 baixo 2, Villaverde, 28021 Madrid",
-        ref: "5567.803.610",
-        pin: "5069",
-        phone: "+34 654 10 39 38",
-        docs: ["doc-hotel-madrid-3"],
-        notes: "Última noite na Espanha antes do voo matinal para Lisboa."
+        address: "4 Callejón Cura, 45003 Toledo, Espanha",
+        ref: "6397.678.603",
+        pin: "2118",
+        phone: "+34 679 19 43 63",
+        docs: ["doc-hotel-toledo-2"],
+        notes: "Noite extra no centro histórico de Toledo após o congresso (Callejón Cura). Atenção logística para o dia 29: saída cedo de Toledo para o Aeroporto Madrid-Barajas (voo TP1013 às 12:10)."
       },
       {
         title: "Central Lisbon Stay • Lisboa (1 Noite)",
@@ -1683,6 +1695,7 @@ class EuropaApp {
                 ${s.docs.map(docId => {
                   const labels = {
                     "doc-hotel-toledo": "🏨 Voucher Hotel Toledo",
+                    "doc-hotel-toledo-2": "🏨 Voucher Apto Centro Toledo",
                     "doc-convite-diego": "📄 Carta Convite Diego",
                     "doc-convite-tatiana": "📄 Carta Convite Tatiana",
                     "doc-pazsalvo-diego-tatiana": "📄 Paz y Salvo Diego & Tatiana",
@@ -1708,6 +1721,7 @@ class EuropaApp {
                 ${s.docs.map(docId => {
                   const labels = {
                     "doc-hotel-toledo": "🏨 Voucher Hotel Toledo",
+                    "doc-hotel-toledo-2": "🏨 Voucher Apto Centro Toledo",
                     "doc-convite-diego": "📄 Carta Convite Diego",
                     "doc-convite-tatiana": "📄 Carta Convite Tatiana",
                     "doc-pazsalvo-diego-tatiana": "📄 Paz y Salvo Diego & Tatiana",

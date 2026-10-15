@@ -146,7 +146,7 @@ def main():
         "doc-airbnb-saillon-anuncio": resolve_source_file("Quarto · Saillon Suiça — Airbnb.pdf"),
         "doc-hotel-madrid-2": resolve_source_file("Booking_ Centro Madrid Rio - Monederos C.pdf"),
         "doc-hotel-toledo": resolve_source_file("Booking_TOLEDO_El Mirador del Valle.pdf"),
-        "doc-hotel-madrid-3": resolve_source_file("Booking_ Villa potasa 19.pdf"),
+        "doc-hotel-toledo-2": resolve_source_file("Booking_TOLEDO_Depois.pdf"),
         "doc-hotel-lisboa": resolve_source_file("Booking_Central Lisbon.pdf"),
         "doc-seguro-diego-bilhete": resolve_source_file("Bilhete_Seguro_Viagem_29340388828/Bilhete_Seguro_Viagem_32572804832/travel_insurance_Jacob Fernandes Leite_32572804832.pdf"),
         "doc-seguro-diego-cert": resolve_source_file("Bilhete_Seguro_Viagem_29340388828/Bilhete_Seguro_Viagem_32572804832/certificado_de_elegibilidade_32572804832.pdf"),
@@ -402,19 +402,20 @@ def main():
                 "notes": "Período do Congresso Gnóstico Internacional no Palacio de Congresos El Greco. Vista espetacular do vale histórico de Toledo."
             },
             {
-                "id": "stay-madrid-3",
+                "id": "stay-toledo-2",
                 "category": "stay",
-                "title": "Villa Potasa 19 • Madrid (1 Noite)",
-                "bookingRef": "5567.803.610",
-                "pin": "5069",
+                "title": "Apartamento Centro de Toledo • Toledo (1 Noite)",
+                "bookingRef": "6397.678.603",
+                "pin": "2118",
                 "provider": "Booking.com",
-                "address": "Calle Potasa 19 baixo 2, Villaverde, 28021 Madrid, Espanha",
-                "phone": "+34 654 10 39 38",
-                "checkIn": "2026-10-28T15:00:00+01:00",
-                "checkOut": "2026-10-29T10:00:00+01:00",
+                "address": "4 Callejón Cura, 45003 Toledo, Espanha",
+                "phone": "+34 679 19 43 63",
+                "checkIn": "2026-10-28T13:00:00+01:00",
+                "checkOut": "2026-10-29T11:00:00+01:00",
                 "tz": "Europe/Madrid",
-                "documents": ["doc-hotel-madrid-3"],
-                "notes": "Retorno de Toledo para Madrid. Pernoite antes do voo para Lisboa."
+                "paidAmount": "€ 135,00",
+                "documents": ["doc-hotel-toledo-2"],
+                "notes": "Noite extra no centro histórico de Toledo após o congresso (Callejón Cura). Atenção logística para o dia 29: saída cedo de Toledo para o Aeroporto Madrid-Barajas (voo TP1013 às 12:10)."
             },
             {
                 "id": "flight-tap-mad-lis",
@@ -624,17 +625,17 @@ def main():
             },
             {
                 "date": "2026-10-28",
-                "city": "Toledo ➔ Madrid",
+                "city": "Toledo",
                 "events": [
                     {"time": "11:00", "title": "Checkout El Mirador del Valle (Toledo)", "category": "stay", "protectedId": "stay-toledo-congresso"},
-                    {"time": "15:00", "title": "Check-in Villa Potasa 19 (Madrid)", "category": "stay", "protectedId": "stay-madrid-3"}
+                    {"time": "13:00", "title": "Check-in Apartamento Centro de Toledo", "category": "stay", "protectedId": "stay-toledo-2"}
                 ]
             },
             {
                 "date": "2026-10-29",
-                "city": "Madrid ➔ Lisboa",
+                "city": "Toledo ➔ Madrid ➔ Lisboa",
                 "events": [
-                    {"time": "10:00", "title": "Checkout Villa Potasa 19 (Madrid)", "category": "stay", "protectedId": "stay-madrid-3"},
+                    {"time": "08:00", "title": "Checkout Apto Centro Toledo ➔ Ida Aeroporto Madrid (MAD)", "category": "stay", "protectedId": "stay-toledo-2"},
                     {"time": "12:10", "title": "Voo TAP TP1013 (MAD ➔ LIS)", "category": "flight", "protectedId": "flight-tap-mad-lis"},
                     {"time": "15:00", "title": "Check-in Central Lisbon Stay (Lisboa)", "category": "stay", "protectedId": "stay-lisboa"}
                 ]

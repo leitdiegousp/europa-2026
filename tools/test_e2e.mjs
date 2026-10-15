@@ -862,6 +862,52 @@ async function main() {
   }
   console.log("  ✓ Congress tab contains all documentation, passports, and action buttons");
 
+  // Step K2: Check Stays Tab for Apartamento Centro de Toledo (replacing Villa Potasa)
+  console.log("\n[TEST I3] Checking Stays Tab for Apartamento Centro de Toledo...");
+  const staysCheck = await cdp.evaluate(`
+    (() => {
+      app.switchTab("stays");
+      const area = document.getElementById("tab-content-container");
+      const text = area.innerText;
+      const btns = Array.from(area.querySelectorAll("button")).map(b => b.innerText.trim());
+      return {
+        hasAptoToledo: text.includes("Apartamento Centro de Toledo"),
+        hasCallejonCura: text.includes("Callejón Cura"),
+        hasRef: text.includes("6397.678.603"),
+        hasPin: text.includes("2118"),
+        hasPhone: text.includes("+34 679 19 43 63"),
+        hasVoucherBtn: btns.some(b => b.includes("Voucher Apto Centro Toledo")),
+        hasNoVillaPotasa: !text.includes("Villa Potasa")
+      };
+    })()
+  `);
+
+  if (!staysCheck.hasAptoToledo || !staysCheck.hasCallejonCura || !staysCheck.hasRef || !staysCheck.hasPin || !staysCheck.hasPhone || !staysCheck.hasVoucherBtn || !staysCheck.hasNoVillaPotasa) {
+    throw new Error("Stays tab verification failed for Apartamento Centro de Toledo: " + JSON.stringify(staysCheck));
+  }
+  console.log("  ✓ Stays tab verified: Apartamento Centro de Toledo present with voucher button, PIN 2118, and Villa Potasa removed!");
+
+  // Test opening the doc-hotel-toledo-2 voucher
+  await cdp.evaluate(`app.openPdf("doc-hotel-toledo-2", "Apartamento Centro de Toledo • Toledo (1 Noite)")`);
+  await new Promise(r => setTimeout(r, 250));
+  const toledoVoucherState = await cdp.evaluate(`
+    (() => {
+      const modal = document.getElementById("modal-pdf");
+      const title = document.getElementById("pdf-modal-title");
+      const iframe = document.getElementById("pdf-viewer-frame");
+      return {
+        open: modal.classList.contains("open"),
+        title: title ? title.innerText : "",
+        src: iframe ? iframe.src : ""
+      };
+    })()
+  `);
+  if (!toledoVoucherState.open || !toledoVoucherState.src.startsWith("blob:") || !toledoVoucherState.title.includes("Toledo")) {
+    throw new Error("Failed to open doc-hotel-toledo-2: " + JSON.stringify(toledoVoucherState));
+  }
+  console.log("  ✓ Decrypted and opened doc-hotel-toledo-2 voucher successfully: " + toledoVoucherState.title);
+  await cdp.evaluate(`app.closeModals()`);
+
   // Step L: Check Day 19 Current Step Simulation
   console.log("\n[TEST J] Checking Day 19 Current Step simulation for Templo Divino Daimon...");
   await cdp.evaluate(`app.setSimulatedDate('2026-10-19')`);

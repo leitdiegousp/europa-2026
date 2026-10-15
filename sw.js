@@ -5,7 +5,7 @@
  * blobs criptografados no modo avião / sem sinal.
  */
 
-const CACHE_NAME = "europa-vault-v20";
+const CACHE_NAME = "europa-vault-v21";
 
 const STATIC_ASSETS = [
   "./",
@@ -33,7 +33,7 @@ const STATIC_ASSETS = [
   "vault/assets/doc-airbnb-saillon-anuncio.enc",
   "vault/assets/doc-hotel-madrid-2.enc",
   "vault/assets/doc-hotel-toledo.enc",
-  "vault/assets/doc-hotel-madrid-3.enc",
+  "vault/assets/doc-hotel-toledo-2.enc",
   "vault/assets/doc-hotel-lisboa.enc",
   "vault/assets/doc-seguro-diego-bilhete.enc",
   "vault/assets/doc-seguro-diego-cert.enc",
