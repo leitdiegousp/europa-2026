@@ -1337,11 +1337,49 @@ class EuropaApp {
                   🗺️ Rota Saillon ➔ Riddes (Google Maps) ↗
                 </a>
               </div>
-              ${isUnlocked && privateBooking && privateBooking.notes ? `
-                <div style="font-size: 0.78rem; color: var(--accent-emerald); margin-top: 8px;">
-                  ✓ Informação confidencial autenticada: ${privateBooking.notes}
+            </div>
+          `;
+        } else if (evt.isTrain || (evt.category === "transport" && evt.title.includes("Trem"))) {
+          const isIda = day.date === "2026-10-22";
+          html += `
+            <div class="secret-badge" style="border-left: 3px solid var(--accent-sky); margin-top: 10px;">
+              <div style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 6px;">
+                🚄 <strong>Trem de Alta Velocidade: Renfe Avant (${isIda ? 'Madrid-Atocha ➔ Toledo' : 'Toledo ➔ Madrid-Atocha'})</strong><br>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                  ${isIda ? 
+                    'Viagem rápida de alta velocidade de apenas <strong>33 minutos</strong> entre Madrid Puerta de Atocha e Toledo. Horário recomendado: ~13:50 ou 14:50 para check-in às 16:00 em Toledo.' : 
+                    'Viagem de <strong>33 minutos</strong> até Madrid-Atocha. O bilhete Avant inclui <strong>Combinado Cercanías Grátis</strong> (linhas C-1 / C-10 até Aeroporto T4). Para T1/T2, há táxi tarifa fixa (€ 33) ou ônibus de conexão gratuito.'}
+                </span>
+              </div>
+              <div class="secret-grid" style="margin-bottom: 8px;">
+                <div class="secret-item">
+                  <span class="secret-label">Status do Bilhete</span>
+                  <span class="secret-value" style="color: var(--accent-amber);">Aguardando Compra • Promoção Ida y Vuelta</span>
                 </div>
-              ` : ""}
+                <div class="secret-item">
+                  <span class="secret-label">Desconto Renfe</span>
+                  <span class="secret-value">20% de desconto na volta comprando ida e volta juntas</span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Estação em Madrid</span>
+                  <span class="secret-value">Madrid - Puerta de Atocha Almudena Grandes</span>
+                </div>
+                <div class="secret-item">
+                  <span class="secret-label">Estação em Toledo</span>
+                  <span class="secret-value">Estación de Tren de Toledo (Paseo de la Rosa)</span>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+                <a href="https://www.renfe.com/es/es" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
+                  🚄 Consultar Horários na Renfe Oficial ↗
+                </a>
+                <a href="https://www.thetrainline.com/pt-br" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
+                  🎟️ Consultar no Trainline ↗
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Estacion+de+Tren+de+Toledo" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
+                  📍 Estação Toledo no Maps ↗
+                </a>
+              </div>
             </div>
           `;
         } else if (isUnlocked && privateBooking) {

@@ -615,7 +615,7 @@ def main():
                 "city": "Madrid ➔ Toledo",
                 "events": [
                     {"time": "11:00", "title": "Checkout Centro Madrid Rio", "category": "stay", "protectedId": "stay-madrid-2"},
-                    {"time": "14:00", "title": "Deslocamento Madrid ➔ Toledo", "category": "transport", "protectedId": "stay-toledo-congresso"},
+                    {"time": "13:30", "title": "Trem Renfe Avant: Madrid-Atocha ➔ Toledo (Aguardando Compra)", "category": "transport", "isTrain": True, "protectedId": "stay-toledo-congresso"},
                     {"time": "16:00", "title": "Check-in El Mirador del Valle (Toledo) • Credenciamento do Congresso", "category": "stay", "isCongressCheckin": True, "protectedId": "stay-toledo-congresso"}
                 ]
             },
@@ -667,8 +667,10 @@ def main():
                 "date": "2026-10-29",
                 "city": "Toledo ➔ Madrid ➔ Lisboa",
                 "events": [
-                    {"time": "08:00", "title": "Checkout Apto Centro Toledo ➔ Ida Aeroporto Madrid (MAD)", "category": "stay", "protectedId": "stay-toledo-2"},
+                    {"time": "08:00", "title": "Checkout Apto Centro Toledo ➔ Estação Toledo", "category": "stay", "protectedId": "stay-toledo-2"},
+                    {"time": "08:25", "title": "Trem Renfe Avant: Toledo ➔ Madrid-Atocha (Conexão Voo TAP 12:10)", "category": "transport", "isTrain": True, "protectedId": "stay-toledo-2"},
                     {"time": "12:10", "title": "Voo TAP TP1013 (MAD ➔ LIS)", "category": "flight", "protectedId": "flight-tap-mad-lis"},
+                    {"time": "13:25", "title": "Trem Renfe Avant: Toledo ➔ Madrid-Atocha (Opção Voo 18:00 Fabiana)", "category": "transport", "isTrain": True, "protectedId": "stay-toledo-2"},
                     {"time": "15:00", "title": "Check-in Central Lisbon Stay (Lisboa)", "category": "stay", "protectedId": "stay-lisboa"}
                 ]
             },

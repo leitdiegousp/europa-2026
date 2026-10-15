@@ -124,9 +124,10 @@
           "protectedId": "stay-madrid-2"
         },
         {
-          "time": "14:00",
-          "title": "Deslocamento Madrid ➔ Toledo",
+          "time": "13:30",
+          "title": "Trem Renfe Avant: Madrid-Atocha ➔ Toledo (Aguardando Compra)",
           "category": "transport",
+          "isTrain": true,
           "protectedId": "stay-toledo-congresso"
         },
         {
@@ -228,8 +229,15 @@
       "events": [
         {
           "time": "08:00",
-          "title": "Checkout Apto Centro Toledo ➔ Ida Aeroporto Madrid (MAD)",
+          "title": "Checkout Apto Centro Toledo ➔ Estação Toledo",
           "category": "stay",
+          "protectedId": "stay-toledo-2"
+        },
+        {
+          "time": "08:25",
+          "title": "Trem Renfe Avant: Toledo ➔ Madrid-Atocha (Conexão Voo TAP 12:10)",
+          "category": "transport",
+          "isTrain": true,
           "protectedId": "stay-toledo-2"
         },
         {
@@ -237,6 +245,13 @@
           "title": "Voo TAP TP1013 (MAD ➔ LIS)",
           "category": "flight",
           "protectedId": "flight-tap-mad-lis"
+        },
+        {
+          "time": "13:25",
+          "title": "Trem Renfe Avant: Toledo ➔ Madrid-Atocha (Opção Voo 18:00 Fabiana)",
+          "category": "transport",
+          "isTrain": true,
+          "protectedId": "stay-toledo-2"
         },
         {
           "time": "15:00",
