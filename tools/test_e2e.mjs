@@ -798,6 +798,7 @@ async function main() {
         hasRefArgus: text.includes("CH279343390"),
         hasConfNumber: text.includes("1208217510"),
         hasFranchise: text.includes("CHF 2.500,00"),
+        hasDeposit: text.includes("CHF 350,00"),
         hasVoucherBtn: linksAndBtns.some(b => b.includes("Ver Voucher da Reserva (PDF)")),
         hasSwissSectorAlert: text.includes("ALERTA OPERACIONAL: Setor Suíço"),
         hasMainRoute: text.includes("Rota Principal: Aeroporto de Genebra") && text.includes("Saillon"),
@@ -817,7 +818,7 @@ async function main() {
     })()
   `);
 
-  if (!carCheck.hasSwissSectionTitle || !carCheck.hasSwissNavTab || !carCheck.hasConfirmedCard || !carCheck.hasRefArgus || !carCheck.hasConfNumber || !carCheck.hasFranchise || !carCheck.hasVoucherBtn || !carCheck.hasSwissSectorAlert || !carCheck.hasMainRoute || !carCheck.hasValaisRoteiro || !carCheck.hasDistance || !carCheck.hasCredentials || !carCheck.hasArredores || !carCheck.hasDrivingRules || !carCheck.hasSpeedLimits || !carCheck.hasHeadlightsRule || !carCheck.hasParkingRule || !carCheck.hasAutumnWeather || !carCheck.hasMapsRouteBtn || !carCheck.hasPazSalvoDiegoTatiana || !carCheck.hasPazSalvoFabiana) {
+  if (!carCheck.hasSwissSectionTitle || !carCheck.hasSwissNavTab || !carCheck.hasConfirmedCard || !carCheck.hasRefArgus || !carCheck.hasConfNumber || !carCheck.hasFranchise || !carCheck.hasDeposit || !carCheck.hasVoucherBtn || !carCheck.hasSwissSectorAlert || !carCheck.hasMainRoute || !carCheck.hasValaisRoteiro || !carCheck.hasDistance || !carCheck.hasCredentials || !carCheck.hasArredores || !carCheck.hasDrivingRules || !carCheck.hasSpeedLimits || !carCheck.hasHeadlightsRule || !carCheck.hasParkingRule || !carCheck.hasAutumnWeather || !carCheck.hasMapsRouteBtn || !carCheck.hasPazSalvoDiegoTatiana || !carCheck.hasPazSalvoFabiana) {
     throw new Error("Car tab missing required elements, confirmed voucher, driving rules, or buttons: " + JSON.stringify(carCheck));
   }
   console.log("  ✓ Car & Swiss Routes tab contains confirmed reservation (Skoda Fabia, Argus CH279343390, Conf 1208217510), Valais itinerary, and Swiss driving rules");

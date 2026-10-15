@@ -331,14 +331,16 @@ def main():
                 "fuelPolicy": "Depósito cheio para depósito cheio (Full to Full)",
                 "mileage": "Quilometragem Ilimitada",
                 "winterPack": "Conjunto de inverno incluído (R$ 0,00)",
-                "paidAmount": "USD 98.22 (~R$ 493,68)",
+                "paidAmount": "USD 98.22 (CHF 81.87) • Pago Online (CHF 0,00 a pagar no balcão)",
                 "creditCardUsed": "Mastercard final 3636",
-                "franchise": "CHF 2.500,00 (Exige cartão de crédito físico no nome de Diego Jacob Fernandes Leite)",
+                "deposit": "CHF 350,00 (Caução retida temporariamente no cartão de crédito)",
+                "fuelDeposit": "Possível caução de combustível temporária (~CHF 80 a 100, reembolsada na devolução com tanque cheio)",
+                "franchise": "CHF 2.500,00 (Franquia máxima de responsabilidade por danos/furto sem seguro extra)",
                 "mandatoryRequirements": [
-                    "Cartão de crédito físico no nome e apelido do condutor principal (sem abreviaturas) com limite para a franquia de CHF 2.500,00",
+                    "Cartão de crédito físico no nome de Diego Jacob Fernandes Leite (sem abreviaturas) com limite para a caução de CHF 350,00 (+ garantia de combustível) e senha PIN",
                     "CNH física válida do condutor principal (+ PID recomendada)",
                     "Passaporte válido (GO506551)",
-                    "Voucher impresso ou digital (doc-carro-suica)"
+                    "Voucher da reserva (CH279343390)"
                 ],
                 "documents": ["doc-carro-suica"],
                 "criticalNotice": "⚠️ BALCÃO NO SETOR SUÍÇO: Balcão da Europcar / Unirent no Arrivals hall do Setor Suíço. Carros locados no lado suíço já incluem a Vignette Rodoviária Suíça (CHF 40).",

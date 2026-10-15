@@ -1808,29 +1808,38 @@ class EuropaApp {
                 </span>
               </div>
               <div class="secret-item">
-                <span class="secret-label">Franquia / Bloqueio Caução</span>
-                <span class="secret-value" style="color: var(--accent-amber);">CHF 2.500,00 (Cartão de Crédito Físico)</span>
+                <span class="secret-label">Caução Retida no Cartão</span>
+                <span class="secret-value" style="color: var(--accent-amber);">CHF 350,00 (Bloqueio temporário)</span>
+              </div>
+              <div class="secret-item">
+                <span class="secret-label">Franquia Máxima de Sinistro</span>
+                <span class="secret-value" style="color: var(--text-dim); font-size: 0.85rem;">CHF 2.500,00 (Danos/Roubo)</span>
+              </div>
+              <div class="secret-item">
+                <span class="secret-label">Pagamento da Reserva</span>
+                <span class="secret-value" style="color: var(--accent-emerald);">USD 98.22 Pago Online (CHF 0,00 no balcão)</span>
               </div>
               <div class="secret-item">
                 <span class="secret-label">Combustível & Km</span>
                 <span class="secret-value">Depósito Cheio (Full to Full) • Km Ilimitada</span>
               </div>
               <div class="secret-item">
-                <span class="secret-label">Equipamento de Inverno</span>
-                <span class="secret-value">Conjunto de Inverno Incluído (R$ 0,00)</span>
+                <span class="secret-label">Garantia de Combustível</span>
+                <span class="secret-value" style="color: var(--text-dim); font-size: 0.85rem;">Depósito temporário no balcão (~CHF 80-100)</span>
               </div>
               <div class="secret-item">
-                <span class="secret-label">Valor Pago</span>
-                <span class="secret-value">USD 98.22 (~R$ 493,68 • Cartão final 3636)</span>
+                <span class="secret-label">Equipamento de Inverno</span>
+                <span class="secret-value">Conjunto de Inverno Incluído (CHF 0,00)</span>
               </div>
             </div>
 
             <div style="margin-top: 12px; padding: 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); font-size: 0.82rem; line-height: 1.6; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06);">
-              <strong style="color: var(--text-main);">📋 Documentos Obrigatórios para Retirar no Balcão:</strong><br>
-              1. 💳 <strong>Cartão de crédito físico</strong> em nome do condutor principal (Diego Jacob Fernandes Leite, sem abreviações) com limite para a franquia de <strong>CHF 2.500,00</strong>.<br>
+              <strong style="color: var(--text-main);">📋 Requisitos Obrigatórios para Retirada no Balcão:</strong><br>
+              1. 💳 <strong>Cartão de crédito físico</strong> em nome do condutor principal (<strong>Diego Jacob Fernandes Leite</strong>, sem abreviações) com limite para a caução de <strong>CHF 350,00</strong> (+ margem para garantia de combustível) e com a <strong>senha PIN</strong> do chip.<br>
               2. 🪪 <strong>CNH física válida</strong> do Diego (+ Permissão Internacional para Dirigir recomendada).<br>
               3. 🛂 <strong>Passaporte brasileiro</strong> (GO506551).<br>
-              4. 📄 <strong>Voucher da reserva</strong> (acesso instantâneo abaixo).
+              4. 📄 <strong>Voucher da reserva</strong> (Ref. Argus: CH279343390 / Conf: 1208217510).<br>
+              <span style="font-size: 0.76rem; color: var(--text-dim);">ℹ️ <em>Nota sobre a Franquia: O bloqueio de caução no balcão é de apenas <strong>CHF 350,00</strong>. O valor de CHF 2.500,00 é o limite máximo de responsabilidade (franquia do seguro CDW/Roubo) caso ocorra acidente ou avaria não coberta.</em></span>
             </div>
 
             <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
