@@ -116,7 +116,7 @@ async function main() {
   const { sessionDek, vaultId } = await unwrapDek("ti8mao", env);
 
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT_DIR, "vault/asset-manifest.json"), "utf8"));
-  if (manifest.length !== 20) throw new Error(`Expected 20 documents in manifest, found ${manifest.length}`);
+  if (manifest.length !== 21) throw new Error(`Expected 21 documents in manifest, found ${manifest.length}`);
 
   for (const doc of manifest) {
     const buf = fs.readFileSync(path.join(ROOT_DIR, `vault/assets/${doc.id}.enc`));
@@ -794,6 +794,11 @@ async function main() {
       return {
         hasSwissSectionTitle: text.includes("Suíça & Aluguel de Carro (Valais)"),
         hasSwissNavTab: navBtn ? navBtn.innerText.includes("Suíça") : false,
+        hasConfirmedCard: text.includes("Skoda Fabia"),
+        hasRefArgus: text.includes("CH279343390"),
+        hasConfNumber: text.includes("1208217510"),
+        hasFranchise: text.includes("CHF 2.500,00"),
+        hasVoucherBtn: linksAndBtns.some(b => b.includes("Ver Voucher da Reserva (PDF)")),
         hasSwissSectorAlert: text.includes("ALERTA OPERACIONAL: Setor Suíço"),
         hasMainRoute: text.includes("Rota Principal: Aeroporto de Genebra") && text.includes("Saillon"),
         hasValaisRoteiro: text.includes("Roteiro em Valais: Saillon ➔ Riddes (Templo Divino Daimon)"),
@@ -812,10 +817,31 @@ async function main() {
     })()
   `);
 
-  if (!carCheck.hasSwissSectionTitle || !carCheck.hasSwissNavTab || !carCheck.hasSwissSectorAlert || !carCheck.hasMainRoute || !carCheck.hasValaisRoteiro || !carCheck.hasDistance || !carCheck.hasCredentials || !carCheck.hasArredores || !carCheck.hasDrivingRules || !carCheck.hasSpeedLimits || !carCheck.hasHeadlightsRule || !carCheck.hasParkingRule || !carCheck.hasAutumnWeather || !carCheck.hasMapsRouteBtn || !carCheck.hasPazSalvoDiegoTatiana || !carCheck.hasPazSalvoFabiana) {
-    throw new Error("Car tab missing required elements, driving rules, or buttons: " + JSON.stringify(carCheck));
+  if (!carCheck.hasSwissSectionTitle || !carCheck.hasSwissNavTab || !carCheck.hasConfirmedCard || !carCheck.hasRefArgus || !carCheck.hasConfNumber || !carCheck.hasFranchise || !carCheck.hasVoucherBtn || !carCheck.hasSwissSectorAlert || !carCheck.hasMainRoute || !carCheck.hasValaisRoteiro || !carCheck.hasDistance || !carCheck.hasCredentials || !carCheck.hasArredores || !carCheck.hasDrivingRules || !carCheck.hasSpeedLimits || !carCheck.hasHeadlightsRule || !carCheck.hasParkingRule || !carCheck.hasAutumnWeather || !carCheck.hasMapsRouteBtn || !carCheck.hasPazSalvoDiegoTatiana || !carCheck.hasPazSalvoFabiana) {
+    throw new Error("Car tab missing required elements, confirmed voucher, driving rules, or buttons: " + JSON.stringify(carCheck));
   }
-  console.log("  ✓ Car & Swiss Routes tab contains Valais itinerary, Templo Daimon route, credentials, Swiss driving guidelines, and action buttons");
+  console.log("  ✓ Car & Swiss Routes tab contains confirmed reservation (Skoda Fabia, Argus CH279343390, Conf 1208217510), Valais itinerary, and Swiss driving rules");
+
+  // Test opening the doc-carro-suica voucher
+  await cdp.evaluate(`app.openPdf("doc-carro-suica", "Voucher Aluguel de Carro - Skoda Fabia (Argus / Unirent)")`);
+  await new Promise(r => setTimeout(r, 250));
+  const carVoucherState = await cdp.evaluate(`
+    (() => {
+      const modal = document.getElementById("modal-pdf");
+      const title = document.getElementById("pdf-modal-title");
+      const iframe = document.getElementById("pdf-viewer-frame");
+      return {
+        open: modal.classList.contains("open"),
+        title: title ? title.innerText : "",
+        src: iframe ? iframe.src : ""
+      };
+    })()
+  `);
+  if (!carVoucherState.open || !carVoucherState.src.startsWith("blob:") || !carVoucherState.title.includes("Skoda Fabia")) {
+    throw new Error("Failed to open doc-carro-suica voucher: " + JSON.stringify(carVoucherState));
+  }
+  console.log("  ✓ Decrypted and opened doc-carro-suica voucher successfully: " + carVoucherState.title);
+  await cdp.evaluate(`app.closeModals()`);
 
   // Step J: Check Emergency Tab (buttons actionable in both locked and unlocked state)
   console.log("\n[TEST I] Checking Emergency Tab...");

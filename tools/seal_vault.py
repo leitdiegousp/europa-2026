@@ -156,6 +156,7 @@ def main():
         "doc-convite-tatiana": resolve_source_file("Carta_Invitacion_ARAÚJO DE SOUSA JACOB (1).pdf"),
         "doc-pazsalvo-diego-tatiana": resolve_source_file("2026207 - VIC - Paz y Salvo Diego.Tatiana - CONGRESO.pdf"),
         "doc-pazsalvo-fabiana": resolve_source_file("2026209 - VIC - Paz y Salvo Fabiana Nunes Poli - CONGRESO.pdf"),
+        "doc-carro-suica": resolve_source_file("Carro_Reservation Details - HMSFDZ52SZ.pdf"),
     }
 
     dek_cipher = AESGCM(dek)
@@ -306,13 +307,43 @@ def main():
             {
                 "id": "car-rental-genebra",
                 "category": "car",
-                "title": "Aluguel de Carro • Genebra Aeroporto (GVA)",
-                "status": "A reservar pelo viajante",
-                "pickup": {"location": "Aeroporto de Genebra (GVA)", "time": "2026-10-18T11:00:00+02:00", "tz": "Europe/Zurich"},
-                "dropoff": {"location": "Aeroporto de Genebra (GVA)", "time": "2026-10-20T16:30:00+02:00", "tz": "Europe/Zurich"},
-                "criticalNotice": "⚠️ RETIRAR NO SETOR SUÍÇO (Secteur Suisse). Carros locados no lado suíço já incluem a Vignette Rodoviária Suíça (CHF 40). O lado francês exige compra avulsa ou acarreta multa de CHF 200 nas rodovias A1/A9 para Saillon.",
+                "title": "Aluguel de Carro • Genebra Aeroporto (GVA) ➔ Valais",
+                "status": "Confirmado",
+                "provider": "Argus Car Hire / Europcar (Unirent)",
+                "bookingRef": "CH279343390",
+                "confirmationNumber": "1208217510",
+                "vehicle": "Skoda Fabia ou semelhante (Econômico • Automático • 5P • A/C)",
+                "driver": "Diego Jacob Fernandes Leite",
+                "pickup": {
+                    "location": "Europcar, Arrivals hall - Genève Airport (Setor Suíço), Genève, 1215",
+                    "time": "2026-10-18T11:00:00+02:00",
+                    "deskPhone": "022 717 81 10",
+                    "deskPhoneInt": "+41 22 717 81 10",
+                    "tz": "Europe/Zurich"
+                },
+                "dropoff": {
+                    "location": "Europcar, Arrivals hall - Genève Airport (Setor Suíço), Genève, 1215",
+                    "time": "2026-10-20T11:00:00+02:00",
+                    "deskPhone": "022 717 81 10",
+                    "deskPhoneInt": "+41 22 717 81 10",
+                    "tz": "Europe/Zurich"
+                },
+                "fuelPolicy": "Depósito cheio para depósito cheio (Full to Full)",
+                "mileage": "Quilometragem Ilimitada",
+                "winterPack": "Conjunto de inverno incluído (R$ 0,00)",
+                "paidAmount": "USD 98.22 (~R$ 493,68)",
+                "creditCardUsed": "Mastercard final 3636",
+                "franchise": "CHF 2.500,00 (Exige cartão de crédito físico no nome de Diego Jacob Fernandes Leite)",
+                "mandatoryRequirements": [
+                    "Cartão de crédito físico no nome e apelido do condutor principal (sem abreviaturas) com limite para a franquia de CHF 2.500,00",
+                    "CNH física válida do condutor principal (+ PID recomendada)",
+                    "Passaporte válido (GO506551)",
+                    "Voucher impresso ou digital (doc-carro-suica)"
+                ],
+                "documents": ["doc-carro-suica"],
+                "criticalNotice": "⚠️ BALCÃO NO SETOR SUÍÇO: Balcão da Europcar / Unirent no Arrivals hall do Setor Suíço. Carros locados no lado suíço já incluem a Vignette Rodoviária Suíça (CHF 40).",
                 "routeToSaillon": "GVA ➔ Rodovia A1 ➔ Rodovia A9 direção Martigny/Sion ➔ Saída 24 (Riddes/Saillon). Duração: ~1h35 (145 km).",
-                "notes": "Devolver no mesmo Setor Suíço antes das 16:30 do dia 20/10."
+                "notes": "Balcão no hall de chegadas (Arrivals hall) do Setor Suíço da Europcar / Unirent. Telefone: 022 717 81 10. Devolver com tanque cheio."
             },
             {
                 "id": "stay-saillon-suica",
@@ -538,7 +569,7 @@ def main():
                 "city": "Madrid ➔ Genebra ➔ Saillon (Suíça)",
                 "events": [
                     {"time": "08:00", "title": "Voo Air Europa UX1663 (MAD ➔ GVA)", "category": "flight", "protectedId": "flight-aireuropa-ida"},
-                    {"time": "11:00", "title": "Retirada do Carro (Aeroporto Genebra - Setor Suíço)", "category": "car", "protectedId": "car-rental-genebra"},
+                    {"time": "11:00", "title": "Retirada do Carro: Skoda Fabia Automático (Europcar / Unirent • Setor Suíço)", "category": "car", "protectedId": "car-rental-genebra"},
                     {"time": "15:00", "title": "Check-in Airbnb Saillon (Valais)", "category": "stay", "protectedId": "stay-saillon-suica"}
                 ]
             },
@@ -565,8 +596,7 @@ def main():
                 "date": "2026-10-20",
                 "city": "Saillon ➔ Genebra ➔ Madrid",
                 "events": [
-                    {"time": "11:00", "title": "Checkout Airbnb Saillon", "category": "stay", "protectedId": "stay-saillon-suica"},
-                    {"time": "16:30", "title": "Devolução do Carro no Aeroporto de Genebra", "category": "car", "protectedId": "car-rental-genebra"},
+                    {"time": "11:00", "title": "Checkout Airbnb Saillon & Devolução do Carro (Europcar / Unirent GVA)", "category": "car", "protectedId": "car-rental-genebra"},
                     {"time": "18:55", "title": "Voo Air Europa UX1666 (GVA ➔ MAD)", "category": "flight", "protectedId": "flight-aireuropa-volta"},
                     {"time": "22:00", "title": "Check-in Centro Madrid Rio (Madrid)", "category": "stay", "protectedId": "stay-madrid-2"}
                 ]

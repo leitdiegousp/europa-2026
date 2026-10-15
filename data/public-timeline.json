@@ -46,7 +46,7 @@
         },
         {
           "time": "11:00",
-          "title": "Retirada do Carro (Aeroporto Genebra - Setor Suíço)",
+          "title": "Retirada do Carro: Skoda Fabia Automático (Europcar / Unirent • Setor Suíço)",
           "category": "car",
           "protectedId": "car-rental-genebra"
         },
@@ -83,13 +83,7 @@
       "events": [
         {
           "time": "11:00",
-          "title": "Checkout Airbnb Saillon",
-          "category": "stay",
-          "protectedId": "stay-saillon-suica"
-        },
-        {
-          "time": "16:30",
-          "title": "Devolução do Carro no Aeroporto de Genebra",
+          "title": "Checkout Airbnb Saillon & Devolução do Carro (Europcar / Unirent GVA)",
           "category": "car",
           "protectedId": "car-rental-genebra"
         },

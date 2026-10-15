@@ -5,7 +5,7 @@
  * blobs criptografados no modo avião / sem sinal.
  */
 
-const CACHE_NAME = "europa-vault-v21";
+const CACHE_NAME = "europa-vault-v22";
 
 const STATIC_ASSETS = [
   "./",
@@ -42,7 +42,8 @@ const STATIC_ASSETS = [
   "vault/assets/doc-convite-diego.enc",
   "vault/assets/doc-convite-tatiana.enc",
   "vault/assets/doc-pazsalvo-diego-tatiana.enc",
-  "vault/assets/doc-pazsalvo-fabiana.enc"
+  "vault/assets/doc-pazsalvo-fabiana.enc",
+  "vault/assets/doc-carro-suica.enc"
 ];
 
 // Instalação do Service Worker e pré-cache

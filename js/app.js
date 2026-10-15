@@ -906,6 +906,15 @@ class EuropaApp {
           📄 Paz y Salvo Fabiana ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
         </button>
       `;
+    } else if (evt.protectedId === "car-rental-genebra" || evt.category === "car") {
+      actionButtonsHtml += `
+        <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('doc-carro-suica', 'Voucher Aluguel de Carro - Skoda Fabia')">
+          📄 Voucher Aluguel Carro ${isUnlocked ? '' : '<span class="lock-indicator">🔒</span>'}
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="app.switchTab('car')">
+          🚗 Ver Detalhes do Carro & Balcão
+        </button>
+      `;
     } else if (evt.documents && evt.documents.length > 0) {
       actionButtonsHtml += `
         <button class="btn ${isUnlocked ? 'btn-secondary' : 'btn-doc-locked'} btn-sm doc-action-btn" onclick="app.openPdf('${evt.documents[0]}', '${evt.title}')">
@@ -1749,11 +1758,92 @@ class EuropaApp {
 
   _renderCarView() {
     const isUnlocked = vault.isUnlocked;
+    const privateData = vault.getData();
+    const carBooking = isUnlocked && privateData?.bookings ? privateData.bookings.find(b => b.id === 'car-rental-genebra') : null;
 
     this.elMainContainer.innerHTML = `
       <div class="timeline-section-title">
         <span>🇨🇭 Suíça & Aluguel de Carro (Valais)</span>
         ${!isUnlocked ? `<button class="btn btn-primary btn-sm" onclick="app.openUnlockModal()">Destravar Documentos</button>` : ""}
+      </div>
+
+      <!-- Card da Reserva Confirmada de Carro -->
+      <div class="event-card" style="border-left: 4px solid var(--accent-emerald); margin-bottom: 16px;">
+        <div class="event-card-top">
+          <span class="category-tag category-car" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3);">🚗 Reserva Confirmada</span>
+          <span class="event-time">18/Out 11:00 ➔ 20/Out 11:00</span>
+        </div>
+        <div class="event-name">Skoda Fabia ou semelhante • Câmbio Automático</div>
+        <div class="event-desc">📍 Europcar / Unirent (Arrivals Hall - Setor Suíço • Genève Airport, 1215)</div>
+
+        ${isUnlocked ? `
+          <div class="secret-badge" style="margin-top: 12px;">
+            <div class="secret-grid">
+              <div class="secret-item">
+                <span class="secret-label">Ref. Argus Car Hire</span>
+                <span class="secret-value">${carBooking?.bookingRef || 'CH279343390'} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${carBooking?.bookingRef || 'CH279343390'}', 'Ref. Argus')">📋</button></span>
+              </div>
+              <div class="secret-item">
+                <span class="secret-label">Nº Confirmação Fornecedor</span>
+                <span class="secret-value">${carBooking?.confirmationNumber || '1208217510'} <button type="button" class="copy-icon-btn" onclick="app.copyToClipboard('${carBooking?.confirmationNumber || '1208217510'}', 'Nº Confirmação')">📋</button></span>
+              </div>
+              <div class="secret-item">
+                <span class="secret-label">Condutor Principal</span>
+                <span class="secret-value">${carBooking?.driver || 'Diego Jacob Fernandes Leite'}</span>
+              </div>
+              <div class="secret-item">
+                <span class="secret-label">Telefone do Balcão GVA</span>
+                <span class="secret-value">
+                  <a href="tel:+41227178110" class="whatsapp-badge-link" title="Ligar para o balcão">
+                    📞 022 717 81 10 (+41)
+                  </a>
+                </span>
+              </div>
+              <div class="secret-item">
+                <span class="secret-label">Franquia / Bloqueio Caução</span>
+                <span class="secret-value" style="color: var(--accent-amber);">CHF 2.500,00 (Cartão de Crédito Físico)</span>
+              </div>
+              <div class="secret-item">
+                <span class="secret-label">Combustível & Km</span>
+                <span class="secret-value">Depósito Cheio (Full to Full) • Km Ilimitada</span>
+              </div>
+              <div class="secret-item">
+                <span class="secret-label">Equipamento de Inverno</span>
+                <span class="secret-value">Conjunto de Inverno Incluído (R$ 0,00)</span>
+              </div>
+              <div class="secret-item">
+                <span class="secret-label">Valor Pago</span>
+                <span class="secret-value">USD 98.22 (~R$ 493,68 • Cartão final 3636)</span>
+              </div>
+            </div>
+
+            <div style="margin-top: 12px; padding: 12px; background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); font-size: 0.82rem; line-height: 1.6; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06);">
+              <strong style="color: var(--text-main);">📋 Documentos Obrigatórios para Retirar no Balcão:</strong><br>
+              1. 💳 <strong>Cartão de crédito físico</strong> em nome do condutor principal (Diego Jacob Fernandes Leite, sem abreviações) com limite para a franquia de <strong>CHF 2.500,00</strong>.<br>
+              2. 🪪 <strong>CNH física válida</strong> do Diego (+ Permissão Internacional para Dirigir recomendada).<br>
+              3. 🛂 <strong>Passaporte brasileiro</strong> (GO506551).<br>
+              4. 📄 <strong>Voucher da reserva</strong> (acesso instantâneo abaixo).
+            </div>
+
+            <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary btn-sm doc-action-btn" onclick="app.openPdf('doc-carro-suica', 'Voucher Aluguel de Carro - Skoda Fabia (Argus / Unirent)')">
+                📄 Ver Voucher da Reserva (PDF)
+              </button>
+              <a href="tel:+41227178110" class="btn btn-secondary btn-sm" title="Ligar para o balcão da locadora">
+                📞 Ligar para Balcão (022 717 81 10)
+              </a>
+            </div>
+          </div>
+        ` : `
+          <div class="locked-indicator" style="margin-top: 12px;">
+            <span>🔒 Código de reserva, confirmação, telefone do balcão e voucher PDF protegidos no cofre.</span>
+          </div>
+          <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-doc-locked btn-sm doc-action-btn" onclick="app.openPdf('doc-carro-suica', 'Voucher Aluguel de Carro - Skoda Fabia (Argus / Unirent)')">
+              📄 Ver Voucher da Reserva (PDF) <span class="lock-indicator">🔒</span>
+            </button>
+          </div>
+        `}
       </div>
 
       <div class="event-card" style="border-left: 4px solid var(--accent-amber);">
